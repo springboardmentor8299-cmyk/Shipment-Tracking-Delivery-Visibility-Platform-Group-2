@@ -1,0 +1,77 @@
+.track-container {
+    min-height: 100vh;
+    background: #f4f7fb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.track-card {
+    width: 500px;
+    background: white;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.1);
+}
+
+.track-card h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.track-card p {
+    text-align: center;
+    color: gray;
+}
+
+.track-card form {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.track-card input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.track-card button {
+    padding: 12px;
+    border: none;
+    background: #2563eb;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.track-card button:hover {
+    background: #1d4ed8;
+}
+
+.shipment-card {
+    margin-top: 30px;
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.shipment-card h2 {
+    margin-bottom: 15px;
+}
+
+.shipment-card p {
+    text-align: left;
+    margin: 8px 0;
+    color: black;
+}
+
+.error {
+    color: red;
+    margin-top: 20px;
+    text-align: center;
+}
