@@ -1,0 +1,46 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,sans-serif;
+}
+
+.dashboard{
+
+    height:100vh;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#eef4ff;
+
+}
+
+.dashboard h1{
+
+    color:#2563eb;
+
+    font-size:48px;
+
+    margin-bottom:20px;
+
+}
+
+.dashboard h2{
+
+    margin-bottom:15px;
+
+}
+
+.dashboard p{
+
+    color:#666;
+
+    font-size:20px;
+
+}

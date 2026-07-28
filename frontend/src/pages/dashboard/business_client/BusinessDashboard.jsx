@@ -1,0 +1,213 @@
+import { useEffect, useState } from "react";
+
+import BusinessSidebar from "../../../components/business_client/BusinessSidebar";
+import BusinessNavbar from "../../../components/business_client/BusinessNavbar";
+import BusinessShipmentTable from "../../../components/business_client/BusinessShipmentTable";
+
+import StatCard from "../../../components/StatCard";
+import QuickActions from "../../../components/QuickActions";
+import RecentActivities from "../../../components/RecentActivities";
+
+import Tracking from "../../tracking/Tracking";
+import Delivery from "../../delivery/Delivery";
+
+
+import Reports from "../../reports/Reports";
+
+import {
+    FaBoxOpen,
+    FaTruck,
+    FaMapMarkedAlt,
+    FaCheckCircle
+} from "react-icons/fa";
+
+import {
+    getBusinessDashboard
+} from "../../../services/businessService";
+
+import "../../../styles/StatCard.css";
+
+function BusinessDashboard() {
+
+    const [stats, setStats] = useState({
+
+        totalShipments: 0,
+        activeDeliveries: 0,
+        shipmentsInTransit: 0,
+        deliveredToday: 0
+
+    });
+
+    const [section, setSection] = useState("dashboard");
+
+    const [searchTerm, setSearchTerm] = useState("");
+
+    useEffect(() => {
+
+        loadDashboard();
+
+    }, []);
+
+    const loadDashboard = async () => {
+
+        try {
+
+            const data = await getBusinessDashboard();
+
+            setStats(data);
+
+        }
+
+        catch (error) {
+
+            console.log(error);
+
+        }
+
+    };
+
+    return (
+
+        <div
+            style={{
+                display: "flex",
+                height: "100vh",
+                background: "#f1f5f9"
+            }}
+        >
+
+            <BusinessSidebar
+                role="BUSINESS_CLIENT"
+                onSelect={setSection}
+                activeSection={section}
+            />
+
+            <div
+                style={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    overflow: "hidden"
+                }}
+            >
+
+                <BusinessNavbar
+                    searchTerm={searchTerm}
+                    onSearchChange={setSearchTerm}
+                />
+
+                <div
+                    style={{
+                        flex: 1,
+                        overflowY: "auto",
+                        padding: "25px"
+                    }}
+                >
+
+                    {section === "dashboard" && (
+
+                        <>
+
+                            <h1>
+                                Welcome Business Client 💼
+                            </h1>
+
+                            <p>
+                                Track your shipments and monitor deliveries.
+                            </p>
+
+                            <div className="stats-container">
+
+                                <StatCard
+                                    title="Total Shipments"
+                                    value={stats.totalShipments}
+                                    icon={<FaBoxOpen />}
+                                    color="#2563EB"
+                                />
+
+                                <StatCard
+                                    title="Active Deliveries"
+                                    value={stats.activeDeliveries}
+                                    icon={<FaTruck />}
+                                    color="#F59E0B"
+                                />
+
+                                <StatCard
+                                    title="In Transit"
+                                    value={stats.shipmentsInTransit}
+                                    icon={<FaMapMarkedAlt />}
+                                    color="#8B5CF6"
+                                />
+
+                                <StatCard
+                                    title="Delivered Today"
+                                    value={stats.deliveredToday}
+                                    icon={<FaCheckCircle />}
+                                    color="#22C55E"
+                                />
+
+                            </div>
+
+                            <BusinessShipmentTable
+                                searchTerm={searchTerm}
+                            />
+
+                            <div
+                                style={{
+                                    display: "grid",
+                                    gridTemplateColumns: "1fr 1fr",
+                                    gap: "25px",
+                                    marginTop: "30px",
+                                    marginBottom: "30px"
+                                }}
+                            >
+
+                                <QuickActions />
+
+                                <RecentActivities />
+
+                            </div>
+
+                        </>
+
+                    )}
+
+                    {section === "shipments" && (
+
+                        <BusinessShipmentTable
+                            searchTerm={searchTerm}
+                        />
+
+                    )}
+
+                    {section === "tracking" && (
+
+                        <Tracking />
+
+                    )}
+
+                    {section === "delivery" && (
+
+                        <Delivery />
+
+                    )}
+
+                    {section === "dashboard" && null}
+
+                    {section === 'reports' && (
+                        <Reports />
+                    )}
+
+                
+
+                </div>
+
+            </div>
+
+        </div>
+
+    );
+
+}
+
+export default BusinessDashboard;

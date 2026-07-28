@@ -1,0 +1,120 @@
+.tracking-wrapper {
+    padding: 30px;
+}
+
+.tracking-center {
+    padding: 40px;
+    text-align: center;
+}
+
+.tracking-card {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.status-badge {
+    background-color: #eff6ff;
+    color: #2563eb;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.divider {
+    margin: 24px 0;
+    border: none;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* Timeline Base */
+.timeline-list {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.step-row {
+    display: flex;
+    align-items: flex-start;
+    padding-bottom: 28px;
+}
+
+.step-row.last {
+    padding-bottom: 0;
+}
+
+.marker-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 16px;
+    position: relative;
+    width: 22px;
+    flex-shrink: 0;
+}
+
+.dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background-color: #cbd5e1; /* Pending default */
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.line {
+    width: 2px;
+    position: absolute;
+    top: 22px;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #e2e8f0; /* Default Line */
+    z-index: 1;
+    transition: background-color 0.2s ease-in-out;
+}
+
+/* Timeline Dynamic States */
+.step-row.completed .dot {
+    background-color: #22c55e; /* Green */
+}
+
+.step-row.completed .line {
+    background-color: #22c55e;
+}
+
+.step-row.active .dot {
+    background-color: #2563eb; /* Blue */
+}
+
+.step-row .step-label {
+    margin: 0;
+    font-size: 15px;
+    line-height: 22px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.step-row.completed .step-label,
+.step-row.active .step-label {
+    color: #0f172a;
+}
+
+.step-row.active .step-label {
+    font-weight: 700;
+}

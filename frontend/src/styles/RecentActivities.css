@@ -1,0 +1,48 @@
+.activity-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:0 8px 18px rgba(0,0,0,.08);
+
+}
+
+.activity-card ul{
+
+    margin-top:20px;
+
+    list-style:none;
+    max-height:240px; /* limit height to show scrollbar when many items */
+    overflow-y:auto;
+    padding-right:8px; /* space for scrollbar */
+
+}
+
+.activity-card li{
+
+    padding:12px 0;
+
+    border-bottom:1px solid #eee;
+
+}
+
+/* Custom scrollbar for WebKit browsers */
+.activity-card ul::-webkit-scrollbar{
+    width:10px;
+}
+.activity-card ul::-webkit-scrollbar-track{
+    background:transparent;
+}
+.activity-card ul::-webkit-scrollbar-thumb{
+    background:#cbd5e1;
+    border-radius:6px;
+}
+
+/* Firefox scrollbar */
+.activity-card ul{
+    scrollbar-width:thin;
+    scrollbar-color:#cbd5e1 transparent;
+}
