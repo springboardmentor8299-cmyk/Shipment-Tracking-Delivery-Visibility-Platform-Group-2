@@ -1,0 +1,152 @@
+/* ============================= */
+/* CSS Custom Properties (Theme) */
+/* ============================= */
+
+:root {
+    --brand-primary: #0F4C81;
+    --brand-primary-light: #E8F1FB;
+    --brand-bg-light: #F8FAFC;
+    --brand-bg-card: #FFFFFF;
+    --brand-text-muted: #6B7280;
+    --brand-icon-bg-2: #FFF4E6;
+    --brand-icon-bg-3: #E8F8F5;
+}
+
+[data-bs-theme="dark"] {
+    --brand-primary: #60A5FA;
+    --brand-primary-light: #1E3A5F;
+    --brand-bg-light: #111827;
+    --brand-bg-card: #1F2937;
+    --brand-text-muted: #9CA3AF;
+    --brand-icon-bg-2: #3A2F1F;
+    --brand-icon-bg-3: #1A3A32;
+}
+
+/* ========================= */
+/* Navbar */
+/* ========================= */
+
+.nav-custom{
+    color:white !important;
+    font-size:17px;
+    font-weight:500;
+    transition:0.3s;
+    position:relative;
+}
+
+/* .nav-custom:hover{
+    color:#F59E0B !important;
+} */
+
+.nav-custom::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-4px;
+    width:0;
+    height:2px;
+    background:#F59E0B;
+    transition:.3s;
+    transform:translateX(-50%);
+}
+
+.nav-custom:hover::after{
+    width:70%;
+}
+
+.btn-outline-light{
+    transition:.3s;
+}
+
+.btn-outline-light:hover{
+    background:white;
+    color:#0F4C81 !important;
+}
+
+.btn[style]{
+    transition:.3s;
+}
+
+.login-btn{
+    width:100%;
+    padding:14px;
+    background:#0F4C81;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:18px;
+    font-weight:600;
+    transition:all .3s ease;
+}
+
+.login-btn:hover{
+    background:#0C3B63;
+    color:white;
+    transform:translateY(-2px);
+    box-shadow:0 10px 20px rgba(15,76,129,.25);
+}
+
+.password-toggle{
+    border:1px solid #dee2e6;
+    background:white;
+    color:#6B7280;
+    font-size:1.1rem;
+    transition:all .2s ease;
+}
+
+.password-toggle:hover{
+    background:#F3F7FC;
+    color:#0F4C81;
+    border-color:#0F4C81;
+}
+
+.password-toggle:focus{
+    box-shadow:none;
+}
+
+.input-group .form-control-lg + .password-toggle{
+    border-radius:0 10px 10px 0;
+}
+
+/* ========================= */
+/* Dark Mode Overrides      */
+/* ========================= */
+
+[data-bs-theme="dark"] .nav-custom {
+    color: #E5E7EB !important;
+}
+
+[data-bs-theme="dark"] .nav-custom::after {
+    background: #F59E0B;
+}
+
+[data-bs-theme="dark"] .btn-outline-light {
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #E5E7EB;
+}
+
+[data-bs-theme="dark"] .btn-outline-light:hover {
+    background: #374151;
+    color: #fff !important;
+}
+
+[data-bs-theme="dark"] .login-btn {
+    background: #2563EB;
+}
+
+[data-bs-theme="dark"] .login-btn:hover {
+    background: #1D4ED8;
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+}
+
+[data-bs-theme="dark"] .password-toggle {
+    background: #1F2937;
+    border-color: #374151;
+    color: #9CA3AF;
+}
+
+[data-bs-theme="dark"] .password-toggle:hover {
+    background: #374151;
+    color: #60A5FA;
+    border-color: #60A5FA;
+}

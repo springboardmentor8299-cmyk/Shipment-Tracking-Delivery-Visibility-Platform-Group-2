@@ -1,0 +1,587 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< com.shiptrack:shiptrack-backend >-------------------
+[INFO] Building shiptrack-backend 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.5.3:run (default-cli) > test-compile @ shiptrack-backend >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ shiptrack-backend ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ shiptrack-backend ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ shiptrack-backend ---
+[INFO] skip non existing resourceDirectory E:\Raju-Working\ShipTrack-Pro\backend\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ shiptrack-backend ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] <<< spring-boot:3.5.3:run (default-cli) < test-compile @ shiptrack-backend <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.5.3:run (default-cli) @ shiptrack-backend ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.3)
+
+2026-07-23T23:09:50.607+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] c.shiptrack.ShiptrackBackendApplication  : Starting ShiptrackBackendApplication using Java 26 with PID 25788 (E:\Raju-Working\ShipTrack-Pro\backend\target\classes started by rajus in E:\Raju-Working\ShipTrack-Pro\backend)
+2026-07-23T23:09:50.610+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] c.shiptrack.ShiptrackBackendApplication  : No active profile set, falling back to 1 default profile: "default"
+2026-07-23T23:09:50.636+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-07-23T23:09:50.637+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-07-23T23:09:50.999+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-23T23:09:51.040+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 32 ms. Found 5 JPA repository interfaces.
+2026-07-23T23:09:51.404+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-07-23T23:09:51.416+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-07-23T23:09:51.416+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.42]
+2026-07-23T23:09:51.445+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-07-23T23:09:51.446+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 809 ms
+2026-07-23T23:09:51.522+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-07-23T23:09:51.553+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.18.Final
+2026-07-23T23:09:51.570+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-07-23T23:09:51.721+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-23T23:09:51.740+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-23T23:09:51.923+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5908e787
+2026-07-23T23:09:51.927+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-23T23:09:51.966+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 18.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-23T23:09:52.501+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-23T23:09:52.724+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-23T23:09:53.227+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-07-23T23:09:53.229+05:30  WARN 25788 --- [shiptrack-backend] [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-07-23T23:09:53.510+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-07-23T23:09:53.522+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2026-07-23T23:09:53.523+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@16fa63e7]]
+2026-07-23T23:09:53.524+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2026-07-23T23:09:53.535+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-07-23T23:09:53.541+05:30  INFO 25788 --- [shiptrack-backend] [  restartedMain] c.shiptrack.ShiptrackBackendApplication  : Started ShiptrackBackendApplication in 3.154 seconds (process running for 3.402)
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.email=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+
+Admin account already exists.
+
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+2026-07-23T23:09:53.637+05:30  WARN 25788 --- [shiptrack-backend] [MessageBroker-1] com.shiptrack.service.EtaService         : Cannot calculate ETA for shipment 9: no destination coordinates
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    insert 
+    into
+        delay_predictions
+        (delay_minutes, delay_reason, detected_at, is_active, probability, shipment_id) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-07-23T23:09:53.691+05:30  WARN 25788 --- [shiptrack-backend] [MessageBroker-2] c.shiptrack.service.LiveTrackingService  : Delay alert for shipment 9: No location update for 1508 minutes (120 min, 90.0% probability)
+2026-07-23T23:09:53.692+05:30  WARN 25788 --- [shiptrack-backend] [MessageBroker-2] c.s.service.DelayPredictionService       : Delay detected for shipment 9: No location update for 1508 minutes (120 min)
+2026-07-23T23:10:53.524+05:30  INFO 25788 --- [shiptrack-backend] [MessageBroker-3] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 5, active threads = 1, queued tasks = 2, completed tasks = 2]
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    insert 
+    into
+        delay_predictions
+        (delay_minutes, delay_reason, detected_at, is_active, probability, shipment_id) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-07-23T23:10:53.563+05:30  WARN 25788 --- [shiptrack-backend] [MessageBroker-1] c.shiptrack.service.LiveTrackingService  : Delay alert for shipment 9: No location update for 1509 minutes (120 min, 90.0% probability)
+2026-07-23T23:10:53.563+05:30  WARN 25788 --- [shiptrack-backend] [MessageBroker-1] c.s.service.DelayPredictionService       : Delay detected for shipment 9: No location update for 1509 minutes (120 min)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+2026-07-23T23:11:53.555+05:30  WARN 25788 --- [shiptrack-backend] [MessageBroker-4] com.shiptrack.service.EtaService         : Cannot calculate ETA for shipment 9: no destination coordinates
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    insert 
+    into
+        delay_predictions
+        (delay_minutes, delay_reason, detected_at, is_active, probability, shipment_id) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-07-23T23:11:53.562+05:30  WARN 25788 --- [shiptrack-backend] [MessageBroker-2] c.shiptrack.service.LiveTrackingService  : Delay alert for shipment 9: No location update for 1510 minutes (120 min, 90.0% probability)
+2026-07-23T23:11:53.563+05:30  WARN 25788 --- [shiptrack-backend] [MessageBroker-2] c.s.service.DelayPredictionService       : Delay detected for shipment 9: No location update for 1510 minutes (120 min)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    insert 
+    into
+        delay_predictions
+        (delay_minutes, delay_reason, detected_at, is_active, probability, shipment_id) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-07-23T23:12:53.564+05:30  WARN 25788 --- [shiptrack-backend] [MessageBroker-6] c.shiptrack.service.LiveTrackingService  : Delay alert for shipment 9: No location update for 1511 minutes (120 min, 90.0% probability)
+2026-07-23T23:12:53.565+05:30  WARN 25788 --- [shiptrack-backend] [MessageBroker-6] c.s.service.DelayPredictionService       : Delay detected for shipment 9: No location update for 1511 minutes (120 min)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+2026-07-23T23:13:53.551+05:30  WARN 25788 --- [shiptrack-backend] [MessageBroker-3] com.shiptrack.service.EtaService         : Cannot calculate ETA for shipment 9: no destination coordinates
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    insert 
+    into
+        delay_predictions
+        (delay_minutes, delay_reason, detected_at, is_active, probability, shipment_id) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-07-23T23:13:53.556+05:30  WARN 25788 --- [shiptrack-backend] [MessageBroker-1] c.shiptrack.service.LiveTrackingService  : Delay alert for shipment 9: No location update for 1512 minutes (120 min, 90.0% probability)
+2026-07-23T23:13:53.556+05:30  WARN 25788 --- [shiptrack-backend] [MessageBroker-1] c.s.service.DelayPredictionService       : Delay detected for shipment 9: No location update for 1512 minutes (120 min)
