@@ -11,203 +11,138 @@ import RecentActivities from "../../../components/RecentActivities";
 import Tracking from "../../tracking/Tracking";
 import Delivery from "../../delivery/Delivery";
 
-
 import Reports from "../../reports/Reports";
 
 import {
-    FaBoxOpen,
-    FaTruck,
-    FaMapMarkedAlt,
-    FaCheckCircle
+  FaBoxOpen,
+  FaTruck,
+  FaMapMarkedAlt,
+  FaCheckCircle,
 } from "react-icons/fa";
 
-import {
-    getBusinessDashboard
-} from "../../../services/businessService";
+import { getBusinessDashboard } from "../../../services/businessService";
 
 import "../../../styles/StatCard.css";
 
 function BusinessDashboard() {
+  const [stats, setStats] = useState({
+    totalShipments: 0,
+    activeDeliveries: 0,
+    shipmentsInTransit: 0,
+    deliveredToday: 0,
+  });
 
-    const [stats, setStats] = useState({
+  const [section, setSection] = useState("dashboard");
 
-        totalShipments: 0,
-        activeDeliveries: 0,
-        shipmentsInTransit: 0,
-        deliveredToday: 0
+  const [searchTerm, setSearchTerm] = useState("");
 
-    });
+  useEffect(() => {
+    loadDashboard();
+  }, []);
 
-    const [section, setSection] = useState("dashboard");
+  const loadDashboard = async () => {
+    try {
+      const data = await getBusinessDashboard();
 
-    const [searchTerm, setSearchTerm] = useState("");
+      setStats(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    useEffect(() => {
+  return (
+    <div
+      style={{
+        display: "flex",
+        height: "100vh",
+        background: "#f1f5f9",
+      }}
+    >
+      <BusinessSidebar
+        role="BUSINESS_CLIENT"
+        onSelect={setSection}
+        activeSection={section}
+      />
 
-        loadDashboard();
-
-    }, []);
-
-    const loadDashboard = async () => {
-
-        try {
-
-            const data = await getBusinessDashboard();
-
-            setStats(data);
-
-        }
-
-        catch (error) {
-
-            console.log(error);
-
-        }
-
-    };
-
-    return (
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}
+      >
+        <BusinessNavbar
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+        />
 
         <div
-            style={{
-                display: "flex",
-                height: "100vh",
-                background: "#f1f5f9"
-            }}
+          style={{
+            flex: 1,
+            overflowY: "auto",
+            padding: "25px",
+          }}
         >
+          {section === "dashboard" && (
+            <>
+              <h1>Welcome Business Client 💼</h1>
 
-            <BusinessSidebar
-                role="BUSINESS_CLIENT"
-                onSelect={setSection}
-                activeSection={section}
-            />
+              <p>Track your shipments and monitor deliveries.</p>
 
-            <div
-                style={{
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    overflow: "hidden"
-                }}
-            >
-
-                <BusinessNavbar
-                    searchTerm={searchTerm}
-                    onSearchChange={setSearchTerm}
+              <div className="stats-container">
+                <StatCard
+                  title="Total Shipments"
+                  value={stats.totalShipments}
+                  icon={<FaBoxOpen />}
+                  color="#2563EB"
                 />
 
-                <div
-                    style={{
-                        flex: 1,
-                        overflowY: "auto",
-                        padding: "25px"
-                    }}
-                >
+                <StatCard
+                  title="Active Deliveries"
+                  value={stats.activeDeliveries}
+                  icon={<FaTruck />}
+                  color="#F59E0B"
+                />
 
-                    {section === "dashboard" && (
+                <StatCard
+                  title="In Transit"
+                  value={stats.shipmentsInTransit}
+                  icon={<FaMapMarkedAlt />}
+                  color="#8B5CF6"
+                />
 
-                        <>
+                <StatCard
+                  title="Delivered Today"
+                  value={stats.deliveredToday}
+                  icon={<FaCheckCircle />}
+                  color="#22C55E"
+                />
+              </div>
 
-                            <h1>
-                                Welcome Business Client 💼
-                            </h1>
+              <BusinessShipmentTable searchTerm={searchTerm} />
 
-                            <p>
-                                Track your shipments and monitor deliveries.
-                            </p>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "25px",
+                  marginTop: "30px",
+                  marginBottom: "30px",
+                }}
+              ></div>
+            </>
+          )}
 
-                            <div className="stats-container">
+          {section === "delivery" && <Delivery />}
 
-                                <StatCard
-                                    title="Total Shipments"
-                                    value={stats.totalShipments}
-                                    icon={<FaBoxOpen />}
-                                    color="#2563EB"
-                                />
+          {section === "dashboard" && null}
 
-                                <StatCard
-                                    title="Active Deliveries"
-                                    value={stats.activeDeliveries}
-                                    icon={<FaTruck />}
-                                    color="#F59E0B"
-                                />
-
-                                <StatCard
-                                    title="In Transit"
-                                    value={stats.shipmentsInTransit}
-                                    icon={<FaMapMarkedAlt />}
-                                    color="#8B5CF6"
-                                />
-
-                                <StatCard
-                                    title="Delivered Today"
-                                    value={stats.deliveredToday}
-                                    icon={<FaCheckCircle />}
-                                    color="#22C55E"
-                                />
-
-                            </div>
-
-                            <BusinessShipmentTable
-                                searchTerm={searchTerm}
-                            />
-
-                            <div
-                                style={{
-                                    display: "grid",
-                                    gridTemplateColumns: "1fr 1fr",
-                                    gap: "25px",
-                                    marginTop: "30px",
-                                    marginBottom: "30px"
-                                }}
-                            >
-
-                                <QuickActions />
-
-                                <RecentActivities />
-
-                            </div>
-
-                        </>
-
-                    )}
-
-                    {section === "shipments" && (
-
-                        <BusinessShipmentTable
-                            searchTerm={searchTerm}
-                        />
-
-                    )}
-
-                    {section === "tracking" && (
-
-                        <Tracking />
-
-                    )}
-
-                    {section === "delivery" && (
-
-                        <Delivery />
-
-                    )}
-
-                    {section === "dashboard" && null}
-
-                    {section === 'reports' && (
-                        <Reports />
-                    )}
-
-                
-
-                </div>
-
-            </div>
-
+          {section === "reports" && <Reports />}
         </div>
-
-    );
-
+      </div>
+    </div>
+  );
 }
 
 export default BusinessDashboard;

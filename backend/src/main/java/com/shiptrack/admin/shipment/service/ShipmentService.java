@@ -285,6 +285,18 @@ public class ShipmentService {
             shipment.setRemainingDistance(0.0);
         }
 
+        // If the shipment has moved on but no driver-app/IoT GPS ping has ever
+        // arrived for it, fall back to the origin so "Current Location" has
+        // real data to show instead of staying blank.
+        if (shipment.getCurrentLocationName() == null
+                && (request.getStatus() == ShipmentStatus.IN_TRANSIT
+                        || request.getStatus() == ShipmentStatus.OUT_FOR_DELIVERY)) {
+            shipment.setCurrentLocationName(shipment.getOrigin());
+            shipment.setCurrentLatitude(shipment.getOriginLatitude());
+            shipment.setCurrentLongitude(shipment.getOriginLongitude());
+            shipment.setLastLocationUpdate(java.time.LocalDateTime.now());
+        }
+
         return shipmentRepository.save(shipment);
     }
 
