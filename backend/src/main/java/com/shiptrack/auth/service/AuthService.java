@@ -12,6 +12,7 @@ import com.shiptrack.auth.dto.LoginRequest;
 import com.shiptrack.auth.dto.RegisterRequest;
 import com.shiptrack.auth.entity.User;
 import com.shiptrack.auth.repository.UserRepository;
+import com.shiptrack.auth.entity.Role;
 
 @Service
 public class AuthService {
@@ -22,9 +23,9 @@ public class AuthService {
     private final ActivityService activityService;
 
     public AuthService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder,
-                       JwtService jwtService,
-                       ActivityService activityService) {
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService,
+            ActivityService activityService) {
 
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -44,29 +45,29 @@ public class AuthService {
                 .name(request.getName())
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
+                .role(Role.CUSTOMER) // by default role customer
                 .build();
 
         userRepository.save(user);
         try {
             activityService.save(user.getUsername(), "USER_REGISTERED", "User registered: " + user.getUsername());
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         return AuthResponse.builder()
-            .message("User Registered Successfully")
-            .name(user.getName())
-            .token(null)
-            .username(user.getUsername())
-            .role(user.getRole())
-            .build();
+                .message("User Registered Successfully")
+                .name(user.getName())
+                .token(null)
+                .username(user.getUsername())
+                .role(user.getRole())
+                .build();
     }
 
     // Login
 
     public AuthResponse login(LoginRequest request) {
 
-        Optional<User> optionalUser =
-                userRepository.findByUsername(request.getUsername());
+        Optional<User> optionalUser = userRepository.findByUsername(request.getUsername());
 
         if (optionalUser.isEmpty()) {
             throw new RuntimeException("Invalid Username");
@@ -78,12 +79,11 @@ public class AuthService {
             throw new RuntimeException("Invalid Password");
         }
 
-     
         String token = jwtService.generateToken(user);
 
         return AuthResponse.builder()
                 .token(token)
-                .name(user.getName())          // <-- VERY IMPORTANT
+                .name(user.getName()) // <-- VERY IMPORTANT
                 .username(user.getUsername())
                 .role(user.getRole())
                 .message("Login Successful")

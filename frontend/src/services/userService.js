@@ -9,4 +9,9 @@ export const getAllUsers = async () => {
     return response.data;
 };
 
-export default { getAllUsers };
+export const createStaffUser = async (staffData) => {
+    const response = await api.post('/admin/users', staffData);
+    return response.data;
+};
+
+export default { getAllUsers, createStaffUser };

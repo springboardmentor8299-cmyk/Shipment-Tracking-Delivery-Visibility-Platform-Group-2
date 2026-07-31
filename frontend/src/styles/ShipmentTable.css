@@ -102,18 +102,18 @@ table {
 
 /* Explicit column widths (sum to 100%) — keeps every column evenly
    proportioned regardless of how long any single cell's content is. */
-.col-id { width: 5%; }
+.col-id { width: 3%; }
 .col-tracking { width: 9%; }
 .col-customer { width: 9%; }
 .col-receiver { width: 7%; }
-.col-items { width: 5%; }
+.col-items { width: 3%; }
 .col-weight { width: 6%; }
 .col-cost { width: 6%; }
-.col-origin { width: 13%; }
-.col-destination { width: 13%; }
+.col-origin { width: 10%; }
+.col-destination { width: 10%; }
 .col-status { width: 9%; }
 .col-date { width: 8%; }
-.col-actions { width: 10%; }
+.col-actions { width: 12%; }
 
 /* Long addresses wrap onto multiple lines within their fixed-width column
    instead of forcing the column (and the whole row) to stretch. */
@@ -768,4 +768,12 @@ button[type="submit"]:active {
 .cancel-btn:hover,
 .btn-cancel:hover {
     background-color: #dc2626 !important;
+}
+
+.table-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }

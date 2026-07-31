@@ -2,14 +2,20 @@ package com.shiptrack.admin.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.shiptrack.admin.dto.CreateStaffRequest;
 import com.shiptrack.admin.dto.DashboardResponse;
 import com.shiptrack.admin.dto.MonthlyShipmentOverviewResponse;
 import com.shiptrack.admin.dto.ShipmentStatusCountResponse;
 import com.shiptrack.admin.service.AdminService;
+import com.shiptrack.auth.dto.UserResponse;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -38,6 +44,12 @@ public class AdminController {
     @GetMapping("/dashboard/status-counts")
     public List<ShipmentStatusCountResponse> statusCounts() {
         return adminService.getShipmentStatusCounts();
+    }
+
+    @PostMapping("/users")
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserResponse createStaffUser(@RequestBody CreateStaffRequest request) {
+        return adminService.createStaffUser(request);
     }
 
 }

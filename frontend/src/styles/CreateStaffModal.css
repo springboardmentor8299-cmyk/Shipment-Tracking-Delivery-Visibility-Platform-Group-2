@@ -1,0 +1,251 @@
+/* Create Staff Modal — scoped styles (does not touch shared modal classes
+   used elsewhere, e.g. AddShipmentModal / ticket modals) */
+
+.csm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(3px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+    animation: csm-fade-in 0.15s ease-out;
+}
+
+@keyframes csm-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.csm-card {
+    width: 100%;
+    max-width: 440px;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 24px 60px -12px rgba(15, 23, 42, 0.35);
+    overflow: hidden;
+    animation: csm-pop-in 0.18s ease-out;
+}
+
+@keyframes csm-pop-in {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Header */
+.csm-header {
+    position: relative;
+    padding: 24px 24px 20px 24px;
+    background: linear-gradient(135deg, #1e293b 0%, #2563eb 140%);
+    color: #ffffff;
+}
+
+.csm-header-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.csm-header h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.csm-header p {
+    margin: 4px 0 0 0;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.csm-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.15s ease;
+}
+
+.csm-close:hover {
+    background: rgba(255, 255, 255, 0.24);
+}
+
+/* Body */
+.csm-body {
+    padding: 22px 24px 24px 24px;
+}
+
+.csm-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-size: 0.8rem;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+}
+
+.csm-field {
+    margin-bottom: 14px;
+}
+
+.csm-field label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.csm-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.csm-input-wrap svg {
+    position: absolute;
+    left: 12px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.csm-input-wrap input {
+    width: 100%;
+    padding: 10px 12px 10px 36px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #0f172a;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    box-sizing: border-box;
+}
+
+.csm-input-wrap input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* Role picker — the signature element: color-coded cards instead of a
+   plain <select>, matching the role-badge colors used in the users table */
+.csm-role-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.csm-role-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 6px;
+    border-radius: 12px;
+    border: 1.5px solid #e2e8f0;
+    background: #f8fafc;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.csm-role-card svg {
+    font-size: 16px;
+}
+
+.csm-role-card span {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.15;
+}
+
+.csm-role-card:hover {
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+}
+
+.csm-role-card.selected-support-agent {
+    background: #fef3c7;
+    border-color: #fcd34d;
+    color: #92400e;
+}
+
+.csm-role-card.selected-logistics-operator {
+    background: #f3e8ff;
+    border-color: #d8b4fe;
+    color: #6b21a8;
+}
+
+.csm-role-card.selected-business-client {
+    background: #dcfce7;
+    border-color: #86efac;
+    color: #166534;
+}
+
+/* Footer */
+.csm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.csm-btn-cancel {
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: 1.5px solid #e2e8f0;
+    background: #ffffff;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.csm-btn-cancel:hover {
+    background: #f8fafc;
+}
+
+.csm-btn-submit {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    transition: all 0.15s ease;
+}
+
+.csm-btn-submit:hover:not(:disabled) {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.csm-btn-submit:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
