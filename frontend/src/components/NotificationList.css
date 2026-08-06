@@ -1,0 +1,128 @@
+.notif-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.notif-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.15s;
+}
+
+.notif-item:hover {
+    background: #f8fafc;
+}
+
+.notif-item:last-child {
+    border-bottom: none;
+}
+
+.notif-unread {
+    background: #eff6ff;
+}
+
+.notif-unread:hover {
+    background: #dbeafe;
+}
+
+.notif-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 14px;
+}
+
+.notif-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.notif-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.notif-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.notif-time {
+    font-size: 11px;
+    color: #94a3b8;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.notif-message {
+    margin: 2px 0 0;
+    font-size: 12.5px;
+    color: #475569;
+    line-height: 1.4;
+}
+
+.notif-tracking-id {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #2563eb;
+    background: #eff6ff;
+    padding: 2px 8px;
+    border-radius: 999px;
+}
+
+.notif-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #2563eb;
+    flex-shrink: 0;
+    margin-top: 6px;
+}
+
+.notif-delete-btn {
+    background: none;
+    border: none;
+    color: #cbd5e1;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px;
+    flex-shrink: 0;
+}
+
+.notif-delete-btn:hover {
+    color: #dc2626;
+}
+
+.notif-empty {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 13px;
+    padding: 30px 16px;
+}
+
+/* Compact variant (navbar dropdown) */
+.notif-list-compact .notif-item {
+    padding: 10px 14px;
+}
+
+.notif-list-compact .notif-message {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

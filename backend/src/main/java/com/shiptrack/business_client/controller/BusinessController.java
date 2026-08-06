@@ -18,28 +18,19 @@ public class BusinessController {
         this.businessService = businessService;
     }
 
-    // ==========================
     // Dashboard Statistics
-    // ==========================
-
     @GetMapping("/dashboard")
     public BusinessDashboardResponse getDashboard() {
         return businessService.getDashboard();
     }
 
-    // ==========================
     // Get All Business Shipments
-    // ==========================
-
     @GetMapping("/shipments")
     public List<Shipment> getAllShipments() {
         return businessService.getAllShipments();
     }
 
-    // ==========================
     // Update Shipment
-    // ==========================
-
     @PutMapping("/shipments/{id}")
     public Shipment updateShipment(
             @PathVariable Long id,

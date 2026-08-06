@@ -13,210 +13,149 @@ import Tracking from "../../tracking/Tracking";
 import Delivery from "../../delivery/Delivery";
 
 import { getSupportDashboard } from "../../../services/supportService";
+import SupportRequestTable from "../../../components/support_agent/SupportRequestTable";
 
+import { FaBoxOpen, FaTruck, FaHeadset, FaCheckCircle } from "react-icons/fa";
 
-import {
-    FaBoxOpen,
-    FaTruck,
-    FaHeadset,
-    FaCheckCircle
-} from "react-icons/fa";
+import Notifications from "../../notification/Notifications";
 
 import "../../../styles/StatCard.css";
 import Reports from "../../reports/Reports";
 
 function SupportDashboard() {
+  const [stats, setStats] = useState({
+    totalShipments: 0,
+    activeDeliveries: 0,
+    openTickets: 0,
+    resolvedToday: 0,
+  });
 
-    const [stats, setStats] = useState({
+  const [section, setSection] = useState("dashboard");
 
-        totalShipments: 0,
-        activeDeliveries: 0,
-        openTickets: 0,
-        resolvedToday: 0
+  const [searchTerm, setSearchTerm] = useState("");
 
-    });
+  useEffect(() => {
+    loadDashboard();
+  }, []);
 
-    const [section, setSection] = useState("dashboard");
+  const loadDashboard = async () => {
+    try {
+      const response = await getSupportDashboard();
 
-    const [searchTerm, setSearchTerm] = useState("");
+      setStats(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    useEffect(() => {
+  return (
+    <div
+      style={{
+        display: "flex",
+        height: "100vh",
+        background: "#f1f5f9",
+      }}
+    >
+      <SupportSidebar onSelect={setSection} activeSection={section} />
 
-        loadDashboard();
-
-    }, []);
-
-    const loadDashboard = async () => {
-
-        try {
-
-            const response = await getSupportDashboard();
-
-            setStats(response);
-
-        }
-
-        catch (error) {
-
-            console.log(error);
-
-        }
-
-    };
-
-    return (
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}
+      >
+        <SupportNavbar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
 
         <div
-            style={{
-                display: "flex",
-                height: "100vh",
-                background: "#f1f5f9"
-            }}
+          style={{
+            flex: 1,
+            overflowY: "auto",
+            padding: "25px",
+          }}
         >
+          {section === "dashboard" && (
+            <>
+              <h1>Welcome Support Agent 🎧</h1>
+              <p style={{ color: "#64748b", marginBottom: "20px" }}>
+                Monitor shipments and assist customers.
+              </p>
 
-            <SupportSidebar
-                onSelect={setSection}
-                activeSection={section}
-            />
-
-            <div
-                style={{
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    overflow: "hidden"
-                }}
-            >
-
-                <SupportNavbar
-                    searchTerm={searchTerm}
-                    onSearchChange={setSearchTerm}
+              {/* Stat Cards Row */}
+              <div className="stats-container">
+                <StatCard
+                  title="Total Shipments"
+                  value={stats.totalShipments}
+                  icon={<FaBoxOpen />}
+                  color="#2563EB"
                 />
+                <StatCard
+                  title="Active Deliveries"
+                  value={stats.activeDeliveries}
+                  icon={<FaTruck />}
+                  color="#F59E0B"
+                />
+                <StatCard
+                  title="Open Tickets"
+                  value={stats.openTickets}
+                  icon={<FaHeadset />}
+                  color="#8B5CF6"
+                />
+                <StatCard
+                  title="Resolved Today"
+                  value={stats.resolvedToday}
+                  icon={<FaCheckCircle />}
+                  color="#22C55E"
+                />
+              </div>
 
-                <div
-                    style={{
-                        flex: 1,
-                        overflowY: "auto",
-                        padding: "25px"
-                    }}
-                >
+              {/* Shipments Section */}
+              <div style={{ marginTop: "25px" }}>
+                <SupportShipmentTable searchTerm={searchTerm} />
+              </div>
 
-                    {section === "dashboard" && (
-
-                        <>
-
-                            <h1>
-                                Welcome Support Agent 🎧
-                            </h1>
-
-                            <p>
-                                Monitor shipments and assist customers.
-                            </p>
-
-                            <div className="stats-container">
-
-                                <StatCard
-                                    title="Total Shipments"
-                                    value={stats.totalShipments}
-                                    icon={<FaBoxOpen />}
-                                    color="#2563EB"
-                                />
-
-                                <StatCard
-                                    title="Active Deliveries"
-                                    value={stats.activeDeliveries}
-                                    icon={<FaTruck />}
-                                    color="#F59E0B"
-                                />
-
-                                <StatCard
-                                    title="Open Tickets"
-                                    value={stats.openTickets}
-                                    icon={<FaHeadset />}
-                                    color="#8B5CF6"
-                                />
-
-                                <StatCard
-                                    title="Resolved Today"
-                                    value={stats.resolvedToday}
-                                    icon={<FaCheckCircle />}
-                                    color="#22C55E"
-                                />
-
-                            </div>
-
-                            <SupportShipmentTable
-                                searchTerm={searchTerm}
-                            />
-
-                            <div
-                                style={{
-                                    display: "grid",
-                                    gridTemplateColumns: "1fr 1fr",
-                                    gap: "25px",
-                                    marginTop: "30px",
-                                    marginBottom: "30px"
-                                }}
-                            >
-
-                                <QuickActions />
-
-                                <RecentActivities />
-
-                            </div>
-
-                        </>
-
-                    )}
-
-                    {section === "shipments" && (
-
-                        <SupportShipmentTable
-                            searchTerm={searchTerm}
-                        />
-
-                    )}
-
-                    {section === "tracking" && (
-
-                        <Tracking />
-
-                    )}
-
-                    {section === "delivery" && (
-
-                        <Delivery />
-
-                    )}
-
-                    {section === "tickets" && (
-
-                        <SupportTicketTable />
-
-                    )}
-
-                    {section === "notifications" && (
-
-                        <h2>
-                            🔔 Notifications Module Coming Soon...
-                        </h2>
-
-                    )}
-
-                    {section === "reports" && (
-
-                       <Reports/>
-
-                    )}
-
+              {/* Support Requests & Quick Actions Grid */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "2fr 1fr", // 2/3 for table, 1/3 for quick actions
+                  gap: "25px",
+                  marginTop: "30px",
+                  marginBottom: "30px",
+                  alignItems: "start",
+                }}
+              >
+                <div style={{ minWidth: 0 }}>
+                  {" "}
+                  {/* Fixes CSS grid overflow */}
+                  <SupportRequestTable />
                 </div>
 
-            </div>
+                <div style={{ gridColumn: "1 / -1" }}>
+                  <RecentActivities />
+                </div>
+              </div>
+            </>
+          )}
 
+          {section === "shipments" && (
+            <SupportShipmentTable searchTerm={searchTerm} />
+          )}
+
+          {section === "tracking" && <Tracking />}
+
+          {section === "delivery" && <Delivery />}
+
+          {section === "tickets" && <SupportTicketTable />}
+
+          {section === "notifications" && <Notifications />}
+
+          {section === "reports" && <Reports />}
         </div>
-
-    );
-
+      </div>
+    </div>
+  );
 }
 
 export default SupportDashboard;

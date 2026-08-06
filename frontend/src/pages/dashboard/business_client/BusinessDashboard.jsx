@@ -24,6 +24,8 @@ import { getBusinessDashboard } from "../../../services/businessService";
 
 import "../../../styles/StatCard.css";
 
+import Notifications from "../../notification/Notifications";
+
 function BusinessDashboard() {
   const [stats, setStats] = useState({
     totalShipments: 0,
@@ -139,6 +141,8 @@ function BusinessDashboard() {
           {section === "dashboard" && null}
 
           {section === "reports" && <Reports />}
+
+          {section === "notifications" && <Notifications />}
         </div>
       </div>
     </div>

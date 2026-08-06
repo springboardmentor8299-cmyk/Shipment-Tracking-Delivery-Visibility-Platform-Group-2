@@ -22,10 +22,7 @@ public class TicketController {
 
     }
 
-    // =========================================
     // CREATE TICKET
-    // =========================================
-
     @PostMapping
     public ResponseEntity<TicketResponse> createTicket(
             @RequestBody TicketRequest request) {
@@ -36,10 +33,7 @@ public class TicketController {
 
     }
 
-    // =========================================
     // GET ALL TICKETS
-    // =========================================
-
     @GetMapping
     public ResponseEntity<List<TicketResponse>> getAllTickets() {
 
@@ -48,10 +42,7 @@ public class TicketController {
 
     }
 
-    // =========================================
     // GET TICKET BY ID
-    // =========================================
-
     @GetMapping("/{id}")
     public ResponseEntity<TicketResponse> getTicket(
             @PathVariable Long id) {
@@ -61,10 +52,7 @@ public class TicketController {
 
     }
 
-    // =========================================
     // UPDATE TICKET
-    // =========================================
-
     @PutMapping("/{id}")
     public ResponseEntity<TicketResponse> updateTicket(
             @PathVariable Long id,
@@ -75,10 +63,7 @@ public class TicketController {
 
     }
 
-    // =========================================
     // DELETE TICKET
-    // =========================================
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTicket(
             @PathVariable Long id) {

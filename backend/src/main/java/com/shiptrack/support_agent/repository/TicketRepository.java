@@ -11,48 +11,22 @@ import com.shiptrack.support_agent.entity.TicketStatus;
 
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
-    // ==========================
-    // Customer
-    // ==========================
+        List<Ticket> findByCustomer(User customer);
 
-    List<Ticket> findByCustomer(User customer);
+        List<Ticket> findByAssignedTo(User assignedTo);
 
-    // ==========================
-    // Support Agent
-    // ==========================
+        List<Ticket> findByShipmentId(Long shipmentId);
 
-    List<Ticket> findByAssignedTo(User assignedTo);
+        List<Ticket> findByStatus(TicketStatus status);
 
-    // ==========================
-    // Shipment
-    // ==========================
+        long countByStatus(TicketStatus status);
 
-    List<Ticket> findByShipmentId(Long shipmentId);
+        List<Ticket> findByAssignedToAndStatus(
+                        User assignedTo,
+                        TicketStatus status);
 
-    // ==========================
-    // Status
-    // ==========================
-
-    List<Ticket> findByStatus(TicketStatus status);
-
-    long countByStatus(TicketStatus status);
-
-    // ==========================
-    // Assigned Agent + Status
-    // ==========================
-
-    List<Ticket> findByAssignedToAndStatus(
-            User assignedTo,
-            TicketStatus status
-    );
-
-    // ==========================
-    // Created Between
-    // ==========================
-
-    List<Ticket> findByCreatedAtBetween(
-            LocalDateTime start,
-            LocalDateTime end
-    );
+        List<Ticket> findByCreatedAtBetween(
+                        LocalDateTime start,
+                        LocalDateTime end);
 
 }

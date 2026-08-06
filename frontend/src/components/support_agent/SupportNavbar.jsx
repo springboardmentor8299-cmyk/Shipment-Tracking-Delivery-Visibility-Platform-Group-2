@@ -1,8 +1,9 @@
 import "../../styles/Navbar.css";
 import { useEffect, useState } from "react";
-import { FaBell, FaSearch } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
+import NotificationBell from "../NotificationBell";
 
-function SupportNavbar({ searchTerm, onSearchChange }) {
+function SupportNavbar({ searchTerm, onSearchChange, onNavigate }) {
   const [name, setName] = useState(() => {
     return localStorage.getItem("name") || "Support";
   });
@@ -54,10 +55,7 @@ function SupportNavbar({ searchTerm, onSearchChange }) {
           />
         </div>
 
-        <div className="notification">
-          <FaBell />
-          <span>3</span>
-        </div>
+        <NotificationBell onViewAll={onNavigate ? () => onNavigate("notifications") : undefined} />
 
         <div className="profile">
           {/* Circular Letter Avatar Badge */}

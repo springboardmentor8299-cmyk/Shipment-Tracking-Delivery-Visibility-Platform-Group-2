@@ -1,9 +1,6 @@
 import api from "./api";
 
-// ==========================================
 // CREATE TICKET
-// ==========================================
-
 export const createTicket = async (ticket) => {
 
     const response = await api.post(
@@ -24,10 +21,7 @@ export const createTicket = async (ticket) => {
 
 };
 
-// ==========================================
 // GET ALL TICKETS
-// ==========================================
-
 export const getAllTickets = async () => {
 
     const response = await api.get(
@@ -46,10 +40,7 @@ export const getAllTickets = async () => {
 
 };
 
-// ==========================================
 // GET TICKET BY ID
-// ==========================================
-
 export const getTicketById = async (id) => {
 
     const response = await api.get(
@@ -68,10 +59,7 @@ export const getTicketById = async (id) => {
 
 };
 
-// ==========================================
 // UPDATE TICKET
-// ==========================================
-
 export const updateTicket = async (id, ticket) => {
 
     const response = await api.put(
@@ -92,10 +80,7 @@ export const updateTicket = async (id, ticket) => {
 
 };
 
-// ==========================================
 // DELETE TICKET
-// ==========================================
-
 export const deleteTicket = async (id) => {
 
     const response = await api.delete(

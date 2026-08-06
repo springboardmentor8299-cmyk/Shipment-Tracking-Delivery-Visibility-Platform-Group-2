@@ -11,22 +11,16 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TicketRequest {
 
-    // Customer ID
     private Long customerId;
 
-    // Shipment ID
     private Long shipmentId;
 
-    // Subject
     private String subject;
 
-    // Description
     private String description;
 
-    // Support Agent ID (optional)
     private Long assignedTo;
 
-    // OPEN / IN_PROGRESS / RESOLVED / CLOSED
     private String status;
 
 }

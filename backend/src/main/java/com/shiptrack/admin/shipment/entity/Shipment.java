@@ -51,29 +51,17 @@ public class Shipment {
 
     private LocalDate deliveryDate;
 
-    // ==========================
-    // ORIGIN LOCATION
-    // ==========================
-
     @Column(name = "origin_latitude")
     private Double originLatitude;
 
     @Column(name = "origin_longitude")
     private Double originLongitude;
 
-    // ==========================
-    // DESTINATION LOCATION
-    // ==========================
-
     @Column(name = "destination_latitude")
     private Double destinationLatitude;
 
     @Column(name = "destination_longitude")
     private Double destinationLongitude;
-
-    // ==========================
-    // LIVE TRUCK LOCATION
-    // ==========================
 
     @Column(name = "current_latitude")
     private Double currentLatitude;
@@ -83,10 +71,6 @@ public class Shipment {
 
     @Column(name = "current_location_name")
     private String currentLocationName;
-
-    // ==========================
-    // LIVE TRACKING DETAILS
-    // ==========================
 
     @Column(name = "truck_speed")
     private Double truckSpeed;
@@ -99,10 +83,6 @@ public class Shipment {
 
     @Column(name = "last_location_update")
     private LocalDateTime lastLocationUpdate;
-
-    // ==========================
-    // CUSTOMER
-    // ==========================
 
     @ManyToOne
     @JoinColumn(name = "customer_id")

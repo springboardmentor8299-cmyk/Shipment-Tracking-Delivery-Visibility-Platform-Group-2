@@ -30,14 +30,10 @@ public class SupportAgentService {
         this.ticketRepository = ticketRepository;
     }
 
-    // ==========================
     // Dashboard Statistics
-    // ==========================
-
     public SupportDashboardResponse getDashboard() {
 
-        SupportDashboardResponse response =
-                new SupportDashboardResponse();
+        SupportDashboardResponse response = new SupportDashboardResponse();
 
         response.setTotalShipments(
                 shipmentRepository.count());
@@ -47,28 +43,22 @@ public class SupportAgentService {
                         ShipmentStatus.IN_TRANSIT));
 
         response.setOpenTickets(
-            ticketRepository.countByStatus(TicketStatus.OPEN));
+                ticketRepository.countByStatus(TicketStatus.OPEN));
 
         response.setResolvedToday(
-            ticketRepository.countByStatus(TicketStatus.RESOLVED));
+                ticketRepository.countByStatus(TicketStatus.RESOLVED));
 
         return response;
     }
 
-    // ==========================
     // Get All Shipments
-    // ==========================
-
     public List<Shipment> getAllShipments() {
 
         return shipmentRepository.findAll();
 
     }
 
-    // ==========================
     // Update Shipment
-    // ==========================
-
     public Shipment updateShipment(Long id, Shipment shipment) {
 
         return shipmentService.updateShipment(id, shipment);

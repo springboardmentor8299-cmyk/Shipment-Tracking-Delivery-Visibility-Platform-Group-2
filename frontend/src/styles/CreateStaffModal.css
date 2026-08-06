@@ -1,6 +1,3 @@
-/* Create Staff Modal — scoped styles (does not touch shared modal classes
-   used elsewhere, e.g. AddShipmentModal / ticket modals) */
-
 .csm-overlay {
     position: fixed;
     inset: 0;

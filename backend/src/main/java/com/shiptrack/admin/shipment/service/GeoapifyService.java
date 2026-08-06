@@ -14,18 +14,6 @@ public class GeoapifyService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    /**
-     * Calculates distance (in km) and duration (in minutes) between current
-     * location and destination.
-     * Geoapify Routing API format: mode=drive&waypoints=lat,lon|lat,lon
-     *
-     * Returns a RouteMetrics with null values when the inputs are incomplete or the
-     * API call fails —
-     * callers MUST treat null as "unknown", never as "0 km / arrived". Silently
-     * substituting 0.0 here
-     * previously caused shipments with missing coordinates to be auto-marked
-     * DELIVERED immediately.
-     */
     public RouteMetrics calculateRouteMetrics(Double currentLat, Double currentLon, Double destLat, Double destLon) {
         if (currentLat == null || currentLon == null || destLat == null || destLon == null) {
             return new RouteMetrics(null, null);
@@ -52,11 +40,6 @@ public class GeoapifyService {
         return new RouteMetrics(null, null);
     }
 
-    /**
-     * Forward-geocodes a human-readable address (e.g. "Chennai, India") into
-     * [latitude, longitude].
-     * Returns null if the address can't be resolved or the API call fails.
-     */
     public double[] forwardGeocode(String address) {
         if (address == null || address.isBlank()) {
             return null;
@@ -85,5 +68,35 @@ public class GeoapifyService {
     }
 
     public record RouteMetrics(Double distanceKm, Double durationMinutes) {
+    }
+
+    public RouteMetrics calculateRouteMetrics(Double originLatitude, Double originLongitude,
+            Double destinationLatitude, Double destinationLongitude, String geoapifyType) {
+        if (originLatitude == null || originLongitude == null
+                || destinationLatitude == null || destinationLongitude == null) {
+            return new RouteMetrics(null, null);
+        }
+
+        String typeParam = (geoapifyType == null || geoapifyType.isBlank()) ? "" : "&type=" + geoapifyType;
+
+        String url = String.format(
+                "https://api.geoapify.com/v1/routing?waypoints=%f,%f|%f,%f&mode=drive%s&apiKey=%s",
+                originLatitude, originLongitude, destinationLatitude, destinationLongitude, typeParam, apiKey);
+
+        try {
+            GeoapifyRoutingResponse response = restTemplate.getForObject(url, GeoapifyRoutingResponse.class);
+            if (response != null && response.getFeatures() != null && !response.getFeatures().isEmpty()) {
+                var properties = response.getFeatures().get(0).getProperties();
+
+                double distanceKm = properties.getDistance() / 1000.0;
+                double durationMinutes = properties.getTime() / 60.0;
+
+                return new RouteMetrics(distanceKm, durationMinutes);
+            }
+        } catch (Exception e) {
+            System.err.println("Geoapify routing API error (type=" + geoapifyType + "): " + e.getMessage());
+        }
+
+        return new RouteMetrics(null, null);
     }
 }

@@ -20,10 +20,7 @@ public class SupportAgentController {
         this.supportAgentService = supportAgentService;
     }
 
-    // ==========================
     // Dashboard Statistics
-    // ==========================
-
     @GetMapping("/dashboard")
     public SupportDashboardResponse getDashboard() {
 
@@ -31,10 +28,7 @@ public class SupportAgentController {
 
     }
 
-    // ==========================
     // Get All Shipments
-    // ==========================
-
     @GetMapping("/shipments")
     public List<Shipment> getAllShipments() {
 
@@ -42,10 +36,7 @@ public class SupportAgentController {
 
     }
 
-    // ==========================
     // Update Shipment
-    // ==========================
-
     @PutMapping("/shipments/{id}")
     public Shipment updateShipment(
             @PathVariable Long id,

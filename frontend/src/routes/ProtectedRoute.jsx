@@ -1,14 +1,13 @@
 import { Navigate } from "react-router-dom";
 
 function ProtectedRoute({ children }) {
+  const token = localStorage.getItem("token");
 
-    const token = localStorage.getItem("token");
+  if (!token) {
+    return <Navigate to="/LandingPage" replace />;
+  }
 
-    if (!token) {
-        return <Navigate to="/LandingPage" replace />;
-    }
-
-    return children;
+  return children;
 }
 
 export default ProtectedRoute;

@@ -18,155 +18,137 @@ import com.shiptrack.support_agent.repository.TicketRepository;
 @Service
 public class TicketService {
 
-    private final TicketRepository ticketRepository;
-    private final UserRepository userRepository;
-    private final ShipmentRepository shipmentRepository;
+        private final TicketRepository ticketRepository;
+        private final UserRepository userRepository;
+        private final ShipmentRepository shipmentRepository;
 
-    public TicketService(
-            TicketRepository ticketRepository,
-            UserRepository userRepository,
-            ShipmentRepository shipmentRepository) {
+        public TicketService(
+                        TicketRepository ticketRepository,
+                        UserRepository userRepository,
+                        ShipmentRepository shipmentRepository) {
 
-        this.ticketRepository = ticketRepository;
-        this.userRepository = userRepository;
-        this.shipmentRepository = shipmentRepository;
-    }
-
-    // ==========================
-    // CREATE TICKET
-    // ==========================
-
-    public TicketResponse createTicket(TicketRequest request) {
-
-        User customer = userRepository.findById(request.getCustomerId())
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
-
-        Shipment shipment = shipmentRepository.findById(request.getShipmentId())
-                .orElseThrow(() -> new RuntimeException("Shipment not found"));
-
-        User supportAgent = null;
-
-        if (request.getAssignedTo() != null) {
-
-            supportAgent = userRepository.findById(request.getAssignedTo())
-                    .orElseThrow(() -> new RuntimeException("Support Agent not found"));
+                this.ticketRepository = ticketRepository;
+                this.userRepository = userRepository;
+                this.shipmentRepository = shipmentRepository;
         }
 
-        Ticket ticket = Ticket.builder()
-                .customer(customer)
-                .shipment(shipment)
-                .subject(request.getSubject())
-                .description(request.getDescription())
-                .assignedTo(supportAgent)
-                .status(TicketStatus.valueOf(request.getStatus()))
-                .build();
+        // CREATE TICKET
 
-        return convertToResponse(ticketRepository.save(ticket));
-    }
+        public TicketResponse createTicket(TicketRequest request) {
 
-    // ==========================
-    // GET ALL TICKETS
-    // ==========================
+                User customer = userRepository.findById(request.getCustomerId())
+                                .orElseThrow(() -> new RuntimeException("Customer not found"));
 
-    public List<TicketResponse> getAllTickets() {
+                Shipment shipment = shipmentRepository.findById(request.getShipmentId())
+                                .orElseThrow(() -> new RuntimeException("Shipment not found"));
 
-        return ticketRepository.findAll()
-                .stream()
-                .map(this::convertToResponse)
-                .collect(Collectors.toList());
+                User supportAgent = null;
 
-    }
+                if (request.getAssignedTo() != null) {
 
-    // ==========================
-    // GET TICKET BY ID
-    // ==========================
+                        supportAgent = userRepository.findById(request.getAssignedTo())
+                                        .orElseThrow(() -> new RuntimeException("Support Agent not found"));
+                }
 
-    public TicketResponse getTicket(Long id) {
+                Ticket ticket = Ticket.builder()
+                                .customer(customer)
+                                .shipment(shipment)
+                                .subject(request.getSubject())
+                                .description(request.getDescription())
+                                .assignedTo(supportAgent)
+                                .status(TicketStatus.valueOf(request.getStatus()))
+                                .build();
 
-        Ticket ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+                return convertToResponse(ticketRepository.save(ticket));
+        }
 
-        return convertToResponse(ticket);
+        // GET ALL TICKETS
 
-    }
+        public List<TicketResponse> getAllTickets() {
 
-    // ==========================
-    // UPDATE TICKET
-    // ==========================
-
-    public TicketResponse updateTicket(Long id,
-                                       TicketRequest request) {
-
-        Ticket ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ticket not found"));
-
-        ticket.setSubject(request.getSubject());
-
-        ticket.setDescription(request.getDescription());
-
-        ticket.setStatus(
-                TicketStatus.valueOf(request.getStatus()));
-
-        if (request.getAssignedTo() != null) {
-
-            User supportAgent =
-                    userRepository.findById(request.getAssignedTo())
-                            .orElseThrow(() ->
-                                    new RuntimeException("Support Agent not found"));
-
-            ticket.setAssignedTo(supportAgent);
+                return ticketRepository.findAll()
+                                .stream()
+                                .map(this::convertToResponse)
+                                .collect(Collectors.toList());
 
         }
 
-        return convertToResponse(ticketRepository.save(ticket));
+        // GET TICKET BY ID
+        public TicketResponse getTicket(Long id) {
 
-    }
+                Ticket ticket = ticketRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
-    // ==========================
-    // DELETE TICKET
-    // ==========================
+                return convertToResponse(ticket);
 
-    public void deleteTicket(Long id) {
+        }
 
-        ticketRepository.deleteById(id);
+        // UPDATE TICKET
+        public TicketResponse updateTicket(Long id,
+                        TicketRequest request) {
 
-    }
+                Ticket ticket = ticketRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
-    // ==========================
-    // ENTITY → DTO
-    // ==========================
+                ticket.setSubject(request.getSubject());
 
-    private TicketResponse convertToResponse(Ticket ticket) {
+                ticket.setDescription(request.getDescription());
 
-        return TicketResponse.builder()
+                ticket.setStatus(
+                                TicketStatus.valueOf(request.getStatus()));
 
-                .id(ticket.getId())
+                if (request.getAssignedTo() != null) {
 
-                .customerId(ticket.getCustomer().getId())
-                .customerName(ticket.getCustomer().getName())
+                        User supportAgent = userRepository.findById(request.getAssignedTo())
+                                        .orElseThrow(() -> new RuntimeException("Support Agent not found"));
 
-                .shipmentId(ticket.getShipment().getId())
-                .trackingId(ticket.getShipment().getTrackingId())
+                        ticket.setAssignedTo(supportAgent);
 
-                .subject(ticket.getSubject())
-                .description(ticket.getDescription())
-                .status(ticket.getStatus())
+                }
 
-                .assignedToId(
-                        ticket.getAssignedTo() != null
-                                ? ticket.getAssignedTo().getId()
-                                : null)
+                return convertToResponse(ticketRepository.save(ticket));
 
-                .assignedToName(
-                        ticket.getAssignedTo() != null
-                                ? ticket.getAssignedTo().getName()
-                                : null)
+        }
 
-                .createdAt(ticket.getCreatedAt())
-                .updatedAt(ticket.getUpdatedAt())
+        // DELETE TICKET
+        public void deleteTicket(Long id) {
 
-                .build();
+                ticketRepository.deleteById(id);
 
-    }
+        }
+
+        // ENTITY → DTO
+        private TicketResponse convertToResponse(Ticket ticket) {
+
+                return TicketResponse.builder()
+
+                                .id(ticket.getId())
+
+                                .customerId(ticket.getCustomer().getId())
+                                .customerName(ticket.getCustomer().getName())
+
+                                .shipmentId(ticket.getShipment().getId())
+                                .trackingId(ticket.getShipment().getTrackingId())
+
+                                .subject(ticket.getSubject())
+                                .description(ticket.getDescription())
+                                .status(ticket.getStatus())
+
+                                .assignedToId(
+                                                ticket.getAssignedTo() != null
+                                                                ? ticket.getAssignedTo().getId()
+                                                                : null)
+
+                                .assignedToName(
+                                                ticket.getAssignedTo() != null
+                                                                ? ticket.getAssignedTo().getName()
+                                                                : null)
+
+                                .createdAt(ticket.getCreatedAt())
+                                .updatedAt(ticket.getUpdatedAt())
+
+                                .build();
+
+        }
 
 }

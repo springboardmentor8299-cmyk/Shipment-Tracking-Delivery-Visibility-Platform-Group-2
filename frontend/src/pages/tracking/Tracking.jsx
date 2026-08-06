@@ -138,15 +138,18 @@ const calculateRouteDistanceKm = (points) => {
 
 function MapBounds({ points }) {
   const map = useMap();
+  const hasFitRef = useRef(false);
+
   useEffect(() => {
+    if (hasFitRef.current) return; // don't fight the user's manual zoom/pan
+
     const validPoints = points.filter(isValidLatLng);
-    if (validPoints.length > 0) {
-      const bounds = L.latLngBounds(validPoints);
-      if (validPoints.length >= 2) {
-        map.fitBounds(L.latLngBounds(validPoints), { padding: [50, 50] });
-      }
+    if (validPoints.length >= 2) {
+      map.fitBounds(L.latLngBounds(validPoints), { padding: [50, 50] });
+      hasFitRef.current = true;
     }
   }, [points, map]);
+
   return null;
 }
 

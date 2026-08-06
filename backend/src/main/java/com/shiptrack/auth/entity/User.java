@@ -25,13 +25,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User 
-{
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Allow null during schema migration; existing rows may not have a name
     @Column(nullable = true)
     private String name;
 
@@ -44,6 +42,12 @@ public class User
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private Role role;
+
+    @Column(name = "google_id", unique = true)
+    private String googleId;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

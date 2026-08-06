@@ -1,0 +1,84 @@
+.support-page{
+    background:#fff;
+    padding:25px;
+    border-radius:12px;
+}
+
+.support-header h1{
+    margin-bottom:5px;
+}
+
+.support-tabs{
+    display:flex;
+    gap:15px;
+    margin:25px 0;
+}
+
+.support-tabs button{
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    background:#e2e8f0;
+}
+
+.support-tabs button.active{
+    background:#2563eb;
+    color:white;
+}
+
+.support-form{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.support-form input,
+.support-form textarea,
+.support-form select{
+
+    padding:12px;
+
+    border:1px solid #cbd5e1;
+
+    border-radius:8px;
+
+    font-size:15px;
+}
+
+.support-form textarea{
+    resize:none;
+    height:100px;
+}
+
+.support-form button{
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+}
+
+.requests-table table{
+
+    width:100%;
+
+    border-collapse:collapse;
+}
+
+.requests-table th,
+.requests-table td{
+
+    padding:14px;
+
+    border-bottom:1px solid #ddd;
+
+    text-align:left;
+}

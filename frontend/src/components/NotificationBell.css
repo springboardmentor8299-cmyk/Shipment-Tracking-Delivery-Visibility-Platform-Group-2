@@ -1,0 +1,61 @@
+.notif-bell-container {
+    position: relative;
+}
+
+.notif-dropdown {
+    position: absolute;
+    top: calc(100% + 14px);
+    right: -10px;
+    width: 340px;
+    max-width: 90vw;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+    z-index: 100;
+    overflow: hidden;
+}
+
+.notif-dropdown-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.notif-dropdown-header h4 {
+    margin: 0;
+    font-size: 14px;
+    color: #0f172a;
+}
+
+.notif-mark-all-btn {
+    background: none;
+    border: none;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.notif-dropdown-body {
+    max-height: 360px;
+    overflow-y: auto;
+}
+
+.notif-view-all-btn {
+    width: 100%;
+    background: #f8fafc;
+    border: none;
+    border-top: 1px solid #f1f5f9;
+    padding: 11px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #2563eb;
+    cursor: pointer;
+}
+
+.notif-view-all-btn:hover {
+    background: #eff6ff;
+}

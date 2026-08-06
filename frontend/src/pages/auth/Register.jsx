@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
 
 import "../../styles/Register.css";
 import logo from "../../assets/logo.jpg";
 
-import { register } from "../../services/authService";
+import { register, googleLogin } from "../../services/authService";
+import { applyAuthResponse } from "../../utils/applyAuth";
+import GoogleSignInButton from "../../components/GoogleSignInButton";
 
 function Register() {
   const navigate = useNavigate();
@@ -59,6 +60,23 @@ function Register() {
     } catch (error) {
       console.log(error);
 
+      if (error.response) {
+        alert(error.response.data.message || error.response.data);
+      } else {
+        alert(error.message);
+      }
+    }
+  };
+
+  // Google already verifies the person's identity/email, so unlike password
+  // registration (which just shows a "registered" message and sends them to
+  // log in), a successful Google sign-up logs them straight in.
+  const handleGoogleSuccess = async (idToken) => {
+    try {
+      const response = await googleLogin(idToken);
+      window.dispatchEvent(new Event("activities:update"));
+      applyAuthResponse(response, navigate);
+    } catch (error) {
       if (error.response) {
         alert(error.response.data.message || error.response.data);
       } else {
@@ -142,10 +160,9 @@ function Register() {
               <span>OR</span>
             </div>
 
-            <button type="button" className="google-btn">
-              <FcGoogle />
-              Continue with Google
-            </button>
+            <div className="google-btn-wrapper">
+              <GoogleSignInButton onSuccess={handleGoogleSuccess} />
+            </div>
 
             <div className="bottom-link">
               Already have an account?

@@ -24,9 +24,6 @@ public class ShipmentTrackingResponse {
     private LocalDate shipmentDate;
     private LocalDate deliveryDate;
 
-    // Live tracking details — needed to show a real per-step timeline
-    // (current truck location + when it was last updated, ETA for the
-    // "Destination Hub" step before the shipment is actually delivered).
     private String currentLocationName;
     private LocalDateTime lastLocationUpdate;
     private LocalDateTime estimatedDeliveryTime;

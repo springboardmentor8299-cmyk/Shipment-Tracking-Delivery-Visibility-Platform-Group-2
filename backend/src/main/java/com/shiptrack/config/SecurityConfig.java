@@ -18,67 +18,92 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 
 import com.shiptrack.auth.service.CustomUserDetailsService;
 
-
 @Configuration
 public class SecurityConfig {
 
     @Autowired
-    private  JwtAuthFilter jwtAuthFilter;
+    private JwtAuthFilter jwtAuthFilter;
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {        
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            .cors(cors -> {})
-            .csrf(csrf -> csrf.disable())
-          .authorizeHttpRequests(auth -> auth
+                .cors(cors -> {
+                })
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
 
-                .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
 
-                .requestMatchers("/api/customer/**")
-                .hasRole("CUSTOMER")
+                        .requestMatchers("/uploads/**").permitAll()
 
-                .requestMatchers("/api/admin/**")
-                .hasRole("ADMIN")
+                        .requestMatchers("/api/admin/pod/**")
+                        .hasAnyRole("ADMIN", "LOGISTICS_OPERATOR")
 
-                .requestMatchers("/api/business/**")
-                .hasRole("BUSINESS_CLIENT")
+                        .requestMatchers("/api/admin/routes/**")
+                        .hasAnyRole("ADMIN", "LOGISTICS_OPERATOR")
 
-                .requestMatchers("/api/operator/**")
-                .hasRole("LOGISTICS_OPERATOR")
+                        .requestMatchers("/api/customer/**")
+                        .hasRole("CUSTOMER")
 
-                .requestMatchers("/api/support/**")
-                .hasRole("SUPPORT_AGENT")
+                        .requestMatchers("/api/admin/**")
+                        .hasRole("ADMIN")
 
-                .requestMatchers("/api/shipments/**")
-                .hasAnyRole(
-                        "ADMIN",
-                        "BUSINESS_CLIENT",
-                        "LOGISTICS_OPERATOR",
-                        "SUPPORT_AGENT",
-                        "CUSTOMER"
+                        .requestMatchers("/api/business/**")
+                        .hasRole("BUSINESS_CLIENT")
+
+                        .requestMatchers("/api/operator/**")
+                        .hasRole("LOGISTICS_OPERATOR")
+
+                        .requestMatchers("/api/support/**")
+                        .hasAnyRole(
+                                "SUPPORT_AGENT",
+                                "ADMIN")
+
+                        .requestMatchers("/api/shipments/**")
+                        .hasAnyRole(
+                                "ADMIN",
+                                "BUSINESS_CLIENT",
+                                "LOGISTICS_OPERATOR",
+                                "SUPPORT_AGENT",
+                                "CUSTOMER")
+
+                        .anyRequest()
+                        .authenticated())
+
+                .authenticationProvider(authenticationProvider())
+
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT
+                                                                                                             // doesn't
+                                                                                                             // use
+                                                                                                             // sessions.
+                                                                                                             // Every
+                                                                                                             // request
+                                                                                                             // carries
+                                                                                                             // its own
+                                                                                                             // token.So
+                                                                                                             // we tell
+                                                                                                             // Spring,
+                                                                                                             // Don't
+                                                                                                             // create
+                                                                                                             // sessions.This
+                                                                                                             // is
+                                                                                                             // exactly
+                                                                                                             // how
+                                                                                                             // modern
+                                                                                                             // REST
+                                                                                                             // APIs
+                                                                                                             // work
                 )
 
-                .anyRequest()
-                .authenticated()
-            )
+                .addFilterBefore(jwtAuthFilter,
+                        UsernamePasswordAuthenticationFilter.class) // This line is the heart of JWT Security
 
-            .authenticationProvider(authenticationProvider())
-
-            .sessionManagement(session ->
-                                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)                                  //JWT doesn't use sessions. Every request carries its own token.So we tell Spring, Don't create sessions.This is exactly how modern REST APIs work
-          )
-
-            .addFilterBefore(jwtAuthFilter,
-                    UsernamePasswordAuthenticationFilter.class)                                                 //This line is the heart of JWT Security
-
-            .formLogin(form -> form.disable())
-            .httpBasic(httpBasic -> httpBasic.disable());
-
-            
+                .formLogin(form -> form.disable())
+                .httpBasic(httpBasic -> httpBasic.disable());
 
         return http.build();
     }
@@ -88,12 +113,10 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
 
-        DaoAuthenticationProvider provider =
-                new DaoAuthenticationProvider();
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 
         provider.setUserDetailsService(customUserDetailsService);
         provider.setPasswordEncoder(passwordEncoder());

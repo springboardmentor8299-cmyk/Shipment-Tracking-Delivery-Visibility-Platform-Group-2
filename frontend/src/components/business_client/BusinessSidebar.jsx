@@ -4,6 +4,7 @@ import {
   FaMapMarkedAlt,
   FaChartBar,
   FaFileAlt,
+  FaBell,
   FaCog,
   FaSignOutAlt,
   FaBars,
@@ -50,6 +51,14 @@ function BusinessSidebar({ onSelect, activeSection }) {
         >
           <FaFileAlt />
           {!collapsed && <span>Reports</span>}
+        </li>
+
+        <li
+          className={activeSection === "notifications" ? "active" : ""}
+          onClick={() => select("notifications")}
+        >
+          <FaBell />
+          {!collapsed && <span>Notifications</span>}
         </li>
 
         <li

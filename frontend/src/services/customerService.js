@@ -1,8 +1,6 @@
 import api from "./api";
 
-// ================================
 // Dashboard Statistics
-// ================================
 
 export const getCustomerDashboard = async () => {
 
@@ -12,11 +10,7 @@ export const getCustomerDashboard = async () => {
 
 };
 
-
-// ================================
 // My Shipments
-// ================================
-
 export const getCustomerShipments = async () => {
 
     const response = await api.get("/customer/shipments");
@@ -26,10 +20,7 @@ export const getCustomerShipments = async () => {
 };
 
 
-// ================================
 // My Profile
-// ================================
-
 export const getCustomerProfile = async () => {
 
     const response = await api.get("/customer/profile");
@@ -39,10 +30,7 @@ export const getCustomerProfile = async () => {
 };
 
 
-// ================================
 // Shipment Tracking
-// ================================
-
 export const getShipmentTracking = async (trackingId) => {
 
     const response = await api.get(`/customer/tracking/${trackingId}`);

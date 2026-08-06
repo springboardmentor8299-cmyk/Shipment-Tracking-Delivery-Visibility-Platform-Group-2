@@ -1,0 +1,61 @@
+.support-request-table{
+
+    background:#fff;
+
+    padding:20px;
+
+    border-radius:10px;
+
+}
+
+.support-request-table table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.support-request-table th,
+
+.support-request-table td{
+
+    padding:12px;
+
+    border-bottom:1px solid #ddd;
+
+}
+
+.support-request-table button{
+
+    margin-right:8px;
+
+    padding:6px 12px;
+
+    border:none;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+}
+
+.support-request-table select{
+
+    margin:0 10px;
+
+    padding:5px;
+
+}
+
+/* In SupportRequestTable.css or inline style */
+.support-request-table table {
+  width: 100%;
+  table-layout: auto;
+}
+
+.support-request-table th,
+.support-request-table td {
+  white-space: nowrap; /* Prevents text from wrapping and overlapping */
+  padding: 12px 10px;
+}

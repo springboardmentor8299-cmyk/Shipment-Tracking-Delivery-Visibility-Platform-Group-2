@@ -5,9 +5,7 @@ export const getOperatorDashboard = async () => {
     return response.data;
 };
 
-// ==============================
 // Get All Shipments
-// ==============================
 export const getAllShipments = async () => {
 
     const response = await api.get(
@@ -22,9 +20,7 @@ export const getAllShipments = async () => {
     return response.data;
 };
 
-// ==============================
 // Update Shipment
-// ==============================
 export const updateShipment = async (id, shipment) => {
 
     const response = await api.put(

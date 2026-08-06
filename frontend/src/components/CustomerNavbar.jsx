@@ -1,8 +1,9 @@
 import "../styles/Navbar.css";
 import { useEffect, useState } from "react";
-import { FaBell, FaSearch } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
+import NotificationBell from "./NotificationBell";
 
-function CustomerNavbar({ searchTerm, onSearchChange }) {
+function CustomerNavbar({ searchTerm, onSearchChange, onNavigate }) {
   const [name, setName] = useState(() => {
     return localStorage.getItem("name") || "Customer";
   });
@@ -58,10 +59,7 @@ function CustomerNavbar({ searchTerm, onSearchChange }) {
         </div>
 
         {/* Notification */}
-        <div className="notification">
-          <FaBell />
-          <span>0</span>
-        </div>
+        <NotificationBell onViewAll={onNavigate ? () => onNavigate("notifications") : undefined} />
 
         {/* Profile */}
         <div className="profile">

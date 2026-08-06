@@ -286,6 +286,16 @@ body{
 
 }
 
+.google-btn-wrapper{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+}
+
 .bottom-link{
 
     text-align:center;

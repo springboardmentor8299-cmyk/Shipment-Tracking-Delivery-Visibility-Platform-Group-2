@@ -5,6 +5,8 @@ import LandingPage from "./pages/LandingPage";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Logout from "./pages/auth/Logout";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 
@@ -18,109 +20,102 @@ import Tracking from "./pages/tracking/Tracking";
 import Delivery from "./pages/delivery/Delivery";
 
 function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
 
-    return (
+        <Route path="/login" element={<Login />} />
 
-        <BrowserRouter>
+        <Route path="/register" element={<Register />} />
 
-            <Routes>
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
-                <Route path="/" element={<LandingPage />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
-                <Route path="/login" element={<Login />} />
+        {/* Admin Dashboard */}
 
-                <Route path="/register" element={<Register />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-                {/* Admin Dashboard */}
+        {/* Customer Dashboard */}
 
-                <Route
-                    path="/admin"
-                    element={
-                        <ProtectedRoute>
-                            <AdminDashboard />
-                        </ProtectedRoute>
-                    }
-                />
+        <Route
+          path="/customer"
+          element={
+            <ProtectedRoute>
+              <CustomerDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-                {/* Customer Dashboard */}
+        {/* Business Client */}
 
-                <Route
-                    path="/customer"
-                    element={
-                        <ProtectedRoute>
-                            <CustomerDashboard />
-                        </ProtectedRoute>
-                    }
-                />
+        <Route
+          path="/business_client"
+          element={
+            <ProtectedRoute>
+              <BusinessDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-                {/* Business Client */}
+        {/* Logistics Operator */}
 
-                <Route
-                    path="/business_client"
-                    element={
-                        <ProtectedRoute>
-                            <BusinessDashboard />
-                        </ProtectedRoute>
-                    }
-                />
+        <Route
+          path="/logistics_operator"
+          element={
+            <ProtectedRoute>
+              <LogisticsDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-                {/* Logistics Operator */}
+        {/* Support Agent */}
 
-                <Route
-                    path="/logistics_operator"
-                    element={
-                        <ProtectedRoute>
-                            <LogisticsDashboard />
-                        </ProtectedRoute>
-                    }
-                />
+        <Route
+          path="/support_agent"
+          element={
+            <ProtectedRoute>
+              <SupportDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-                {/* Support Agent */}
+        {/* Tracking */}
 
-                <Route
-                    path="/support_agent"
-                    element={
-                        <ProtectedRoute>
-                            <SupportDashboard />
-                        </ProtectedRoute>
-                    }
-                />
+        <Route
+          path="/tracking"
+          element={
+            <ProtectedRoute>
+              <Tracking />
+            </ProtectedRoute>
+          }
+        />
 
-                {/* Tracking */}
+        {/* Delivery */}
 
-                <Route
-                    path="/tracking"
-                    element={
-                        <ProtectedRoute>
-                            <Tracking />
-                        </ProtectedRoute>
-                    }
-                />
+        <Route
+          path="/delivery"
+          element={
+            <ProtectedRoute>
+              <Delivery />
+            </ProtectedRoute>
+          }
+        />
 
-                {/* Delivery */}
+        {/* Logout */}
 
-                <Route
-                    path="/delivery"
-                    element={
-                        <ProtectedRoute>
-                            <Delivery />
-                        </ProtectedRoute>
-                    }
-                />
-
-                {/* Logout */}
-
-                <Route
-                    path="/logout"
-                    element={<Logout />}
-                />
-
-            </Routes>
-
-        </BrowserRouter>
-
-    );
-
+        <Route path="/logout" element={<Logout />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;

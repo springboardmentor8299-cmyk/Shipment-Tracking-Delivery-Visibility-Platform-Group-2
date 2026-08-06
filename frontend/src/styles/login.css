@@ -222,6 +222,39 @@ body{
 
 }
 
+.divider{
+
+    display:flex;
+
+    align-items:center;
+
+    margin:22px 0;
+
+}
+
+.divider::before,
+.divider::after{
+
+    content:"";
+
+    flex:1;
+
+    height:1px;
+
+    background:#ddd;
+
+}
+
+.divider span{
+
+    padding:0 12px;
+
+    color:#777;
+
+    font-size:14px;
+
+}
+
 /* Bottom */
 
 .bottom-text{
