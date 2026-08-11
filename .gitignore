@@ -1,0 +1,31 @@
+# Node
+node_modules/
+dist/
+build/
+
+# Java / Maven
+target/
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+
+# Environment / secrets
+.env
+*.env.local
+application-local.properties
+
+# Build tools
+keycloak-26.0.0.zip
+keycloak-26.0.0/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
