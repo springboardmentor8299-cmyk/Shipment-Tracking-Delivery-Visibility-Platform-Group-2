@@ -1,87 +1,395 @@
-.profile-container{
+/* =========================================
+   PROFILE CONTAINER
+   ========================================= */
 
-    display:flex;
-
-    justify-content:center;
-
-    margin-top:30px;
-
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 30px;
+    width: 100%;
 }
 
-.profile-card{
 
-    width:500px;
+/* =========================================
+   PROFILE CARD
+   ========================================= */
 
-    background:#fff;
-
-    border-radius:15px;
-
-    padding:30px;
-
-    box-shadow:0 10px 20px rgba(0,0,0,.08);
-
-    text-align:center;
-
+.profile-card {
+    width: 500px;
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    text-align: center;
 }
+
+
+/* =========================================
+   PROFILE AVATAR
+   ========================================= */
 
 .profile-card .profile-avatar {
-  width: 90px !important;
-  height: 90px !important;
-  min-width: 90px !important;
-  min-height: 90px !important;
-  border-radius: 50% !important;
-  background-color: #e0edff !important;
-  border: 2px solid #bfdbfe !important;
-  color: #2563eb !important;
-  font-size: 32px !important;
-  font-weight: 700 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  margin: 0 auto 16px auto !important;
-  user-select: none;
+    width: 90px !important;
+    height: 90px !important;
+    min-width: 90px !important;
+    min-height: 90px !important;
+
+    border-radius: 50% !important;
+
+    background-color: #e0edff !important;
+    border: 2px solid #bfdbfe !important;
+
+    color: #2563eb !important;
+
+    font-size: 32px !important;
+    font-weight: 700 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    margin: 0 auto 16px auto !important;
+
+    user-select: none;
 }
 
-.profile-info{
 
-    margin-top:30px;
+/* =========================================
+   PROFILE TITLE
+   ========================================= */
 
+.profile-card h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    color: #222;
 }
 
-.profile-info div{
 
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    padding:15px;
-
-    border-bottom:1px solid #eee;
-
+.profile-card > p {
+    margin-top: 5px;
+    margin-bottom: 0;
+    font-size: 14px;
+    color: #555;
 }
 
-.profile-info svg{
 
-    color:#2563EB;
+/* =========================================
+   PROFILE INFORMATION
+   ========================================= */
 
+.profile-info {
+    margin-top: 30px;
 }
 
-.profile-info span{
 
-    flex:1;
+/* =========================================
+   PROFILE ROW
+   ========================================= */
 
-    text-align:left;
+.profile-row {
+    display: flex;
+    align-items: center;
 
-    margin-left:15px;
+    min-height: 44px;
 
-    color:#666;
+    padding: 15px 0;
 
+    border-bottom: 1px solid #eeeeee;
+
+    gap: 12px;
+
+    text-align: left;
 }
 
-.profile-info strong{
 
-    color:#222;
+/* =========================================
+   ICON
+   ========================================= */
 
+.profile-row svg {
+    color: #2563eb;
+    width: 16px;
+    min-width: 16px;
+}
+
+
+/* =========================================
+   LABEL
+   ========================================= */
+
+.profile-row span {
+    color: #666;
+
+    min-width: 90px;
+
+    margin-left: 3px;
+}
+
+
+/* =========================================
+   VALUE
+   ========================================= */
+
+.profile-row > strong {
+    color: #222;
+
+    margin-left: auto;
+
+    font-weight: 600;
+
+    text-align: right;
+}
+
+
+/* =========================================
+   PHONE DISPLAY
+   ========================================= */
+
+.phone-display {
+    margin-left: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.phone-display strong {
+    margin-left: 0;
+
+    color: #222;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   EDIT BUTTON
+   ========================================= */
+
+.edit-btn {
+    border: none;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    padding: 6px 14px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    transition:
+        background 0.2s ease,
+        transform 0.1s ease;
+}
+
+
+.edit-btn:hover {
+    background: #1d4ed8;
+}
+
+
+.edit-btn:active {
+    transform: scale(0.97);
+}
+
+
+/* =========================================
+   PHONE EDIT SECTION
+   ========================================= */
+
+.phone-edit {
+    margin-left: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+/* =========================================
+   PHONE INPUT
+   ========================================= */
+
+.phone-edit input {
+    width: 160px;
+
+    padding: 8px 10px;
+
+    border: 1px solid #cccccc;
+
+    border-radius: 6px;
+
+    outline: none;
+
+    font-size: 14px;
+
+    color: #222;
+
+    background: #ffffff;
+
+    box-sizing: border-box;
+}
+
+
+.phone-edit input:focus {
+    border-color: #2563eb;
+
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+
+/* =========================================
+   SAVE / CANCEL BUTTON CONTAINER
+   ========================================= */
+
+.phone-buttons {
+    display: flex;
+
+    gap: 6px;
+
+    align-items: center;
+}
+
+
+/* =========================================
+   SAVE / CANCEL BUTTONS
+   ========================================= */
+
+.save-btn,
+.cancel-btn {
+    border: none;
+
+    padding: 7px 12px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    transition:
+        background 0.2s ease,
+        transform 0.1s ease;
+}
+
+
+/* =========================================
+   SAVE BUTTON
+   ========================================= */
+
+.save-btn {
+    background: #2563eb;
+
+    color: #ffffff;
+}
+
+
+.save-btn:hover {
+    background: #1d4ed8;
+}
+
+
+.save-btn:active {
+    transform: scale(0.97);
+}
+
+
+/* =========================================
+   CANCEL BUTTON
+   ========================================= */
+
+.cancel-btn {
+    background: #e5e7eb;
+
+    color: #333333;
+}
+
+
+.cancel-btn:hover {
+    background: #d1d5db;
+}
+
+
+.cancel-btn:active {
+    transform: scale(0.97);
+}
+
+
+/* =========================================
+   DISABLED BUTTON
+   ========================================= */
+
+.save-btn:disabled,
+.cancel-btn:disabled,
+.edit-btn:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   RESPONSIVE DESIGN
+   ========================================= */
+
+@media (max-width: 600px) {
+
+    .profile-container {
+        padding: 0 15px;
+
+        box-sizing: border-box;
+    }
+
+
+    .profile-card {
+        width: 100%;
+
+        padding: 25px 20px;
+
+        box-sizing: border-box;
+    }
+
+
+    .profile-row {
+        gap: 8px;
+    }
+
+
+    .profile-row span {
+        min-width: 75px;
+    }
+
+
+    .phone-edit {
+        flex-direction: column;
+
+        align-items: flex-end;
+
+        gap: 8px;
+    }
+
+
+    .phone-edit input {
+        width: 150px;
+    }
+
+
+    .phone-buttons {
+        justify-content: flex-end;
+    }
 }

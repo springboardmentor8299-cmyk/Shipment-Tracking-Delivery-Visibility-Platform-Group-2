@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaLock, FaPhone } from "react-icons/fa";
 
 import "../../styles/Register.css";
 import logo from "../../assets/logo.jpg";
@@ -16,6 +16,8 @@ function Register() {
     name: "",
 
     username: "",
+
+    phoneNumber: "",
 
     password: "",
 
@@ -39,11 +41,18 @@ function Register() {
       return;
     }
 
+    if (!/^\d{10}$/.test(formData.phoneNumber)) {
+      alert("Please enter a valid 10-digit phone number");
+      return;
+    }
+
     try {
       const response = await register({
         name: formData.name,
 
         username: formData.username,
+
+        phoneNumber: formData.phoneNumber,
 
         password: formData.password,
 
@@ -120,6 +129,20 @@ function Register() {
                 placeholder="Username"
                 value={formData.username}
                 onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="input-box">
+              <FaPhone className="icon" />
+
+              <input
+                type="tel"
+                name="phoneNumber"
+                placeholder="Phone Number"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                maxLength={10}
                 required
               />
             </div>

@@ -117,11 +117,6 @@ function Sidebar({ onSelect, activeSection }) {
           <FaFileAlt />
           {!collapsed && <span>Reports</span>}
         </li>
-
-        <li>
-          <FaCog />
-          {!collapsed && <span>Settings</span>}
-        </li>
       </ul>
 
       <div

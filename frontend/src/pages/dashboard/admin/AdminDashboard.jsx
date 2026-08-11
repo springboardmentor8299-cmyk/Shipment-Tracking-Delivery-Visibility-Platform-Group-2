@@ -172,7 +172,7 @@ function AdminDashboard() {
                   marginBottom: "30px",
                 }}
               >
-                <SupportRequestTable />
+                <SupportRequestTable showAssign={true} />
               </div>
 
               {/* Bottom Widgets */}

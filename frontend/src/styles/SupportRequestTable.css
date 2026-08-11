@@ -1,61 +1,859 @@
-.support-request-table{
+/* =========================================================
+   MAIN SUPPORT REQUEST TABLE
+========================================================= */
 
-    background:#fff;
-
-    padding:20px;
-
-    border-radius:10px;
-
+.support-request-table {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
 }
 
-.support-request-table table{
+/* =========================================================
+   HEADER
+========================================================= */
 
-    width:100%;
-
-    border-collapse:collapse;
-
+.support-table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
 }
 
-.support-request-table th,
-
-.support-request-table td{
-
-    padding:12px;
-
-    border-bottom:1px solid #ddd;
-
+.support-request-table h2 {
+    margin: 0 0 8px;
+    color: #1e293b;
+    font-size: 22px;
+    font-weight: 700;
 }
 
-.support-request-table button{
-
-    margin-right:8px;
-
-    padding:6px 12px;
-
-    border:none;
-
-    border-radius:6px;
-
-    cursor:pointer;
-
+.support-request-table p {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
 }
 
-.support-request-table select{
-
-    margin:0 10px;
-
-    padding:5px;
-
+.request-count {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    border-radius: 20px;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 700;
 }
 
-/* In SupportRequestTable.css or inline style */
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
 .support-request-table table {
-  width: 100%;
-  table-layout: auto;
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
 }
 
-.support-request-table th,
+.support-request-table th {
+    padding: 13px 12px;
+    background: #eef4ff;
+    color: #1e293b;
+    border-bottom: 2px solid #bfdbfe;
+    font-size: 12px;
+    font-weight: 800;
+    text-align: left;
+    white-space: nowrap;
+}
+
 .support-request-table td {
-  white-space: nowrap; /* Prevents text from wrapping and overlapping */
-  padding: 12px 10px;
+    padding: 13px 12px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.support-request-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.support-request-table tbody tr:hover {
+    background: #f8fbff;
+}
+
+.support-request-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* =========================================================
+   TABLE COLUMNS
+========================================================= */
+
+.support-request-table td:first-child {
+    color: #2563eb;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.support-request-table td:nth-child(2) {
+    color: #1e293b;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.support-request-table td:nth-child(3) {
+    white-space: nowrap;
+}
+
+.support-request-table td:nth-child(4) {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.support-request-table td:nth-child(5) {
+    white-space: nowrap;
+}
+
+.support-request-table td:nth-child(6) {
+    white-space: nowrap;
+}
+
+.support-request-table td:nth-child(7) {
+    white-space: nowrap;
+}
+
+.support-request-table th:last-child,
+.support-request-table td:last-child {
+    width: 1%;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   REQUEST TYPE
+========================================================= */
+
+.type-shipment,
+.type-issue {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.type-shipment {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.type-issue {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+/* =========================================================
+   STATUS BADGES
+========================================================= */
+
+.status-badge {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.status-open {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.status-progress {
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+.status-resolved {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-rejected {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.status-default {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+/* =========================================================
+   ASSIGNED AGENT
+========================================================= */
+
+.assigned-agent-cell {
+    min-width: 120px;
+}
+
+.not-assigned {
+    color: #94a3b8;
+    font-style: italic;
+    font-size: 12px;
+}
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.support-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.support-request-table button {
+    margin-right: 0;
+    padding: 7px 12px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.support-request-table button:hover {
+    transform: translateY(-1px);
+}
+
+.support-request-table button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* =========================================================
+   VIEW BUTTON
+========================================================= */
+
+.support-request-table .view-btn {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.support-request-table .view-btn:hover {
+    background: #bfdbfe;
+}
+
+/* =========================================================
+   ASSIGN BUTTON
+========================================================= */
+
+.support-request-table .assign-btn {
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+.support-request-table .assign-btn:hover {
+    background: #ddd6fe;
+}
+
+/* =========================================================
+   RESOLVE BUTTON
+========================================================= */
+
+.support-request-table .resolve-btn {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.support-request-table .resolve-btn:hover {
+    background: #bbf7d0;
+}
+
+/* =========================================================
+   STATUS SELECT
+========================================================= */
+
+.support-request-table .status-select {
+    margin: 0;
+    padding: 7px 8px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #334155;
+    font-size: 12px;
+    cursor: pointer;
+    outline: none;
+}
+
+.support-request-table .status-select:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+/* =========================================================
+   NO REQUESTS
+========================================================= */
+
+.no-requests {
+    text-align: center;
+    padding: 35px !important;
+    color: #64748b !important;
+    font-weight: 600;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.support-loading {
+    min-height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* =========================================================
+   ASSIGN AGENT MODAL OVERLAY
+========================================================= */
+
+.assign-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    background: rgba(15, 23, 42, 0.60);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   ASSIGN AGENT MODAL
+========================================================= */
+
+.assign-modal {
+    width: 100%;
+    max-width: 500px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.30);
+    overflow: hidden;
+    animation: assignModalOpen 0.2s ease-out;
+}
+
+@keyframes assignModalOpen {
+    from {
+        opacity: 0;
+        transform: translateY(-15px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* =========================================================
+   ASSIGN MODAL HEADER
+========================================================= */
+
+.assign-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20px 22px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.assign-modal-header h2 {
+    margin: 0 0 5px;
+    color: #1e293b;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.assign-modal-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.assign-close-btn {
+    width: 34px;
+    height: 34px;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 50% !important;
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    font-size: 22px !important;
+    line-height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.assign-close-btn:hover {
+    background: #fee2e2 !important;
+    color: #dc2626 !important;
+}
+
+/* =========================================================
+   ASSIGN MODAL BODY
+========================================================= */
+
+.assign-modal-body {
+    padding: 22px;
+}
+
+.assign-modal-body label {
+    display: block;
+    margin-bottom: 8px;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   SUPPORT AGENT DROPDOWN
+========================================================= */
+
+.agent-select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #334155;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+}
+
+.agent-select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+.agent-select:disabled {
+    background: #f8fafc;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   SELECTED AGENT INFO
+========================================================= */
+
+.selected-agent-info {
+    margin-top: 15px;
+    padding: 12px 14px;
+    border: 1px solid #bfdbfe;
+    border-radius: 9px;
+    background: #eff6ff;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.selected-agent-info span {
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.selected-agent-info strong {
+    color: #1e40af;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   ASSIGN MODAL FOOTER
+========================================================= */
+
+.assign-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 22px;
+    border-top: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+/* =========================================================
+   CANCEL BUTTON
+========================================================= */
+
+.cancel-assign-btn {
+    background: #e2e8f0 !important;
+    color: #334155 !important;
+}
+
+.cancel-assign-btn:hover {
+    background: #cbd5e1 !important;
+}
+
+/* =========================================================
+   CONFIRM ASSIGN BUTTON
+========================================================= */
+
+.confirm-assign-btn {
+    background: #2563eb !important;
+    color: #ffffff !important;
+}
+
+.confirm-assign-btn:hover {
+    background: #1d4ed8 !important;
+}
+
+.confirm-assign-btn:disabled {
+    background: #94a3b8 !important;
+}
+
+/* =========================================================
+   DETAILS OVERLAY
+========================================================= */
+
+.details-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(15, 23, 42, 0.60);
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 99999 !important;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   DETAILS MODAL
+========================================================= */
+
+.details-modal {
+    position: relative;
+    width: 720px;
+    max-width: 95vw;
+    max-height: 88vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 25px;
+    box-sizing: border-box;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.30);
+    animation: popupOpen 0.2s ease-out;
+}
+
+@keyframes popupOpen {
+    from {
+        opacity: 0;
+        transform: translateY(-15px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* =========================================================
+   DETAILS HEADER
+========================================================= */
+
+.details-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+}
+
+.details-header h2 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.details-header p {
+    margin: 5px 0 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.close-details-btn {
+    border: none;
+    background: #f1f5f9;
+    color: #475569;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-details-btn:hover {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+/* =========================================================
+   DETAILS SECTIONS
+========================================================= */
+
+.details-section {
+    margin-bottom: 22px;
+}
+
+.details-section h3 {
+    margin: 0 0 13px;
+    color: #1e293b;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   DETAILS GRID
+========================================================= */
+
+.details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.detail-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 9px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.detail-item span {
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.detail-item strong {
+    color: #1e293b;
+    font-size: 14px;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+.detail-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.description-text {
+    line-height: 1.6;
+    white-space: pre-wrap;
+    font-weight: 400 !important;
+}
+
+/* =========================================================
+   DETAILS FOOTER
+========================================================= */
+
+.details-footer {
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 15px;
+    margin-top: 10px;
+}
+
+.close-modal-btn {
+    border: none;
+    background: #2563eb;
+    color: #ffffff;
+    padding: 9px 20px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.close-modal-btn:hover {
+    background: #1d4ed8;
+}
+
+/* =========================================================
+   DETAILS LOADING
+========================================================= */
+
+.details-loading {
+    background: #ffffff;
+    padding: 25px 35px;
+    border-radius: 12px;
+    color: #334155;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* =========================================================
+   RESPONSIVE - 1200px
+========================================================= */
+
+@media (max-width: 1200px) {
+    .support-request-table {
+        padding: 16px;
+    }
+
+    .support-request-table th,
+    .support-request-table td {
+        padding: 10px 8px;
+    }
+
+    .support-request-table button {
+        padding: 6px 9px;
+    }
+
+    .support-request-table .status-select {
+        padding: 6px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE - 900px
+========================================================= */
+
+@media (max-width: 900px) {
+    .support-table-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .support-request-table {
+        overflow-x: auto;
+    }
+
+    .support-request-table table {
+        min-width: 1050px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE - 700px
+========================================================= */
+
+@media (max-width: 700px) {
+    .assign-modal {
+        max-width: 95vw;
+    }
+
+    .details-modal {
+        width: 95vw;
+        padding: 18px;
+    }
+
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-item.full-width {
+        grid-column: auto;
+    }
+
+    .assign-modal-footer {
+        flex-direction: column-reverse;
+    }
+
+    .assign-modal-footer button {
+        width: 100%;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE - 600px
+========================================================= */
+
+@media (max-width: 600px) {
+    .support-request-table {
+        padding: 12px;
+        border-radius: 10px;
+    }
+
+    .support-request-table h2 {
+        font-size: 18px;
+    }
+
+    .support-request-table p {
+        font-size: 13px;
+    }
+
+    .details-overlay {
+        padding: 10px;
+    }
+
+    .details-modal {
+        max-height: 90vh;
+        padding: 18px;
+    }
+
+    .assign-overlay {
+        padding: 10px;
+    }
+
+    .assign-modal-header {
+        padding: 17px;
+    }
+
+    .assign-modal-body {
+        padding: 17px;
+    }
+
+    .assign-modal-footer {
+        padding: 14px 17px;
+    }
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center; /* Keeps everything grouped in the center */
+  align-items: center;
+  gap: 10px; /* Controls exact spacing between buttons */
+  margin-top: 20px;
 }

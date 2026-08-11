@@ -60,14 +60,6 @@ function BusinessSidebar({ onSelect, activeSection }) {
           <FaBell />
           {!collapsed && <span>Notifications</span>}
         </li>
-
-        <li
-          className={activeSection === "settings" ? "active" : ""}
-          onClick={() => select("settings")}
-        >
-          <FaCog />
-          {!collapsed && <span>Settings</span>}
-        </li>
       </ul>
 
       <div

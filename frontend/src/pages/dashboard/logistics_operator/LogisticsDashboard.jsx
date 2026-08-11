@@ -6,7 +6,6 @@ import OperatorShipmentTable from "../../../components/operator/OperatorShipment
 
 import StatCard from "../../../components/StatCard";
 import QuickActions from "../../../components/QuickActions";
-import RecentActivities from "../../../components/RecentActivities";
 
 import Tracking from "../../tracking/Tracking";
 import Delivery from "../../delivery/Delivery";
@@ -141,8 +140,6 @@ function LogisticsDashboard() {
                 }}
               >
                 <QuickActions />
-
-                <RecentActivities />
               </div>
             </>
           )}

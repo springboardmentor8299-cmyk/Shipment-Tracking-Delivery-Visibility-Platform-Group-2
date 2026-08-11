@@ -12,6 +12,8 @@ import {
   updateShipment,
 } from "../../services/shipmentService";
 import { submitPOD, getAllPODs, deletePOD } from "../../services/podService";
+import { sendPodOtp, verifyPodOtp } from "../../services/podOtpService";
+import { generatePodBillPdf } from "../../utils/generatePodBill";
 import "./ProofOfDelivery.css";
 
 const VERIFICATION_METHODS = [
@@ -33,10 +35,6 @@ const CHECKLIST_ITEMS = [
 // captured for — still useful to allow searching any tracking ID though,
 // in case a record needs to be logged after the fact.
 const DELIVERY_CANDIDATE_STATUSES = ["OUT_FOR_DELIVERY", "IN_TRANSIT"];
-
-function generateOtp() {
-  return String(Math.floor(100000 + Math.random() * 900000));
-}
 
 //  (i) Digital signature capture — plain canvas pad, mouse + touch
 function SignaturePad({ onChange }) {
@@ -193,7 +191,11 @@ function PhotoUpload({ photos, onAdd, onRemove }) {
 
 // Main page
 export default function ProofOfDelivery() {
-  const [activeTab, setActiveTab] = useState("new");
+  // Only logistics operators actually perform deliveries and capture new
+  // POD evidence out in the field. Admins review/audit what's already been
+  // captured, so they only get the records list — no "New POD" form.
+  const canCreatePod = localStorage.getItem("role") === "LOGISTICS_OPERATOR";
+  const [activeTab, setActiveTab] = useState(canCreatePod ? "new" : "records");
 
   // Shipment lookup
   const [shipments, setShipments] = useState([]);
@@ -204,8 +206,17 @@ export default function ProofOfDelivery() {
   const [receiverName, setReceiverName] = useState("");
   const [deliveryNotes, setDeliveryNotes] = useState("");
   const [verificationMethod, setVerificationMethod] = useState("SIGNATURE");
-  const [otp, setOtp] = useState("");
+
+  // (iv) OTP verification workflow — driven entirely by the backend:
+  // it generates the code, stores it temporarily, and notifies the
+  // customer; here we just track where in that flow we are.
   const [otpInput, setOtpInput] = useState("");
+  const [otpSending, setOtpSending] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpVerifying, setOtpVerifying] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [otpError, setOtpError] = useState("");
+
   const [checklist, setChecklist] = useState({});
   const [signatureDataUrl, setSignatureDataUrl] = useState(null);
   const [photos, setPhotos] = useState([]);
@@ -221,6 +232,8 @@ export default function ProofOfDelivery() {
   const [recordSearch, setRecordSearch] = useState("");
   const [viewingRecord, setViewingRecord] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
+  const [generatingBillId, setGeneratingBillId] = useState(null);
+  const [billError, setBillError] = useState("");
 
   useEffect(() => {
     loadShipments();
@@ -284,11 +297,67 @@ export default function ProofOfDelivery() {
     setChecklist((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
-  const regenerateOtp = () => setOtp(generateOtp());
+  const resetOtpFlow = () => {
+    setOtpInput("");
+    setOtpSending(false);
+    setOtpSent(false);
+    setOtpVerifying(false);
+    setOtpVerified(false);
+    setOtpError("");
+  };
 
+  // Step 1+2+3+4: admin selects OTP -> ask the backend to generate, store,
+  // and send it to the customer.
+  const handleSendOtp = async () => {
+    if (!selectedShipment) return;
+    setOtpSending(true);
+    setOtpError("");
+    setOtpVerified(false);
+    setOtpInput("");
+    try {
+      await sendPodOtp(selectedShipment.trackingId);
+      setOtpSent(true);
+    } catch (err) {
+      console.error("Failed to send OTP:", err);
+      setOtpSent(false);
+      setOtpError(
+        err?.response?.data?.message || "Could not send the OTP. Try again.",
+      );
+    } finally {
+      setOtpSending(false);
+    }
+  };
+
+  // Step 6+7: admin enters the code the customer gave them -> backend
+  // verifies it server-side.
+  const handleVerifyOtp = async () => {
+    if (!selectedShipment || !otpInput.trim()) return;
+    setOtpVerifying(true);
+    setOtpError("");
+    try {
+      const result = await verifyPodOtp(selectedShipment.trackingId, otpInput.trim());
+      if (result?.verified) {
+        setOtpVerified(true);
+      } else {
+        setOtpVerified(false);
+        setOtpError("That code doesn't match. Ask the receiver to confirm it and try again.");
+      }
+    } catch (err) {
+      console.error("Failed to verify OTP:", err);
+      setOtpVerified(false);
+      setOtpError(
+        err?.response?.data?.message || "Could not verify this code. Try again.",
+      );
+    } finally {
+      setOtpVerifying(false);
+    }
+  };
+
+  // Switching away from OTP, or picking a different shipment, invalidates
+  // whatever OTP progress was in flight.
   useEffect(() => {
-    if (verificationMethod === "OTP" && !otp) regenerateOtp();
-  }, [verificationMethod]); // eslint-disable-line react-hooks/exhaustive-deps
+    resetOtpFlow();
+  }, [verificationMethod, selectedShipment?.trackingId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const resetForm = () => {
     setSelectedShipment(null);
@@ -296,8 +365,7 @@ export default function ProofOfDelivery() {
     setReceiverName("");
     setDeliveryNotes("");
     setVerificationMethod("SIGNATURE");
-    setOtp("");
-    setOtpInput("");
+    resetOtpFlow();
     setChecklist({});
     setSignatureDataUrl(null);
     setPhotos([]);
@@ -305,10 +373,10 @@ export default function ProofOfDelivery() {
 
   // (iv) Verification workflow — must be satisfied before a POD can be submitted
   const verificationSatisfied = useMemo(() => {
-    if (verificationMethod === "OTP") return otpInput.trim() === otp;
+    if (verificationMethod === "OTP") return otpVerified;
     if (verificationMethod === "ID_CHECK") return !!checklist.identityConfirmed;
     return true; // SIGNATURE method is verified by the signature itself
-  }, [verificationMethod, otp, otpInput, checklist]);
+  }, [verificationMethod, otpVerified, checklist]);
 
   const allChecklistDone = CHECKLIST_ITEMS.every((item) => checklist[item.key]);
 
@@ -343,7 +411,7 @@ export default function ProofOfDelivery() {
     if (!verificationSatisfied) {
       setFormError(
         verificationMethod === "OTP"
-          ? "The OTP entered doesn't match. Ask the receiver for the correct code."
+          ? "Verify the OTP code with the receiver before confirming delivery."
           : "Verification is incomplete for the selected method.",
       );
       return;
@@ -414,6 +482,24 @@ export default function ProofOfDelivery() {
     }
   };
 
+  // Builds a downloadable PDF bill from everything already on the record —
+  // sender/receiver, shipment details, cost, signature, and evidence
+  // photos — no extra backend call needed.
+  const handleGenerateBill = async (record) => {
+    setBillError("");
+    setGeneratingBillId(record.id);
+    try {
+      await generatePodBillPdf(record);
+    } catch (err) {
+      console.error("Failed to generate bill PDF:", err);
+      setBillError(
+        `Could not generate the bill for ${record.trackingId}. Try again.`,
+      );
+    } finally {
+      setGeneratingBillId(null);
+    }
+  };
+
   return (
     <div className="pod-wrapper">
       <h1>Proof of Delivery</h1>
@@ -423,12 +509,14 @@ export default function ProofOfDelivery() {
       </p>
 
       <div className="pod-tabs">
-        <button
-          className={activeTab === "new" ? "pod-tab active" : "pod-tab"}
-          onClick={() => setActiveTab("new")}
-        >
-          New POD
-        </button>
+        {canCreatePod && (
+          <button
+            className={activeTab === "new" ? "pod-tab active" : "pod-tab"}
+            onClick={() => setActiveTab("new")}
+          >
+            New POD
+          </button>
+        )}
         <button
           className={activeTab === "records" ? "pod-tab active" : "pod-tab"}
           onClick={() => setActiveTab("records")}
@@ -437,7 +525,7 @@ export default function ProofOfDelivery() {
         </button>
       </div>
 
-      {activeTab === "new" && (
+      {activeTab === "new" && canCreatePod && (
         <form className="pod-card" onSubmit={handleSubmit}>
           {/* Shipment lookup */}
           <div className="pod-section">
@@ -543,24 +631,75 @@ export default function ProofOfDelivery() {
 
             {verificationMethod === "OTP" && (
               <div className="pod-otp-box">
-                <div>
-                  Code sent to receiver: <strong>{otp}</strong>
+                {!selectedShipment && (
+                  <p className="pod-muted">
+                    Select a shipment above to send a verification code.
+                  </p>
+                )}
+
+                {selectedShipment && !otpSent && (
                   <button
                     type="button"
-                    className="pod-link-btn"
-                    onClick={regenerateOtp}
+                    className="pod-btn-secondary"
+                    onClick={handleSendOtp}
+                    disabled={otpSending}
                   >
-                    Resend
+                    {otpSending ? "Sending…" : "Send code to receiver"}
                   </button>
-                </div>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={6}
-                  placeholder="Enter the 6-digit code"
-                  value={otpInput}
-                  onChange={(e) => setOtpInput(e.target.value)}
-                />
+                )}
+
+                {selectedShipment && otpSent && (
+                  <>
+                    <div>
+                      {otpVerified ? (
+                        <span className="pod-otp-verified">
+                          <FaCheckCircle /> Code verified
+                        </span>
+                      ) : (
+                        <span>
+                          Verification code sent to the receiver on file.
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        className="pod-link-btn"
+                        onClick={handleSendOtp}
+                        disabled={otpSending}
+                      >
+                        {otpSending ? "Resending…" : "Resend"}
+                      </button>
+                    </div>
+
+                    <div className="pod-otp-verify-row">
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={6}
+                        placeholder="Enter the 6-digit code from the receiver"
+                        value={otpInput}
+                        disabled={otpVerified}
+                        onChange={(e) => {
+                          setOtpInput(e.target.value);
+                          setOtpVerified(false);
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="pod-btn-secondary"
+                        onClick={handleVerifyOtp}
+                        disabled={otpVerified || otpVerifying || !otpInput.trim()}
+                      >
+                        {otpVerifying
+                          ? "Verifying…"
+                          : otpVerified
+                            ? "Verified"
+                            : "Verify code"}
+                      </button>
+                    </div>
+                  </>
+                )}
+
+                {otpError && <p className="pod-error">{otpError}</p>}
               </div>
             )}
 
@@ -628,6 +767,7 @@ export default function ProofOfDelivery() {
           </div>
 
           {recordsError && <p className="pod-error">{recordsError}</p>}
+          {billError && <p className="pod-error">{billError}</p>}
 
           {recordsLoading ? (
             <p className="pod-muted">Loading records…</p>
@@ -673,6 +813,15 @@ export default function ProofOfDelivery() {
                           onClick={() => setViewingRecord(r)}
                         >
                           View
+                        </button>
+                        <button
+                          className="pod-link-btn"
+                          disabled={generatingBillId === r.id}
+                          onClick={() => handleGenerateBill(r)}
+                        >
+                          {generatingBillId === r.id
+                            ? "Generating…"
+                            : "Generate Bill"}
                         </button>
                         <button
                           className="pod-link-btn pod-link-danger"

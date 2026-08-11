@@ -8,6 +8,7 @@ import {
 import { NOTIFICATION_TYPES } from "../../utils/notificationTypes";
 import NotificationList from "../../components/NotificationList";
 import NotificationPreferences from "../../components/NotificationPreferences";
+import SendNotification from "../../components/SendNotification";
 import "./Notifications.css";
 
 const FILTERS = [{ key: "ALL", label: "All" }, ...Object.entries(NOTIFICATION_TYPES).map(([key, meta]) => ({
@@ -23,6 +24,10 @@ export default function Notifications() {
     const [filter, setFilter] = useState("ALL");
     const [search, setSearch] = useState("");
     const [unreadOnly, setUnreadOnly] = useState(false);
+
+    // Only admins get the manual "push a notification" tool — everyone
+    // else just reads what lands in their own feed.
+    const isAdmin = localStorage.getItem("role") === "ADMIN";
 
     useEffect(() => {
         load();
@@ -110,10 +115,20 @@ export default function Notifications() {
                 >
                     Preferences
                 </button>
+                {isAdmin && (
+                    <button
+                        className={activeTab === "send" ? "notifpage-tab active" : "notifpage-tab"}
+                        onClick={() => setActiveTab("send")}
+                    >
+                        Send Notification
+                    </button>
+                )}
             </div>
 
             {activeTab === "preferences" ? (
                 <NotificationPreferences />
+            ) : activeTab === "send" && isAdmin ? (
+                <SendNotification />
             ) : (
                 <div className="notifpage-card">
                     <div className="notifpage-toolbar">

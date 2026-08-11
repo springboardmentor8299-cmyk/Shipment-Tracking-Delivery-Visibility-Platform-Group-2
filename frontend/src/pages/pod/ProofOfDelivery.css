@@ -185,6 +185,43 @@
     max-width: 200px;
 }
 
+.pod-otp-verify-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+.pod-otp-verify-row input {
+    margin-top: 0;
+}
+
+.pod-otp-verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #15803d;
+    font-weight: 600;
+}
+
+.pod-btn-secondary {
+    background: #fff;
+    color: #2563eb;
+    border: 1px solid #2563eb;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.pod-btn-secondary:disabled {
+    color: #94a3b8;
+    border-color: #cbd5e1;
+    cursor: not-allowed;
+}
+
 .pod-checklist {
     display: flex;
     flex-direction: column;
@@ -302,6 +339,7 @@
     font-weight: 600;
     cursor: pointer;
     padding: 4px 6px;
+    white-space: nowrap;
 }
 
 .pod-link-btn:disabled {
