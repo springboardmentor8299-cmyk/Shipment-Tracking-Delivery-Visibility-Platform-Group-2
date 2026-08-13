@@ -6,6 +6,8 @@ import React, {
   useRef,
 } from "react";
 
+import { useSearchParams } from "react-router-dom";
+
 import {
   MapContainer,
   TileLayer,
@@ -313,16 +315,21 @@ const getShipmentTimeline = (
   ];
 };
 
-function Tracking() {
+function Tracking({ initialSearchOverride } = {}) {
+  const [searchParams] = useSearchParams();
+  const initialSearch =
+    initialSearchOverride ?? (searchParams.get("search") || "");
+
   const [shipments, setShipments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [lastUpdated, setLastUpdated] = useState(null);
   const [expandedId, setExpandedId] = useState(null);
+  const autoExpandedRef = useRef(false);
 
   const [coordsMap, setCoordsMap] = useState({});
   const [routes, setRoutes] = useState({});
@@ -628,6 +635,20 @@ function Tracking() {
   const indexOfLast = currentPage * itemsPerPage;
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentShipments = filteredShipments.slice(indexOfFirst, indexOfLast);
+
+  useEffect(() => {
+    if (autoExpandedRef.current) return;
+    if (!initialSearch || shipments.length === 0) return;
+
+    const match = shipments.find(
+      (s) => s.trackingId?.toLowerCase() === initialSearch.trim().toLowerCase(),
+    );
+
+    if (match) {
+      setExpandedId(match.id);
+      autoExpandedRef.current = true;
+    }
+  }, [shipments, initialSearch]);
 
   const toggleExpand = (id) => {
     setExpandedId((prev) => (prev === id ? null : id));

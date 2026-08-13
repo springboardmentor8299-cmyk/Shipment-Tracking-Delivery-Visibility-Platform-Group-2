@@ -30,7 +30,6 @@ public class RouteAnalyticsResponse {
     private long optimizedRouteCount;
     private Double averageOptimizationSavingsPercent;
 
-    // Traffic condition name -> number of routes currently in that condition
     private Map<String, Long> trafficBreakdown;
 
     private RouteSummary longestRoute;

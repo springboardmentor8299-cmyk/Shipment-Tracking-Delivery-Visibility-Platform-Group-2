@@ -21,114 +21,113 @@ import com.shiptrack.auth.service.CustomUserDetailsService;
 @Configuration
 public class SecurityConfig {
 
-    @Autowired
-    private JwtAuthFilter jwtAuthFilter;
+        @Autowired
+        private JwtAuthFilter jwtAuthFilter;
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+        @Autowired
+        private CustomUserDetailsService customUserDetailsService;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        @Autowired
+        private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-        http
-                .cors(cors -> {
-                })
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
+        @Autowired
+        private CustomAccessDeniedHandler customAccessDeniedHandler;
 
-                        .requestMatchers("/api/auth/**").permitAll()
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-                        .requestMatchers("/uploads/**").permitAll()
+                http
+                                .cors(cors -> {
+                                })
+                                .csrf(csrf -> csrf.disable())
+                                .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/api/admin/pod/**")
-                        .hasAnyRole("ADMIN", "LOGISTICS_OPERATOR")
+                                                .requestMatchers("/api/auth/**").permitAll()
 
-                        .requestMatchers("/api/admin/routes/**")
-                        .hasAnyRole("ADMIN", "LOGISTICS_OPERATOR")
+                                                .requestMatchers("/error").permitAll()
 
-                        .requestMatchers("/api/customer/**")
-                        .hasRole("CUSTOMER")
+                                                .requestMatchers("/uploads/**").permitAll()
 
-                        .requestMatchers("/api/admin/**")
-                        .hasRole("ADMIN")
+                                                .requestMatchers("/api/admin/pod", "/api/admin/pod/**")
+                                                .hasAnyRole("ADMIN", "LOGISTICS_OPERATOR", "DRIVER")
 
-                        .requestMatchers("/api/business/**")
-                        .hasRole("BUSINESS_CLIENT")
+                                                .requestMatchers("/api/admin/routes/**")
+                                                .hasAnyRole("ADMIN", "LOGISTICS_OPERATOR")
 
-                        .requestMatchers("/api/operator/**")
-                        .hasRole("LOGISTICS_OPERATOR")
+                                                .requestMatchers("/api/customer/**")
+                                                .hasRole("CUSTOMER")
 
-                        .requestMatchers("/api/support/**")
-                        .hasAnyRole(
-                                "SUPPORT_AGENT",
-                                "ADMIN")
+                                                .requestMatchers("/api/admin/**")
+                                                .hasRole("ADMIN")
 
-                        .requestMatchers("/api/shipments/**")
-                        .hasAnyRole(
-                                "ADMIN",
-                                "BUSINESS_CLIENT",
-                                "LOGISTICS_OPERATOR",
-                                "SUPPORT_AGENT",
-                                "CUSTOMER")
+                                                .requestMatchers("/api/business/**")
+                                                .hasRole("BUSINESS_CLIENT")
 
-                        .anyRequest()
-                        .authenticated())
+                                                .requestMatchers("/api/operator/**")
+                                                .hasAnyRole("LOGISTICS_OPERATOR", "ADMIN")
 
-                .authenticationProvider(authenticationProvider())
+                                                .requestMatchers("/api/driver/**")
+                                                .hasAnyRole("DRIVER", "ADMIN")
 
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT
-                                                                                                             // doesn't
-                                                                                                             // use
-                                                                                                             // sessions.
-                                                                                                             // Every
-                                                                                                             // request
-                                                                                                             // carries
-                                                                                                             // its own
-                                                                                                             // token.So
-                                                                                                             // we tell
-                                                                                                             // Spring,
-                                                                                                             // Don't
-                                                                                                             // create
-                                                                                                             // sessions.This
-                                                                                                             // is
-                                                                                                             // exactly
-                                                                                                             // how
-                                                                                                             // modern
-                                                                                                             // REST
-                                                                                                             // APIs
-                                                                                                             // work
-                )
+                                                .requestMatchers("/api/support/**")
+                                                .hasAnyRole(
+                                                                "SUPPORT_AGENT",
+                                                                "ADMIN")
 
-                .addFilterBefore(jwtAuthFilter,
-                        UsernamePasswordAuthenticationFilter.class) // This line is the heart of JWT Security
+                                                .requestMatchers("/api/shipments/**")
+                                                .hasAnyRole(
+                                                                "ADMIN",
+                                                                "BUSINESS_CLIENT",
+                                                                "LOGISTICS_OPERATOR",
+                                                                "SUPPORT_AGENT",
+                                                                "CUSTOMER",
+                                                                "DRIVER")
 
-                .formLogin(form -> form.disable())
-                .httpBasic(httpBasic -> httpBasic.disable());
+                                                .anyRequest()
+                                                .authenticated())
 
-        return http.build();
-    }
+                                .authenticationProvider(authenticationProvider())
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+                                .exceptionHandling(exceptions -> exceptions
+                                                // Not authenticated at all (missing/expired/invalid token) -> 401 with
+                                                // a real reason.
+                                                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                                                // Authenticated but wrong role -> 403 with a real reason.
+                                                .accessDeniedHandler(customAccessDeniedHandler))
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+                                .addFilterBefore(jwtAuthFilter,
+                                                UsernamePasswordAuthenticationFilter.class)
 
-        provider.setUserDetailsService(customUserDetailsService);
-        provider.setPasswordEncoder(passwordEncoder());
+                                .formLogin(form -> form.disable())
+                                .httpBasic(httpBasic -> httpBasic.disable());
 
-        return provider;
-    }
+                return http.build();
+        }
 
-    @Bean
-    AuthenticationManager authenticationManager(
-            AuthenticationConfiguration configuration)
-            throws Exception {
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 
-        return configuration.getAuthenticationManager();
-    }
+        @Bean
+        public AuthenticationProvider authenticationProvider() {
+
+                DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+
+                provider.setUserDetailsService(customUserDetailsService);
+                provider.setPasswordEncoder(passwordEncoder());
+
+                return provider;
+        }
+
+        @Bean
+        AuthenticationManager authenticationManager(
+                        AuthenticationConfiguration configuration)
+                        throws Exception {
+
+                return configuration.getAuthenticationManager();
+        }
 }

@@ -14,6 +14,7 @@ import com.shiptrack.customer.support.entity.CustomerSupportRequest;
 import com.shiptrack.customer.support.repository.CustomerSupportRepository;
 import com.shiptrack.notification.entity.NotificationType;
 import com.shiptrack.notification.service.NotificationService;
+import com.shiptrack.support_agent.dto.SupportAgentResponseDto;
 import com.shiptrack.support_agent.dto.SupportRequestResponseDto;
 
 import lombok.RequiredArgsConstructor;
@@ -27,397 +28,477 @@ import com.shiptrack.customer.support.entity.RequestStatus;
 @Transactional
 public class SupportRequestServiceImpl implements SupportRequestService {
 
-    private final CustomerSupportRepository customerSupportRepository;
+        private final CustomerSupportRepository customerSupportRepository;
 
-    private final UserRepository userRepository;
+        private final UserRepository userRepository;
 
-    private final NotificationService notificationService;
+        private final NotificationService notificationService;
 
-    /**
-     * Returns the currently logged-in support agent.
-     */
-    private User getLoggedInSupportAgent() {
+        private User getLoggedInSupportAgent() {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        String username = authentication.getName();
+                String username = authentication.getName();
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Support Agent not found."));
+                User user = userRepository.findByUsername(username)
+                                .orElseThrow(() -> new RuntimeException("Support Agent not found."));
 
-        if (user.getRole() != Role.SUPPORT_AGENT) {
-            throw new RuntimeException("Access denied.");
+                if (user.getRole() != Role.SUPPORT_AGENT) {
+                        throw new RuntimeException("Access denied.");
+                }
+
+                return user;
         }
 
-        return user;
-    }
-
-    /**
-     * Notify customer.
-     */
-    private void notifyCustomer(
-            User customer,
-            String title,
-            String message,
-            String trackingId) {
-
-        notificationService.notify(
-
-                customer,
-
-                NotificationType.SYSTEM,
-
-                title,
-
-                message,
-
-                trackingId
-
-        );
-    }
-
-    private SupportRequestResponseDto mapToDto(
-            CustomerSupportRequest request) {
-
-        return SupportRequestResponseDto.builder()
-
-                .id(request.getId())
-
-                .requestType(request.getRequestType())
-
-                .status(request.getStatus())
-
-                .customerName(
-                        request.getCustomer() != null
-                                ? request.getCustomer().getName()
-                                : null)
-
-                .trackingId(
-                        request.getShipment() != null
-                                ? request.getShipment().getTrackingId()
-                                : null)
-
-                .senderName(request.getSenderName())
-
-                .receiverName(request.getReceiverName())
-
-                .pickupAddress(request.getPickupAddress())
-
-                .deliveryAddress(request.getDeliveryAddress())
-
-                .packageType(request.getPackageType())
-
-                .weight(request.getWeight())
-
-                .pickupDate(request.getPickupDate())
-
-                .specialInstructions(
-                        request.getSpecialInstructions())
-
-                .issueType(request.getIssueType())
-
-                .subject(request.getSubject())
-
-                .description(request.getDescription())
-
-                .attachment(request.getAttachment())
-
-                .assignedTo(
-
-                        request.getAssignedTo() != null
-
-                                ? request.getAssignedTo().getName()
-
-                                : null
-
-                )
-
-                .createdAt(request.getCreatedAt())
-
-                .updatedAt(request.getUpdatedAt())
-
-                .build();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<SupportRequestResponseDto> getAllRequests() {
-
-        List<CustomerSupportRequest> requests = customerSupportRepository.findAllByOrderByCreatedAtDesc();
-
-        return requests.stream()
-                .map(this::mapToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public SupportRequestResponseDto getRequestById(Long id) {
-
-        CustomerSupportRequest request = customerSupportRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Support Request not found."));
-
-        return mapToDto(request);
-    }
-
-    @Override
-    public void assignToCurrentAgent(Long id) {
-
-        // Logged-in Support Agent
-        User supportAgent = getLoggedInSupportAgent();
-
-        // Find Request
-        CustomerSupportRequest request = customerSupportRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Support Request not found."));
-
-        // Prevent duplicate assignment
-        if (request.getAssignedTo() != null) {
-            throw new RuntimeException("Request is already assigned.");
-        }
-
-        // Assign support agent
-        request.setAssignedTo(supportAgent);
-
-        customerSupportRepository.save(request);
-
-        notificationService.notify(
-
-                supportAgent,
-
-                NotificationType.SYSTEM,
-
-                "New Support Request Assigned",
-
-                "Support Request #" + request.getId()
-                        + " has been assigned to you.",
-
-                request.getShipment() != null
-                        ? request.getShipment().getTrackingId()
-                        : null
-
-        );
-
-        userRepository.findAll().stream()
-
-                .filter(user -> user.getRole() == Role.ADMIN)
-
-                .forEach(admin ->
+        private void notifyCustomer(
+                        User customer,
+                        String title,
+                        String message,
+                        String trackingId) {
 
                 notificationService.notify(
 
-                        admin,
+                                customer,
 
-                        NotificationType.SYSTEM,
+                                NotificationType.SYSTEM,
 
-                        "Customer Support Request Assigned",
+                                title,
 
-                        "Support Request #"
-                                + request.getId()
-                                + " has been assigned to "
-                                + supportAgent.getName(),
+                                message,
 
-                        request.getShipment() != null
-                                ? request.getShipment().getTrackingId()
-                                : null
-
-                )
+                                trackingId
 
                 );
-
-        // Notify Customer
-        notifyCustomer(
-
-                request.getCustomer(),
-
-                "Support Request Assigned",
-
-                "Your support request #" + request.getId()
-                        + " has been assigned to a support agent.",
-
-                request.getShipment() != null
-                        ? request.getShipment().getTrackingId()
-                        : null
-
-        );
-    }
-
-    @Override
-    public void updateStatus(Long id, String status) {
-
-        CustomerSupportRequest request = customerSupportRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Support Request not found."));
-
-        RequestStatus requestStatus;
-
-        try {
-
-            requestStatus = RequestStatus.valueOf(status.toUpperCase());
-
-        } catch (IllegalArgumentException ex) {
-
-            throw new RuntimeException("Invalid Request Status : " + status);
-
         }
 
-        request.setStatus(requestStatus);
+        private SupportRequestResponseDto mapToDto(
+                        CustomerSupportRequest request) {
 
-        customerSupportRepository.save(request);
+                return SupportRequestResponseDto.builder()
 
-        // Notify Customer
-        notifyCustomer(
+                                .id(request.getId())
 
-                request.getCustomer(),
+                                .requestType(request.getRequestType())
 
-                "Support Request Status Updated",
+                                .status(request.getStatus())
 
-                "Your support request #" + request.getId()
-                        + " status has been updated to "
-                        + requestStatus,
+                                .customerName(
+                                                request.getCustomer() != null
+                                                                ? request.getCustomer().getName()
+                                                                : null)
 
-                request.getShipment() != null
-                        ? request.getShipment().getTrackingId()
-                        : null
+                                .trackingId(
+                                                request.getShipment() != null
+                                                                ? request.getShipment().getTrackingId()
+                                                                : null)
 
-        );
+                                .senderName(request.getSenderName())
 
-        // Notify Assigned Support Agent
-        if (request.getAssignedTo() != null) {
+                                .receiverName(request.getReceiverName())
 
-            notificationService.notify(
+                                .pickupAddress(request.getPickupAddress())
 
-                    request.getAssignedTo(),
+                                .deliveryAddress(request.getDeliveryAddress())
 
-                    NotificationType.SYSTEM,
+                                .packageType(request.getPackageType())
 
-                    "Support Request Updated",
+                                .weight(request.getWeight())
 
-                    "Support Request #" + request.getId()
-                            + " status changed to "
-                            + requestStatus,
+                                .pickupDate(request.getPickupDate())
 
-                    request.getShipment() != null
-                            ? request.getShipment().getTrackingId()
-                            : null
+                                .specialInstructions(
+                                                request.getSpecialInstructions())
 
-            );
+                                .issueType(request.getIssueType())
 
+                                .subject(request.getSubject())
+
+                                .description(request.getDescription())
+
+                                .attachment(request.getAttachment())
+
+                                .assignedTo(
+
+                                                request.getAssignedTo() != null
+
+                                                                ? request.getAssignedTo().getName()
+
+                                                                : null
+
+                                )
+
+                                .createdAt(request.getCreatedAt())
+
+                                .updatedAt(request.getUpdatedAt())
+
+                                .build();
         }
 
-        // Notify all Admins
-        userRepository.findAll()
+        @Override
+        @Transactional(readOnly = true)
+        public List<SupportRequestResponseDto> getAllRequests() {
 
-                .stream()
+                List<CustomerSupportRequest> requests = customerSupportRepository.findAllByOrderByCreatedAtDesc();
 
-                .filter(user -> user.getRole() == Role.ADMIN)
+                return requests.stream()
+                                .map(this::mapToDto)
+                                .collect(Collectors.toList());
+        }
 
-                .forEach(admin ->
+        @Override
+        @Transactional(readOnly = true)
+        public List<SupportRequestResponseDto> getMyRequests() {
+
+                User supportAgent = getLoggedInSupportAgent();
+
+                System.out.println(
+                                "Logged-in Support Agent: "
+                                                + supportAgent.getName()
+                                                + " | ID: "
+                                                + supportAgent.getId()
+                                                + " | Username: "
+                                                + supportAgent.getUsername());
+
+                List<CustomerSupportRequest> requests = customerSupportRepository
+                                .findByAssignedToIdOrderByCreatedAtDesc(
+                                                supportAgent.getId());
+
+                System.out.println(
+                                "Requests assigned to "
+                                                + supportAgent.getName()
+                                                + ": "
+                                                + requests.size());
+
+                return requests.stream()
+                                .map(this::mapToDto)
+                                .collect(Collectors.toList());
+        }
+
+        @Override
+        @Transactional(readOnly = true)
+        public SupportRequestResponseDto getRequestById(Long id) {
+
+                CustomerSupportRequest request = customerSupportRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException("Support Request not found."));
+
+                return mapToDto(request);
+        }
+
+        @Override
+        public void assignToCurrentAgent(Long id) {
+
+                User supportAgent = getLoggedInSupportAgent();
+
+                CustomerSupportRequest request = customerSupportRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException("Support Request not found."));
+
+                if (request.getAssignedTo() != null) {
+                        throw new RuntimeException("Request is already assigned.");
+                }
+
+                request.setAssignedTo(supportAgent);
+
+                customerSupportRepository.save(request);
 
                 notificationService.notify(
 
-                        admin,
+                                supportAgent,
 
-                        NotificationType.SYSTEM,
+                                NotificationType.SYSTEM,
 
-                        "Support Request Updated",
+                                "New Support Request Assigned",
 
-                        "Support Request #"
-                                + request.getId()
-                                + " status updated to "
-                                + requestStatus,
+                                "Support Request #" + request.getId()
+                                                + " has been assigned to you.",
 
-                        request.getShipment() != null
-                                ? request.getShipment().getTrackingId()
-                                : null
-
-                )
+                                request.getShipment() != null
+                                                ? request.getShipment().getTrackingId()
+                                                : null
 
                 );
 
-    }
+                userRepository.findAll().stream()
 
-    @Override
-    public void resolveRequest(Long id) {
+                                .filter(user -> user.getRole() == Role.ADMIN)
 
-        CustomerSupportRequest request = customerSupportRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Support Request not found."));
+                                .forEach(admin ->
 
-        // Already resolved?
-        if (request.getStatus() == RequestStatus.RESOLVED) {
-            throw new RuntimeException("Support Request is already resolved.");
+                                notificationService.notify(
+
+                                                admin,
+
+                                                NotificationType.SYSTEM,
+
+                                                "Customer Support Request Assigned",
+
+                                                "Support Request #"
+                                                                + request.getId()
+                                                                + " has been assigned to "
+                                                                + supportAgent.getName(),
+
+                                                request.getShipment() != null
+                                                                ? request.getShipment().getTrackingId()
+                                                                : null
+
+                                )
+
+                                );
+
+                notifyCustomer(
+
+                                request.getCustomer(),
+
+                                "Support Request Assigned",
+
+                                "Your support request #" + request.getId()
+                                                + " has been assigned to a support agent.",
+
+                                request.getShipment() != null
+                                                ? request.getShipment().getTrackingId()
+                                                : null
+
+                );
         }
 
-        request.setStatus(RequestStatus.RESOLVED);
+        @Override
+        public void updateStatus(Long id, String status) {
 
-        customerSupportRepository.save(request);
+                CustomerSupportRequest request = customerSupportRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException("Support Request not found."));
 
-        // Notify Customer
-        notifyCustomer(
+                RequestStatus requestStatus;
 
-                request.getCustomer(),
+                try {
 
-                "Support Request Resolved",
+                        requestStatus = RequestStatus.valueOf(status.toUpperCase());
 
-                "Your support request #" + request.getId()
-                        + " has been resolved successfully.",
+                } catch (IllegalArgumentException ex) {
 
-                request.getShipment() != null
-                        ? request.getShipment().getTrackingId()
-                        : null
+                        throw new RuntimeException("Invalid Request Status : " + status);
 
-        );
+                }
 
-        // Notify Assigned Support Agent
-        if (request.getAssignedTo() != null) {
+                request.setStatus(requestStatus);
 
-            notificationService.notify(
+                customerSupportRepository.save(request);
 
-                    request.getAssignedTo(),
+                notifyCustomer(
 
-                    NotificationType.SYSTEM,
+                                request.getCustomer(),
 
-                    "Support Request Resolved",
+                                "Support Request Status Updated",
 
-                    "Support Request #"
-                            + request.getId()
-                            + " has been marked as RESOLVED.",
+                                "Your support request #" + request.getId()
+                                                + " status has been updated to "
+                                                + requestStatus,
 
-                    request.getShipment() != null
-                            ? request.getShipment().getTrackingId()
-                            : null
+                                request.getShipment() != null
+                                                ? request.getShipment().getTrackingId()
+                                                : null
 
-            );
+                );
+
+                if (request.getAssignedTo() != null) {
+
+                        notificationService.notify(
+
+                                        request.getAssignedTo(),
+
+                                        NotificationType.SYSTEM,
+
+                                        "Support Request Updated",
+
+                                        "Support Request #" + request.getId()
+                                                        + " status changed to "
+                                                        + requestStatus,
+
+                                        request.getShipment() != null
+                                                        ? request.getShipment().getTrackingId()
+                                                        : null
+
+                        );
+
+                }
+
+                userRepository.findAll()
+
+                                .stream()
+
+                                .filter(user -> user.getRole() == Role.ADMIN)
+
+                                .forEach(admin ->
+
+                                notificationService.notify(
+
+                                                admin,
+
+                                                NotificationType.SYSTEM,
+
+                                                "Support Request Updated",
+
+                                                "Support Request #"
+                                                                + request.getId()
+                                                                + " status updated to "
+                                                                + requestStatus,
+
+                                                request.getShipment() != null
+                                                                ? request.getShipment().getTrackingId()
+                                                                : null
+
+                                )
+
+                                );
 
         }
 
-        // Notify all Admins
-        userRepository.findAll()
-                .stream()
-                .filter(user -> user.getRole() == Role.ADMIN)
-                .forEach(admin ->
+        @Override
+        public void resolveRequest(Long id) {
+
+                CustomerSupportRequest request = customerSupportRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException("Support Request not found."));
+
+                if (request.getStatus() == RequestStatus.RESOLVED) {
+                        throw new RuntimeException("Support Request is already resolved.");
+                }
+
+                request.setStatus(RequestStatus.RESOLVED);
+
+                customerSupportRepository.save(request);
+
+                notifyCustomer(
+
+                                request.getCustomer(),
+
+                                "Support Request Resolved",
+
+                                "Your support request #" + request.getId()
+                                                + " has been resolved successfully.",
+
+                                request.getShipment() != null
+                                                ? request.getShipment().getTrackingId()
+                                                : null
+
+                );
+
+                if (request.getAssignedTo() != null) {
+
+                        notificationService.notify(
+
+                                        request.getAssignedTo(),
+
+                                        NotificationType.SYSTEM,
+
+                                        "Support Request Resolved",
+
+                                        "Support Request #"
+                                                        + request.getId()
+                                                        + " has been marked as RESOLVED.",
+
+                                        request.getShipment() != null
+                                                        ? request.getShipment().getTrackingId()
+                                                        : null
+
+                        );
+
+                }
+
+                userRepository.findAll()
+                                .stream()
+                                .filter(user -> user.getRole() == Role.ADMIN)
+                                .forEach(admin ->
+
+                                notificationService.notify(
+
+                                                admin,
+
+                                                NotificationType.SYSTEM,
+
+                                                "Support Request Resolved",
+
+                                                "Support Request #"
+                                                                + request.getId()
+                                                                + " has been resolved by "
+                                                                + (request.getAssignedTo() != null
+                                                                                ? request.getAssignedTo().getName()
+                                                                                : "Support Agent"),
+
+                                                request.getShipment() != null
+                                                                ? request.getShipment().getTrackingId()
+                                                                : null
+
+                                )
+
+                                );
+
+        }
+
+        @Override
+        public void assignToSupportAgent(Long requestId, Long agentId) {
+
+                CustomerSupportRequest request = customerSupportRepository
+                                .findById(requestId)
+                                .orElseThrow(() -> new RuntimeException("Support Request not found."));
+
+                User supportAgent = userRepository
+                                .findById(agentId)
+                                .orElseThrow(() -> new RuntimeException("Support Agent not found."));
+
+                if (supportAgent.getRole() != Role.SUPPORT_AGENT) {
+                        throw new RuntimeException(
+                                        "Selected user is not a Support Agent.");
+                }
+
+                request.setAssignedTo(supportAgent);
+
+                customerSupportRepository.save(request);
 
                 notificationService.notify(
+                                supportAgent,
+                                NotificationType.SYSTEM,
+                                "New Support Request Assigned",
+                                "Support Request #" + request.getId()
+                                                + " has been assigned to you.",
+                                request.getShipment() != null
+                                                ? request.getShipment().getTrackingId()
+                                                : null);
 
-                        admin,
+                userRepository.findAll()
+                                .stream()
+                                .filter(user -> user.getRole() == Role.ADMIN)
+                                .forEach(admin -> notificationService.notify(
+                                                admin,
+                                                NotificationType.SYSTEM,
+                                                "Customer Support Request Assigned",
+                                                "Support Request #"
+                                                                + request.getId()
+                                                                + " has been assigned to "
+                                                                + supportAgent.getName(),
+                                                request.getShipment() != null
+                                                                ? request.getShipment().getTrackingId()
+                                                                : null));
 
-                        NotificationType.SYSTEM,
+                notifyCustomer(
+                                request.getCustomer(),
+                                "Support Request Assigned",
+                                "Your support request #" + request.getId()
+                                                + " has been assigned to a support agent.",
+                                request.getShipment() != null
+                                                ? request.getShipment().getTrackingId()
+                                                : null);
+        }
 
-                        "Support Request Resolved",
+        @Override
+        @Transactional(readOnly = true)
+        public List<SupportAgentResponseDto> getSupportAgents() {
 
-                        "Support Request #"
-                                + request.getId()
-                                + " has been resolved by "
-                                + (request.getAssignedTo() != null
-                                        ? request.getAssignedTo().getName()
-                                        : "Support Agent"),
-
-                        request.getShipment() != null
-                                ? request.getShipment().getTrackingId()
-                                : null
-
-                )
-
-                );
-
-    }
+                return userRepository.findByRole(Role.SUPPORT_AGENT)
+                                .stream()
+                                .map(user -> SupportAgentResponseDto.builder()
+                                                .id(user.getId())
+                                                .name(user.getName())
+                                                .username(user.getUsername())
+                                                .build())
+                                .collect(Collectors.toList());
+        }
 
 }

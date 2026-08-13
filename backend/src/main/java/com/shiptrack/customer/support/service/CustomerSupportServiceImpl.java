@@ -43,296 +43,300 @@ import com.shiptrack.customer.support.entity.IssueType;
 @Transactional
 public class CustomerSupportServiceImpl implements CustomerSupportService {
 
-    private final CustomerSupportRepository customerSupportRepository;
+        private final CustomerSupportRepository customerSupportRepository;
 
-    private final UserRepository userRepository;
+        private final UserRepository userRepository;
 
-    private final ShipmentRepository shipmentRepository;
+        private final ShipmentRepository shipmentRepository;
 
-    private final NotificationService notificationService;
+        private final NotificationService notificationService;
 
-    @Value("${app.upload.dir}")
-    private String uploadDir;
+        @Value("${app.upload.dir}")
+        private String uploadDir;
 
-    /**
-     * Returns the currently logged-in customer.
-     */
-    private User getLoggedInUser() {
+        private User getLoggedInUser() {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        String username = authentication.getName();
+                String username = authentication.getName();
 
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
-    }
-
-    private String saveAttachment(MultipartFile file) {
-
-        if (file == null || file.isEmpty()) {
-            return null;
+                return userRepository.findByUsername(username)
+                                .orElseThrow(() -> new RuntimeException("Customer not found"));
         }
 
-        try {
+        private String saveAttachment(MultipartFile file) {
 
-            File folder = new File(uploadDir);
+                if (file == null || file.isEmpty()) {
+                        return null;
+                }
 
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
+                try {
 
-            String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+                        File folder = new File(uploadDir);
 
-            Path destination = Paths.get(uploadDir, fileName);
+                        if (!folder.exists()) {
+                                folder.mkdirs();
+                        }
 
-            Files.copy(
-                    file.getInputStream(),
-                    destination,
-                    StandardCopyOption.REPLACE_EXISTING);
+                        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
-            return fileName;
+                        Path destination = Paths.get(uploadDir, fileName);
 
-        } catch (IOException e) {
+                        Files.copy(
+                                        file.getInputStream(),
+                                        destination,
+                                        StandardCopyOption.REPLACE_EXISTING);
 
-            throw new RuntimeException("Unable to upload attachment.");
-        }
-    }
+                        return fileName;
 
-    private void notifyAdmins(
-            String title,
-            String message,
-            String trackingId) {
+                } catch (IOException e) {
 
-        userRepository.findAll()
-
-                .stream()
-
-                .filter(user -> user.getRole() == Role.ADMIN)
-
-                .forEach(admin ->
-
-                notificationService.notify(
-
-                        admin,
-
-                        com.shiptrack.notification.entity.NotificationType.SYSTEM,
-
-                        title,
-
-                        message,
-
-                        trackingId));
-    }
-
-    private void notifySupportAgents(
-            String title,
-            String message,
-            String trackingId) {
-
-        userRepository.findAll()
-
-                .stream()
-
-                .filter(user -> user.getRole() == Role.SUPPORT_AGENT)
-
-                .forEach(agent ->
-
-                notificationService.notify(
-
-                        agent,
-
-                        com.shiptrack.notification.entity.NotificationType.SYSTEM,
-
-                        title,
-
-                        message,
-
-                        trackingId));
-    }
-
-    @Override
-    public void createShipmentRequest(ShipmentRequestDto request) {
-
-        // Get logged-in customer
-        User customer = getLoggedInUser();
-
-        // Create new support request
-        CustomerSupportRequest supportRequest = CustomerSupportRequest.builder()
-
-                .customer(customer)
-
-                .requestType(RequestType.SHIPMENT_REQUEST)
-
-                .status(RequestStatus.PENDING)
-
-                .senderName(request.getSenderName())
-
-                .receiverName(request.getReceiverName())
-
-                .pickupAddress(request.getPickupAddress())
-
-                .deliveryAddress(request.getDeliveryAddress())
-
-                .packageType(request.getPackageType())
-
-                .weight(request.getWeight())
-
-                .pickupDate(request.getPickupDate())
-
-                .specialInstructions(request.getInstructions())
-
-                .subject("Shipment Request")
-
-                .description("Customer submitted a new shipment request.")
-
-                .build();
-
-        // Save into database
-        customerSupportRepository.save(supportRequest);
-
-        // Notification Title
-        String title = "New Shipment Request";
-
-        // Notification Message
-        String message = "Customer " + customer.getName()
-                + " submitted a shipment request.";
-
-        // Notify all Admins
-        notifyAdmins(title, message, null);
-
-        // Notify all Support Agents
-        notifySupportAgents(title, message, null);
-    }
-
-    @Override
-    public void raiseIssue(
-            RaiseIssueDto request,
-            MultipartFile attachment) {
-
-        // Logged-in customer
-        User customer = getLoggedInUser();
-
-        // Find shipment by tracking ID
-        Shipment shipment = shipmentRepository
-                .findByTrackingId(request.getTrackingId())
-                .orElseThrow(() -> new RuntimeException("Shipment not found."));
-
-        // (Optional) Ensure the shipment belongs to this customer
-        if (!shipment.getCustomerId().getId().equals(customer.getId())) {
-            throw new RuntimeException("You are not allowed to raise an issue for this shipment.");
+                        throw new RuntimeException("Unable to upload attachment.");
+                }
         }
 
-        // Upload attachment (if provided)
-        String attachmentPath = saveAttachment(attachment);
+        private void notifyAdmins(
+                        String title,
+                        String message,
+                        String trackingId) {
 
-        // Create support request
-        CustomerSupportRequest supportRequest = CustomerSupportRequest.builder()
+                userRepository.findAll()
 
-                .customer(customer)
+                                .stream()
 
-                .shipment(shipment)
+                                .filter(user -> user.getRole() == Role.ADMIN)
 
-                .requestType(RequestType.ISSUE)
+                                .forEach(admin ->
 
-                .status(RequestStatus.OPEN)
+                                notificationService.notify(
 
-                .issueType(request.getIssueType())
+                                                admin,
 
-                .subject(request.getSubject())
+                                                com.shiptrack.notification.entity.NotificationType.SYSTEM,
 
-                .description(request.getDescription())
+                                                title,
 
-                .attachment(attachmentPath)
+                                                message,
 
-                .build();
+                                                trackingId));
+        }
 
-        // Save into database
-        customerSupportRepository.save(supportRequest);
+        private void notifySupportAgents(
+                        String title,
+                        String message,
+                        String trackingId) {
 
-        // Notification title
-        String title = "New Customer Issue";
+                userRepository.findAll()
 
-        // Customer name
-        String customerName = customer.getName() != null
-                ? customer.getName()
-                : customer.getUsername();
+                                .stream()
 
-        // Notification message
-        String message = customerName +
-                " raised an issue for shipment " +
-                shipment.getTrackingId();
+                                .filter(user -> user.getRole() == Role.SUPPORT_AGENT)
 
-        // Notify Admins
-        notifyAdmins(
-                title,
-                message,
-                shipment.getTrackingId());
+                                .forEach(agent ->
 
-        // Notify Support Agents
-        notifySupportAgents(
-                title,
-                message,
-                shipment.getTrackingId());
-    }
+                                notificationService.notify(
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<CustomerSupportResponseDto> getMyRequests() {
+                                                agent,
 
-        User customer = getLoggedInUser();
+                                                com.shiptrack.notification.entity.NotificationType.SYSTEM,
 
-        List<CustomerSupportRequest> requests = customerSupportRepository.findByCustomerOrderByCreatedAtDesc(customer);
+                                                title,
 
-        return requests.stream()
-                .map(this::mapToResponse)
-                .toList();
-    }
+                                                message,
 
-    private CustomerSupportResponseDto mapToResponse(
-            CustomerSupportRequest request) {
+                                                trackingId));
+        }
 
-        return CustomerSupportResponseDto.builder()
+        @Override
+        public void createShipmentRequest(ShipmentRequestDto request) {
 
-                .id(request.getId())
+                // Get logged-in customer
+                User customer = getLoggedInUser();
 
-                .requestType(request.getRequestType())
+                // Create new support request
+                CustomerSupportRequest supportRequest = CustomerSupportRequest.builder()
 
-                .status(request.getStatus())
+                                .customer(customer)
 
-                .shipmentId(
-                        request.getShipment() != null
-                                ? request.getShipment().getTrackingId()
-                                : null)
+                                .requestType(RequestType.SHIPMENT_REQUEST)
 
-                .issueType(request.getIssueType())
+                                .status(RequestStatus.PENDING)
 
-                .subject(request.getSubject())
+                                .senderName(request.getSenderName())
 
-                .description(request.getDescription())
+                                .receiverName(request.getReceiverName())
 
-                .senderName(request.getSenderName())
+                                .pickupAddress(request.getPickupAddress())
 
-                .receiverName(request.getReceiverName())
+                                .deliveryAddress(request.getDeliveryAddress())
 
-                .pickupAddress(request.getPickupAddress())
+                                .packageType(request.getPackageType())
 
-                .deliveryAddress(request.getDeliveryAddress())
+                                .weight(request.getWeight())
 
-                .packageType(request.getPackageType())
+                                .pickupDate(request.getPickupDate())
 
-                .weight(request.getWeight())
+                                .specialInstructions(request.getInstructions())
 
-                .pickupDate(request.getPickupDate())
+                                .subject("Shipment Request")
 
-                .specialInstructions(request.getSpecialInstructions())
+                                .description("Customer submitted a new shipment request.")
 
-                .attachment(request.getAttachment())
+                                .build();
 
-                .createdAt(request.getCreatedAt())
+                // Save into database
+                customerSupportRepository.save(supportRequest);
 
-                .updatedAt(request.getUpdatedAt())
+                // Notification Title
+                String title = "New Shipment Request";
 
-                .build();
-    }
+                // Notification Message
+                String message = "Customer " + customer.getName()
+                                + " submitted a shipment request.";
+
+                // Notify all Admins
+                notifyAdmins(title, message, null);
+
+                // Notify all Support Agents
+                notifySupportAgents(title, message, null);
+        }
+
+        @Override
+        public void raiseIssue(
+                        RaiseIssueDto request,
+                        MultipartFile attachment) {
+
+                // Logged-in customer
+                User customer = getLoggedInUser();
+
+                // Find shipment by tracking ID
+                Shipment shipment = shipmentRepository
+                                .findByTrackingId(request.getTrackingId())
+                                .orElseThrow(() -> new RuntimeException("Shipment not found."));
+
+                // (Optional) Ensure the shipment belongs to this customer
+                if (!shipment.getCustomerId().getId().equals(customer.getId())) {
+                        throw new RuntimeException("You are not allowed to raise an issue for this shipment.");
+                }
+
+                // Upload attachment (if provided)
+                String attachmentPath = saveAttachment(attachment);
+
+                // Create support request
+                CustomerSupportRequest supportRequest = CustomerSupportRequest.builder()
+
+                                .customer(customer)
+
+                                .shipment(shipment)
+
+                                .requestType(RequestType.ISSUE)
+
+                                .status(RequestStatus.OPEN)
+
+                                .issueType(request.getIssueType())
+
+                                .subject(request.getSubject())
+
+                                .description(request.getDescription())
+
+                                .attachment(attachmentPath)
+
+                                .build();
+
+                // Save into database
+                customerSupportRepository.save(supportRequest);
+
+                // Notification title
+                String title = "New Customer Issue";
+
+                // Customer name
+                String customerName = customer.getName() != null
+                                ? customer.getName()
+                                : customer.getUsername();
+
+                // Notification message
+                String message = customerName +
+                                " raised an issue for shipment " +
+                                shipment.getTrackingId();
+
+                // Notify Admins
+                notifyAdmins(
+                                title,
+                                message,
+                                shipment.getTrackingId());
+
+                // Notify Support Agents
+                notifySupportAgents(
+                                title,
+                                message,
+                                shipment.getTrackingId());
+        }
+
+        @Override
+        @Transactional(readOnly = true)
+        public List<CustomerSupportResponseDto> getMyRequests() {
+
+                User customer = getLoggedInUser();
+
+                List<CustomerSupportRequest> requests = customerSupportRepository
+                                .findByCustomerOrderByCreatedAtDesc(customer);
+
+                return requests.stream()
+                                .map(this::mapToResponse)
+                                .toList();
+        }
+
+        private CustomerSupportResponseDto mapToResponse(
+                        CustomerSupportRequest request) {
+
+                return CustomerSupportResponseDto.builder()
+
+                                .id(request.getId())
+
+                                .requestType(request.getRequestType())
+
+                                .status(request.getStatus())
+
+                                .shipmentId(
+                                                request.getShipment() != null
+                                                                ? request.getShipment().getTrackingId()
+                                                                : null)
+
+                                .issueType(request.getIssueType())
+
+                                .subject(request.getSubject())
+
+                                .description(request.getDescription())
+
+                                .senderName(request.getSenderName())
+
+                                .receiverName(request.getReceiverName())
+
+                                .pickupAddress(request.getPickupAddress())
+
+                                .deliveryAddress(request.getDeliveryAddress())
+
+                                .packageType(request.getPackageType())
+
+                                .weight(request.getWeight())
+
+                                .pickupDate(request.getPickupDate())
+
+                                .specialInstructions(request.getSpecialInstructions())
+
+                                .attachment(request.getAttachment())
+
+                                .createdAt(request.getCreatedAt())
+
+                                .updatedAt(request.getUpdatedAt())
+
+                                .build();
+        }
+
+        @Override
+        public Object getSupportRequestById(Long id) {
+                // TODO Auto-generated method stub
+                throw new UnsupportedOperationException("Unimplemented method 'getSupportRequestById'");
+        }
 
 }

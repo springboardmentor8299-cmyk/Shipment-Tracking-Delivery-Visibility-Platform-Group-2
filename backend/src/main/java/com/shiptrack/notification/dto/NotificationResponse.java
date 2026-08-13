@@ -10,8 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-// Field names line up 1:1 with what NotificationList.jsx / NotificationBell.jsx
-// read off each item: id, type, title, message, trackingId, read, createdAt.
 @Getter
 @Setter
 @NoArgsConstructor

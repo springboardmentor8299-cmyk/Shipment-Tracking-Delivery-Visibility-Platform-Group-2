@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import AddressAutocomplete from "./AddressAutocomplete";
 import {
   getAllRoutes,
   planRoute,
@@ -122,9 +123,12 @@ function RoutesTab() {
       showSyncNotice(res);
       load(statusFilter);
     } catch (err) {
+      const backendMessage = err?.response?.data?.message;
       setError(
-        err?.response?.data?.message ||
-          "Could not plan this route. Check the addresses and try again.",
+        backendMessage ||
+          (err?.response
+            ? "Could not plan this route. Check the addresses and try again."
+            : "Could not reach the server to plan this route. Check that the backend is running and reachable."),
       );
     }
   };
@@ -148,7 +152,10 @@ function RoutesTab() {
     } catch (err) {
       console.error("Optimize failed:", err);
       alert(
-        "Optimization failed — the routing service may be unavailable right now.",
+        err?.response?.data?.message ||
+          (err?.response
+            ? "Optimization failed — the routing service may be unavailable right now."
+            : "Could not reach the server to optimize this route. Check that the backend is running and reachable."),
       );
     } finally {
       setBusyId(null);
@@ -238,13 +245,15 @@ function RoutesTab() {
               value={form.routeName}
               onChange={(e) => setForm({ ...form, routeName: e.target.value })}
             />
-            <input
+            <AddressAutocomplete
+              name="origin"
               placeholder="Origin (e.g. Delhi, India)"
               required
               value={form.origin}
               onChange={(e) => setForm({ ...form, origin: e.target.value })}
             />
-            <input
+            <AddressAutocomplete
+              name="destination"
               placeholder="Destination (e.g. Mumbai, India)"
               required
               value={form.destination}
@@ -486,9 +495,12 @@ function DistanceCalculatorTab() {
       const data = await calculateDistance(origin, destination);
       setResult(data);
     } catch (err) {
+      const backendMessage = err?.response?.data?.message;
       setError(
-        err?.response?.data?.message ||
-          "Could not resolve one or both addresses.",
+        backendMessage ||
+          (err?.response
+            ? "Could not resolve one or both addresses."
+            : "Could not reach the server. Check that the backend is running and reachable."),
       );
     } finally {
       setLoading(false);
@@ -499,13 +511,15 @@ function DistanceCalculatorTab() {
     <div className="rm-calculator">
       <form className="rm-form" onSubmit={handleCalculate}>
         <div className="rm-form-grid">
-          <input
+          <AddressAutocomplete
+            name="origin"
             placeholder="Origin address"
             required
             value={origin}
             onChange={(e) => setOrigin(e.target.value)}
           />
-          <input
+          <AddressAutocomplete
+            name="destination"
             placeholder="Destination address"
             required
             value={destination}

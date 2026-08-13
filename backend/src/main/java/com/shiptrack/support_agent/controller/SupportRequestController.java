@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.shiptrack.support_agent.dto.SupportAgentResponseDto;
 import com.shiptrack.support_agent.dto.SupportRequestResponseDto;
 import com.shiptrack.support_agent.service.SupportRequestService;
 
@@ -16,69 +17,78 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(origins = "http://localhost:5173")
 public class SupportRequestController {
 
-    private final SupportRequestService supportRequestService;
+        private final SupportRequestService supportRequestService;
 
-    /**
-     * Get all customer support requests
-     */
-    @GetMapping
-    public ResponseEntity<List<SupportRequestResponseDto>> getAllRequests() {
+        @GetMapping
+        public ResponseEntity<List<SupportRequestResponseDto>> getAllRequests() {
 
-        return ResponseEntity.ok(
-                supportRequestService.getAllRequests());
-    }
+                return ResponseEntity.ok(
+                                supportRequestService.getAllRequests());
+        }
 
-    /**
-     * Get request by id
-     */
-    @GetMapping("/{id}")
-    public ResponseEntity<SupportRequestResponseDto> getRequestById(
-            @PathVariable Long id) {
+        @GetMapping("/{id}")
+        public ResponseEntity<SupportRequestResponseDto> getRequestById(
+                        @PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                supportRequestService.getRequestById(id));
-    }
+                return ResponseEntity.ok(
+                                supportRequestService.getRequestById(id));
+        }
 
-    /**
-     * Assign request to logged-in support agent
-     */
-    @PutMapping("/{id}/assign")
-    public ResponseEntity<String> assignRequest(
-            @PathVariable Long id) {
+        @GetMapping("/agents")
+        public ResponseEntity<List<SupportAgentResponseDto>> getSupportAgents() {
 
-        supportRequestService.assignToCurrentAgent(id);
+                return ResponseEntity.ok(
+                                supportRequestService.getSupportAgents());
+        }
 
-        return ResponseEntity.ok(
-                "Support Request assigned successfully.");
-    }
+        @PutMapping("/{id}/assign")
+        public ResponseEntity<String> assignRequest(
+                        @PathVariable Long id) {
 
-    /**
-     * Update request status
-     */
-    @PutMapping("/{id}/status")
-    public ResponseEntity<String> updateStatus(
+                supportRequestService.assignToCurrentAgent(id);
 
-            @PathVariable Long id,
+                return ResponseEntity.ok(
+                                "Support Request assigned successfully.");
+        }
 
-            @RequestParam String status) {
+        @PutMapping("/{id}/assign/{agentId}")
+        public ResponseEntity<String> assignRequestToAgent(
+                        @PathVariable Long id,
+                        @PathVariable Long agentId) {
 
-        supportRequestService.updateStatus(id, status);
+                supportRequestService.assignToSupportAgent(
+                                id,
+                                agentId);
 
-        return ResponseEntity.ok(
-                "Support Request status updated successfully.");
-    }
+                return ResponseEntity.ok(
+                                "Support Request assigned successfully.");
+        }
 
-    /**
-     * Resolve request
-     */
-    @PutMapping("/{id}/resolve")
-    public ResponseEntity<String> resolveRequest(
-            @PathVariable Long id) {
+        @PutMapping("/{id}/status")
+        public ResponseEntity<String> updateStatus(
+                        @PathVariable Long id,
+                        @RequestParam String status) {
 
-        supportRequestService.resolveRequest(id);
+                supportRequestService.updateStatus(id, status);
 
-        return ResponseEntity.ok(
-                "Support Request resolved successfully.");
-    }
+                return ResponseEntity.ok(
+                                "Support Request status updated successfully.");
+        }
 
+        @PutMapping("/{id}/resolve")
+        public ResponseEntity<String> resolveRequest(
+                        @PathVariable Long id) {
+
+                supportRequestService.resolveRequest(id);
+
+                return ResponseEntity.ok(
+                                "Support Request resolved successfully.");
+        }
+
+        @GetMapping("/my-requests")
+        public ResponseEntity<List<SupportRequestResponseDto>> getMyRequests() {
+
+                return ResponseEntity.ok(
+                                supportRequestService.getMyRequests());
+        }
 }

@@ -19,46 +19,45 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(origins = "http://localhost:5173")
 public class CustomerSupportController {
 
-    private final CustomerSupportService customerSupportService;
+        private final CustomerSupportService customerSupportService;
 
-    /**
-     * Customer submits a shipment request.
-     */
-    @PostMapping("/shipment")
-    public ResponseEntity<String> createShipmentRequest(
-            @RequestBody ShipmentRequestDto request) {
+        @PostMapping("/shipment")
+        public ResponseEntity<String> createShipmentRequest(
+                        @RequestBody ShipmentRequestDto request) {
 
-        customerSupportService.createShipmentRequest(request);
+                customerSupportService.createShipmentRequest(request);
 
-        return ResponseEntity.ok(
-                "Shipment request submitted successfully.");
-    }
+                return ResponseEntity.ok(
+                                "Shipment request submitted successfully.");
+        }
 
-    /**
-     * Customer raises an issue.
-     */
-    @PostMapping(value = "/issue", consumes = { "multipart/form-data" })
-    public ResponseEntity<String> raiseIssue(
+        @PostMapping(value = "/issue", consumes = { "multipart/form-data" })
+        public ResponseEntity<String> raiseIssue(
 
-            @RequestPart("request") RaiseIssueDto request,
+                        @RequestPart("request") RaiseIssueDto request,
 
-            @RequestPart(value = "attachment", required = false) MultipartFile attachment) {
-        System.out.println("Controller reached!");
+                        @RequestPart(value = "attachment", required = false) MultipartFile attachment) {
+                System.out.println("Controller reached!");
 
-        customerSupportService.raiseIssue(request, attachment);
+                customerSupportService.raiseIssue(request, attachment);
 
-        return ResponseEntity.ok(
-                "Issue submitted successfully.");
-    }
+                return ResponseEntity.ok(
+                                "Issue submitted successfully.");
+        }
 
-    /**
-     * Customer views all his/her requests.
-     */
-    @GetMapping("/my-requests")
-    public ResponseEntity<List<CustomerSupportResponseDto>> getMyRequests() {
+        @GetMapping("/my-requests")
+        public ResponseEntity<List<CustomerSupportResponseDto>> getMyRequests() {
 
-        return ResponseEntity.ok(
-                customerSupportService.getMyRequests());
-    }
+                return ResponseEntity.ok(
+                                customerSupportService.getMyRequests());
+        }
+
+        @GetMapping("/requests/{id}")
+        public ResponseEntity<?> getSupportRequestById(
+                        @PathVariable Long id) {
+
+                return ResponseEntity.ok(
+                                customerSupportService.getSupportRequestById(id));
+        }
 
 }

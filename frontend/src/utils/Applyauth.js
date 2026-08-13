@@ -26,6 +26,10 @@ export function applyAuthResponse(response, navigate) {
             navigate("/support_agent");
             break;
 
+        case "DRIVER":
+            navigate("/driver");
+            break;
+
         default:
             navigate("/login");
     }

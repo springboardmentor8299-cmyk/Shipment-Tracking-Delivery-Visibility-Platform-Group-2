@@ -41,10 +41,6 @@ public class NotificationService {
         this.smsService = smsService;
     }
 
-    // =========================================================
-    // Read-side — used directly by NotificationController
-    // =========================================================
-
     @Transactional(readOnly = true)
     public List<NotificationResponse> getMyNotifications(String username) {
 
@@ -94,10 +90,6 @@ public class NotificationService {
         notificationRepository.deleteByIdAndUser_Id(notificationId, user.getId());
     }
 
-    // =========================================================
-    // Preferences
-    // =========================================================
-
     @Transactional
     public NotificationPreferenceResponse getPreferences(String username) {
 
@@ -132,19 +124,6 @@ public class NotificationService {
         return toResponse(preferenceRepository.save(prefs));
     }
 
-    // =========================================================
-    // Write-side — called by OTHER services (shipment, POD, route,
-    // support ticket, etc.) to actually raise a notification.
-    //
-    // e.g. from ShipmentService, once a status changes:
-    //   notificationService.notify(
-    //       shipment.getCustomerId(),
-    //       NotificationType.SHIPMENT_UPDATE,
-    //       "Shipment " + shipment.getTrackingId() + " updated",
-    //       "Your shipment is now " + shipment.getStatus(),
-    //       shipment.getTrackingId());
-    // =========================================================
-
     @Transactional
     public Notification notify(
             User recipient,
@@ -154,8 +133,6 @@ public class NotificationService {
             String trackingId) {
 
         if (recipient == null) {
-            // No linked account (e.g. a shipment with no customer on file) —
-            // nothing to notify, in-app or otherwise.
             return null;
         }
 
@@ -182,8 +159,6 @@ public class NotificationService {
         return notification;
     }
 
-    // Convenience overload for callers that only have a username handy
-    // (e.g. support agent flows keyed off the ticket's customer username).
     @Transactional
     public Notification notify(
             String recipientUsername,
@@ -208,11 +183,6 @@ public class NotificationService {
         };
     }
 
-    // Email goes through the existing JavaMailSender-backed EmailService.
-    // SMS goes through Twilio via SmsService (no-ops if twilio.* isn't
-    // configured, or if the recipient has no phoneNumber on file). Either
-    // channel failing must never block the in-app notification that was
-    // already saved above — hence the try/catch around each.
     private void dispatchToChannels(
             User recipient,
             NotificationPreference prefs,
@@ -223,7 +193,6 @@ public class NotificationService {
             try {
                 emailService.sendNotificationEmail(recipient.getUsername(), title, message);
             } catch (Exception ignored) {
-                // Best-effort — the in-app notification already exists.
             }
         }
 
@@ -231,14 +200,9 @@ public class NotificationService {
             try {
                 smsService.sendSms(recipient.getPhoneNumber(), title + ": " + message);
             } catch (Exception ignored) {
-                // Best-effort — the in-app notification already exists.
             }
         }
 
-        // Push is delivered client-side: NotificationBell polls
-        // GET /api/notifications and fires a browser Notification for any
-        // new unread item once permission has been granted, so there is
-        // nothing to send from the server.
     }
 
     private User getUserOrThrow(String username) {

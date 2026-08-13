@@ -12,6 +12,7 @@ import Delivery from "../../delivery/Delivery";
 
 import RouteManagement from "../../../components/Routemanagement";
 import ProofOfDelivery from "../../pod/ProofOfDelivery";
+import DriverManagement from "../../../components/operator/DriverManagement";
 
 import { getOperatorDashboard } from "../../../services/operatorService";
 
@@ -157,6 +158,8 @@ function LogisticsDashboard() {
           {section === "delivery" && <Delivery />}
 
           {section === "routes" && <RouteManagement />}
+
+          {section === "drivers" && <DriverManagement />}
 
           {section === "proof" && <ProofOfDelivery />}
 

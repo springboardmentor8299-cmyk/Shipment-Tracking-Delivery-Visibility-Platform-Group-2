@@ -7,6 +7,7 @@ import SupportTicketTable from "../../../components/support_agent/TicketTable";
 
 import StatCard from "../../../components/StatCard";
 import QuickActions from "../../../components/QuickActions";
+import RecentActivities from "../../../components/RecentActivities";
 
 import Tracking from "../../tracking/Tracking";
 import Delivery from "../../delivery/Delivery";
@@ -124,7 +125,17 @@ function SupportDashboard() {
                   marginBottom: "30px",
                   alignItems: "start",
                 }}
-              ></div>
+              >
+                <div style={{ gridColumn: "1 / -1" }}>
+                  {" "}
+                  {/* Fixes CSS grid overflow */}
+                  <SupportRequestTable showAssign={false} />
+                </div>
+
+                <div style={{ gridColumn: "1 / -1" }}>
+                  <RecentActivities />
+                </div>
+              </div>
             </>
           )}
 

@@ -15,9 +15,12 @@ import CustomerDashboard from "./pages/dashboard/customer/CustomerDashboard";
 import BusinessDashboard from "./pages/dashboard/business_client/BusinessDashboard";
 import LogisticsDashboard from "./pages/dashboard/logistics_operator/LogisticsDashboard";
 import SupportDashboard from "./pages/dashboard/support_agent/SupportDashboard";
+import DriverDashboard from "./pages/dashboard/driver/DriverDashboard";
 
 import Tracking from "./pages/tracking/Tracking";
 import Delivery from "./pages/delivery/Delivery";
+
+import DriverPODPage from "./pages/dashboard/driver/DriverPODPage";
 
 function App() {
   return (
@@ -84,6 +87,28 @@ function App() {
           element={
             <ProtectedRoute>
               <SupportDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Driver Dashboard */}
+
+        <Route
+          path="/driver"
+          element={
+            <ProtectedRoute>
+              <DriverDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Driver POD */}
+
+        <Route
+          path="/driver/pod"
+          element={
+            <ProtectedRoute>
+              <DriverPODPage />
             </ProtectedRoute>
           }
         />

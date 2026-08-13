@@ -2,6 +2,7 @@ import Sidebar from "../../../components/Sidebar";
 import Navbar from "../../../components/Navbar";
 import StatCard from "../../../components/StatCard";
 import ShipmentTable from "../../../components/ShipmentTable";
+import DriverManagement from "../../../components/operator/DriverManagement";
 import AnalyticsSection from "../../../components/AnalyticsSection";
 import UsersTable from "../../../components/UsersTable";
 import QuickActions from "../../../components/QuickActions";
@@ -134,6 +135,10 @@ function AdminDashboard() {
               {/* Shipment Table */}
 
               <ShipmentTable searchTerm={searchTerm} />
+
+              <div style={{ marginTop: "30px" }}>
+                <DriverManagement />
+              </div>
 
               {/* Charts */}
 

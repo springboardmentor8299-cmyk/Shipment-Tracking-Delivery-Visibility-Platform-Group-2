@@ -14,4 +14,6 @@ public interface CustomerSupportRepository
 
     List<CustomerSupportRequest> findAllByOrderByCreatedAtDesc();
 
+    List<CustomerSupportRequest> findByAssignedToIdOrderByCreatedAtDesc(Long assignedTo);
+
 }

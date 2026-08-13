@@ -18,13 +18,6 @@ import com.shiptrack.notification.dto.NotificationPreferenceResponse;
 import com.shiptrack.notification.dto.NotificationResponse;
 import com.shiptrack.notification.service.NotificationService;
 
-// Mirrors frontend/src/services/notificationService.js exactly:
-// GET /notifications, PATCH /notifications/{id}/read, PATCH /notifications/read-all,
-// DELETE /notifications/{id}, GET /notifications/preferences, PUT /notifications/preferences.
-//
-// No role check here — every role (customer, admin, operator, support agent,
-// business client) has notifications, and every query is scoped to
-// authentication.getName() so users only ever see their own.
 @RestController
 @RequestMapping("/api/notifications")
 public class NotificationController {
@@ -35,7 +28,6 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
-    // (i)-(iv) Unified list — shipment updates, ETA, delivery alerts, delay warnings
     @GetMapping
     public ResponseEntity<List<NotificationResponse>> getNotifications(
             Authentication authentication) {
@@ -71,7 +63,6 @@ public class NotificationController {
         return ResponseEntity.noContent().build();
     }
 
-    // (v)-(vii) Email / SMS / push channel + category preferences
     @GetMapping("/preferences")
     public ResponseEntity<NotificationPreferenceResponse> getPreferences(
             Authentication authentication) {

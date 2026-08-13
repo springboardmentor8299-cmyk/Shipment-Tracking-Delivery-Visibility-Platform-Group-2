@@ -29,6 +29,7 @@ public class PodService {
     private final FileStorageService fileStorageService;
     private final ActivityService activityService;
     private final NotificationService notificationService;
+    private final PodOtpService podOtpService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public PodService(
@@ -36,15 +37,16 @@ public class PodService {
             ShipmentRepository shipmentRepository,
             FileStorageService fileStorageService,
             ActivityService activityService,
-            NotificationService notificationService) {
+            NotificationService notificationService,
+            PodOtpService podOtpService) {
         this.podRecordRepository = podRecordRepository;
         this.shipmentRepository = shipmentRepository;
         this.fileStorageService = fileStorageService;
         this.activityService = activityService;
         this.notificationService = notificationService;
+        this.podOtpService = podOtpService;
     }
 
-    // (iii)(iv)(v)(vi) Submit: confirmation + verification + evidence storage
     @Transactional
     public PodResponse submitPod(PodSubmitRequest request, String submittedBy) {
 
@@ -58,10 +60,15 @@ public class PodService {
 
         VerificationMethod method = parseVerificationMethod(request.getVerificationMethod());
 
-        if (method == VerificationMethod.OTP
-                && (request.getVerificationCode() == null || request.getVerificationCode().isBlank())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "verificationCode is required for OTP verification");
+        if (method == VerificationMethod.OTP) {
+            if (request.getVerificationCode() == null || request.getVerificationCode().isBlank()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "verificationCode is required for OTP verification");
+            }
+            if (!podOtpService.isVerified(request.getTrackingId())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "This shipment's OTP has not been verified yet. Verify the code before confirming delivery.");
+            }
         }
 
         if (request.getSignature() == null || request.getSignature().isEmpty()) {
@@ -99,7 +106,6 @@ public class PodService {
                 "Proof of delivery captured for " + shipment.getTrackingId()
                         + " (received by " + record.getReceiverName() + ")");
 
-        // (iii) Delivery confirmation alert, now that proof of delivery is on file.
         try {
             notificationService.notify(
                     shipment.getCustomerId(),
@@ -110,10 +116,13 @@ public class PodService {
         } catch (Exception ignored) {
         }
 
+        if (method == VerificationMethod.OTP) {
+            podOtpService.clear(request.getTrackingId());
+        }
+
         return toResponse(saved);
     }
 
-    // (v) POD record management
     public List<PodResponse> getAllPods() {
         return podRecordRepository.findAllByOrderByDeliveredAtDesc()
                 .stream()
@@ -185,6 +194,11 @@ public class PodService {
                 .photoUrls(record.getPhotoUrls())
                 .deliveredAt(record.getDeliveredAt())
                 .deliveredBy(record.getDeliveredBy())
+                .origin(shipment.getOrigin())
+                .destination(shipment.getDestination())
+                .noOfItems(shipment.getNoOfItems())
+                .totalWeightOfItems(shipment.getTotalWeightOfItems())
+                .shipmentCost(shipment.getShipmentCost())
                 .build();
     }
 

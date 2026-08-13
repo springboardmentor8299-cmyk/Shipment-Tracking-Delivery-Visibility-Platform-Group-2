@@ -26,4 +26,10 @@ public class PodResponse {
     private LocalDateTime deliveredAt;
     private String deliveredBy;
 
+    private String origin;
+    private String destination;
+    private String noOfItems;
+    private String totalWeightOfItems;
+    private String shipmentCost;
+
 }

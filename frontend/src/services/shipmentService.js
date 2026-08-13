@@ -24,6 +24,12 @@ export const updateShipment = async (id, shipment) => {
     return response.data;
 };
 
+// Update Shipment Status only (does not touch customer/cost/other fields)
+export const updateShipmentStatus = async (trackingId, status) => {
+    const response = await api.put(`/shipments/${trackingId}/status`, { status });
+    return response.data;
+};
+
 // Delete Shipment
 export const deleteShipment = async (id) => {
     await api.delete(`/shipments/${id}`);

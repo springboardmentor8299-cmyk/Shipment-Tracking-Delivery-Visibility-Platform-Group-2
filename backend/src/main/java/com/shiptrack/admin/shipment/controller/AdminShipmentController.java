@@ -55,9 +55,7 @@ public class AdminShipmentController {
         shipmentService.deleteShipment(id);
     }
 
-
-    // Live location ping endpoint (from driver app / IoT simulator)
-  @PostMapping("/{trackingId}/location")
+    @PostMapping("/{trackingId}/location")
     public ResponseEntity<Shipment> updateLiveLocation(
             @PathVariable String trackingId,
             @RequestBody LocationUpdateRequest request) {
@@ -68,7 +66,6 @@ public class AdminShipmentController {
                 shipmentService.updateLiveLocation(trackingId, request));
     }
 
-    // Status management endpoint
     @PutMapping("/{trackingId}/status")
     public ResponseEntity<Shipment> updateStatus(
             @PathVariable String trackingId,
@@ -76,7 +73,6 @@ public class AdminShipmentController {
         return ResponseEntity.ok(shipmentService.updateShipmentStatus(trackingId, request));
     }
 
-    // Live tracking overview / predictions
     @GetMapping("/{trackingId}/tracking")
     public ResponseEntity<TrackingResponseDto> getTrackingDetails(@PathVariable String trackingId) {
         return ResponseEntity.ok(shipmentService.getTrackingDetails(trackingId));

@@ -39,9 +39,6 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // The recipient. Every query is scoped to this so a user only ever
-    // sees their own notifications (admin/system-wide notices are just
-    // rows with recipient = every relevant user, written at creation time).
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -56,7 +53,6 @@ public class Notification {
     @Column(nullable = false, length = 1000)
     private String message;
 
-    // Optional shipment tracking id, shown as a chip in the UI when present.
     @Column(name = "tracking_id")
     private String trackingId;
 

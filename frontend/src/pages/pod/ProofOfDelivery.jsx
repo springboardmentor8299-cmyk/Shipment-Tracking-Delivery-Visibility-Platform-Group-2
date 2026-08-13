@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import {
   FaCamera,
   FaSignature,
@@ -9,7 +10,7 @@ import {
 } from "react-icons/fa";
 import {
   getAllShipments,
-  updateShipment,
+  updateShipmentStatus,
 } from "../../services/shipmentService";
 import { submitPOD, getAllPODs, deletePOD } from "../../services/podService";
 import { sendPodOtp, verifyPodOtp } from "../../services/podOtpService";
@@ -31,12 +32,8 @@ const CHECKLIST_ITEMS = [
   { key: "itemCountVerified", label: "Item count matches shipment record" },
 ];
 
-// Shipments in these statuses are the ones a POD would realistically be
-// captured for — still useful to allow searching any tracking ID though,
-// in case a record needs to be logged after the fact.
 const DELIVERY_CANDIDATE_STATUSES = ["OUT_FOR_DELIVERY", "IN_TRANSIT"];
 
-//  (i) Digital signature capture — plain canvas pad, mouse + touch
 function SignaturePad({ onChange }) {
   const canvasRef = useRef(null);
   const drawingRef = useRef(false);
@@ -82,8 +79,6 @@ function SignaturePad({ onChange }) {
     onChange(null);
   };
 
-  // Report a fresh data URL every time drawing stops (not just on the
-  // hasSignature flip), so edits after the first stroke are captured.
   const handlePointerUp = () => {
     if (drawingRef.current) {
       drawingRef.current = false;
@@ -127,7 +122,6 @@ function SignaturePad({ onChange }) {
   );
 }
 
-// (ii) Delivery photo upload — multi-file, drag/drop, previews
 function PhotoUpload({ photos, onAdd, onRemove }) {
   const inputRef = useRef(null);
 
@@ -189,13 +183,13 @@ function PhotoUpload({ photos, onAdd, onRemove }) {
   );
 }
 
-// Main page
 export default function ProofOfDelivery() {
-  // Only logistics operators actually perform deliveries and capture new
-  // POD evidence out in the field. Admins review/audit what's already been
-  // captured, so they only get the records list — no "New POD" form.
-  const canCreatePod = localStorage.getItem("role") === "LOGISTICS_OPERATOR";
+  const role = localStorage.getItem("role");
+  const canCreatePod = role === "LOGISTICS_OPERATOR" || role === "DRIVER";
   const [activeTab, setActiveTab] = useState(canCreatePod ? "new" : "records");
+
+  const location = useLocation();
+  const incomingShipment = location.state?.shipment;
 
   // Shipment lookup
   const [shipments, setShipments] = useState([]);
@@ -207,9 +201,7 @@ export default function ProofOfDelivery() {
   const [deliveryNotes, setDeliveryNotes] = useState("");
   const [verificationMethod, setVerificationMethod] = useState("SIGNATURE");
 
-  // (iv) OTP verification workflow — driven entirely by the backend:
-  // it generates the code, stores it temporarily, and notifies the
-  // customer; here we just track where in that flow we are.
+  // OTP verification workflow
   const [otpInput, setOtpInput] = useState("");
   const [otpSending, setOtpSending] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
@@ -235,10 +227,23 @@ export default function ProofOfDelivery() {
   const [generatingBillId, setGeneratingBillId] = useState(null);
   const [billError, setBillError] = useState("");
 
+  // ✅ FIX 1: Fetch active shipments on initial mount when creating POD is allowed
   useEffect(() => {
-    loadShipments();
-  }, []);
+    if (canCreatePod) {
+      loadShipments();
+    }
+  }, [canCreatePod]);
 
+  // Handle passed shipment state from router location
+  useEffect(() => {
+    if (!incomingShipment) return;
+
+    setSelectedShipment(incomingShipment);
+    setShipmentQuery(incomingShipment.trackingId);
+    setReceiverName(incomingShipment.receiverName || "");
+  }, [incomingShipment]);
+
+  // Fetch records when switching to the records tab
   useEffect(() => {
     if (activeTab === "records") loadRecords();
   }, [activeTab]);
@@ -262,7 +267,7 @@ export default function ProofOfDelivery() {
       console.error("Failed to load POD records:", err);
       setRecordsError(
         err?.response?.data?.message ||
-          "Could not load POD records. This needs a matching backend at /api/admin/pod — see note below.",
+          "Could not load POD records. Please check the network endpoint.",
       );
     } finally {
       setRecordsLoading(false);
@@ -282,7 +287,8 @@ export default function ProofOfDelivery() {
       .filter(
         (s) =>
           s.trackingId?.toLowerCase().includes(q) ||
-          s.customerName?.toLowerCase().includes(q),
+          s.customerName?.toLowerCase().includes(q) ||
+          s.receiverName?.toLowerCase().includes(q),
       )
       .slice(0, 8);
   }, [shipmentQuery, shipments]);
@@ -306,8 +312,6 @@ export default function ProofOfDelivery() {
     setOtpError("");
   };
 
-  // Step 1+2+3+4: admin selects OTP -> ask the backend to generate, store,
-  // and send it to the customer.
   const handleSendOtp = async () => {
     if (!selectedShipment) return;
     setOtpSending(true);
@@ -328,36 +332,38 @@ export default function ProofOfDelivery() {
     }
   };
 
-  // Step 6+7: admin enters the code the customer gave them -> backend
-  // verifies it server-side.
   const handleVerifyOtp = async () => {
     if (!selectedShipment || !otpInput.trim()) return;
     setOtpVerifying(true);
     setOtpError("");
     try {
-      const result = await verifyPodOtp(selectedShipment.trackingId, otpInput.trim());
+      const result = await verifyPodOtp(
+        selectedShipment.trackingId,
+        otpInput.trim(),
+      );
       if (result?.verified) {
         setOtpVerified(true);
       } else {
         setOtpVerified(false);
-        setOtpError("That code doesn't match. Ask the receiver to confirm it and try again.");
+        setOtpError(
+          "That code doesn't match. Ask the receiver to confirm it and try again.",
+        );
       }
     } catch (err) {
       console.error("Failed to verify OTP:", err);
       setOtpVerified(false);
       setOtpError(
-        err?.response?.data?.message || "Could not verify this code. Try again.",
+        err?.response?.data?.message ||
+          "Could not verify this code. Try again.",
       );
     } finally {
       setOtpVerifying(false);
     }
   };
 
-  // Switching away from OTP, or picking a different shipment, invalidates
-  // whatever OTP progress was in flight.
   useEffect(() => {
     resetOtpFlow();
-  }, [verificationMethod, selectedShipment?.trackingId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [verificationMethod, selectedShipment?.trackingId]);
 
   const resetForm = () => {
     setSelectedShipment(null);
@@ -371,11 +377,10 @@ export default function ProofOfDelivery() {
     setPhotos([]);
   };
 
-  // (iv) Verification workflow — must be satisfied before a POD can be submitted
   const verificationSatisfied = useMemo(() => {
     if (verificationMethod === "OTP") return otpVerified;
     if (verificationMethod === "ID_CHECK") return !!checklist.identityConfirmed;
-    return true; // SIGNATURE method is verified by the signature itself
+    return true;
   }, [verificationMethod, otpVerified, checklist]);
 
   const allChecklistDone = CHECKLIST_ITEMS.every((item) => checklist[item.key]);
@@ -388,7 +393,6 @@ export default function ProofOfDelivery() {
     verificationSatisfied &&
     !submitting;
 
-  // (iii) Delivery confirmation — submits the POD and flips the shipment to DELIVERED
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError("");
@@ -430,15 +434,11 @@ export default function ProofOfDelivery() {
         photos,
       });
 
-      // Delivery confirmation: reflect it on the shipment itself.
-      // Only the status changes here — `deliveryDate` is the target/
-      // promised date set at creation and is used elsewhere (customer
-      // tracking, delivery performance reporting) as that baseline, so
-      // POD confirmation shouldn't overwrite it with today's date.
-      await updateShipment(selectedShipment.id, {
-        ...selectedShipment,
-        status: "DELIVERED",
-      });
+      // Status-only update — the shipment object we have here can be the
+      // driver portal's lightweight view (no customerId/shipmentCost on
+      // it), so a full-object PUT would wipe those fields in the DB.
+      // Only flip the status instead.
+      await updateShipmentStatus(selectedShipment.trackingId, "DELIVERED");
 
       setFormSuccess(
         `Delivery confirmed for ${selectedShipment.trackingId}. POD record saved.`,
@@ -448,8 +448,7 @@ export default function ProofOfDelivery() {
     } catch (err) {
       console.error("POD submission failed:", err);
       setFormError(
-        err?.response?.data?.message ||
-          "Could not save this POD. This needs a matching backend at POST /api/admin/pod — see note below.",
+        err?.response?.data?.message || "Could not save this POD record.",
       );
     } finally {
       setSubmitting(false);
@@ -482,9 +481,6 @@ export default function ProofOfDelivery() {
     }
   };
 
-  // Builds a downloadable PDF bill from everything already on the record —
-  // sender/receiver, shipment details, cost, signature, and evidence
-  // photos — no extra backend call needed.
   const handleGenerateBill = async (record) => {
     setBillError("");
     setGeneratingBillId(record.id);
@@ -503,6 +499,7 @@ export default function ProofOfDelivery() {
   return (
     <div className="pod-wrapper">
       <h1>Proof of Delivery</h1>
+
       <p className="pod-subtitle">
         Capture signature, photo evidence, and verification for each delivery —
         and manage saved POD records.
@@ -687,7 +684,9 @@ export default function ProofOfDelivery() {
                         type="button"
                         className="pod-btn-secondary"
                         onClick={handleVerifyOtp}
-                        disabled={otpVerified || otpVerifying || !otpInput.trim()}
+                        disabled={
+                          otpVerified || otpVerifying || !otpInput.trim()
+                        }
                       >
                         {otpVerifying
                           ? "Verifying…"

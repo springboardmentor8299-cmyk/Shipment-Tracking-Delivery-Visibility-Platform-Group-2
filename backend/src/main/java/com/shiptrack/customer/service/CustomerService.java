@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.shiptrack.admin.pod.dto.PodResponse;
+import com.shiptrack.admin.pod.service.PodService;
 import com.shiptrack.admin.shipment.entity.Shipment;
 import com.shiptrack.admin.shipment.entity.ShipmentStatus;
 import com.shiptrack.admin.shipment.repository.ShipmentRepository;
@@ -21,11 +23,14 @@ public class CustomerService {
 
         private final ShipmentRepository shipmentRepository;
         private final UserRepository userRepository;
+        private final PodService podService;
 
         public CustomerService(ShipmentRepository shipmentRepository,
-                        UserRepository userRepository) {
+                        UserRepository userRepository,
+                        PodService podService) {
                 this.shipmentRepository = shipmentRepository;
                 this.userRepository = userRepository;
+                this.podService = podService;
         }
 
         // ================= Dashboard =================
@@ -114,16 +119,78 @@ public class CustomerService {
                                 shipment.getEstimatedDeliveryTime());
         }
 
-        // ================= Profile =================
+        // ================= Bill (Proof of Delivery) =================
 
-        public CustomerProfileResponse getProfile(String username) {
+        // Same data the admin/operator "Generate Bill" PDF is built from
+        // (see PodService), just scoped to the requesting customer's own
+        // shipment instead of the admin-only /api/admin/pod endpoint.
+        public PodResponse getBillForCustomer(String username, String trackingId) {
 
                 User user = userRepository.findByUsername(username)
                                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
+                Shipment shipment = shipmentRepository.findByTrackingId(trackingId)
+                                .orElseThrow(() -> new RuntimeException("Shipment not found"));
+
+                // Security Check: Customer can only view their own shipment's bill
+                if (!shipment.getCustomerId().getId().equals(user.getId())) {
+                        throw new RuntimeException("Access Denied");
+                }
+
+                return podService.getLatestPodForTrackingId(trackingId);
+        }
+
+        // ================= Profile =================
+
+        public CustomerProfileResponse getProfile(
+                        String username) {
+
+                User customer = userRepository
+                                .findByUsername(username)
+                                .orElseThrow(() -> new RuntimeException(
+                                                "Customer not found"));
+
                 return new CustomerProfileResponse(
-                                user.getId(),
-                                user.getUsername(),
-                                user.getRole().name().replace("_", " "));
+
+                                customer.getId(),
+
+                                customer.getName(),
+
+                                customer.getUsername(),
+
+                                customer.getPhoneNumber(),
+
+                                customer.getRole().toString()
+
+                );
+        }
+
+        // UPDATE CUSTOMER PHONE NUMBER
+
+        public String updatePhoneNumber(
+                        String username,
+                        String phoneNumber) {
+
+                User customer = userRepository
+                                .findByUsername(username)
+                                .orElseThrow(() -> new RuntimeException(
+                                                "Customer not found"));
+
+                String cleanedPhone = phoneNumber.trim();
+
+                // Basic validation
+                if (!cleanedPhone.matches(
+                                "^\\+?[0-9]{7,15}$")) {
+
+                        throw new IllegalArgumentException(
+                                        "Invalid phone number");
+                }
+
+                customer.setPhoneNumber(
+                                cleanedPhone);
+
+                userRepository.save(customer);
+
+                return cleanedPhone;
         }
 }

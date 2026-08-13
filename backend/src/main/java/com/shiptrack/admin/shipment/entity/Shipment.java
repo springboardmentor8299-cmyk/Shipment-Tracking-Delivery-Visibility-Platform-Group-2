@@ -88,4 +88,8 @@ public class Shipment {
     @JoinColumn(name = "customer_id")
     private User customerId;
 
+    @ManyToOne
+    @JoinColumn(name = "driver_id")
+    private com.shiptrack.driver.entity.Driver assignedDriver;
+
 }

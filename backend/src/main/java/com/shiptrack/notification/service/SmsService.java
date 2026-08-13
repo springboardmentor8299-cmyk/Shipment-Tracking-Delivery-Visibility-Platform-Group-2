@@ -9,13 +9,6 @@ import com.twilio.type.PhoneNumber;
 
 import jakarta.annotation.PostConstruct;
 
-// (vi) SMS notifications, backed by Twilio.
-//
-// Credentials are read from application.properties (twilio.account-sid /
-// twilio.auth-token / twilio.from-number) — see application.properties.
-// If they're not configured, Twilio.init is simply never called and
-// sendSms() logs and no-ops instead of throwing, so the rest of the app
-// (and the other two channels) keep working with no SMS provider set up.
 @Service
 public class SmsService {
 

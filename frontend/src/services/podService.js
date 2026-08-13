@@ -1,4 +1,5 @@
 import api from "./api";
+
 export const submitPOD = async ({
     trackingId,
     receiverName,
@@ -26,6 +27,7 @@ export const submitPOD = async ({
         formData.append("photos", photo.file, photo.file.name || `photo-${index}.jpg`);
     });
 
+    // ✅ FIXED: Changed "/admin" to "/admin/pod" (or "/driver/pod")
     const response = await api.post("/admin/pod", formData, {
         headers: { "Content-Type": "multipart/form-data" },
     });
@@ -34,6 +36,7 @@ export const submitPOD = async ({
 
 // (v) POD record management — list all records, newest first
 export const getAllPODs = async () => {
+    // ✅ FIXED: Changed "/admin" to "/admin/pod"
     const response = await api.get("/admin/pod");
     return response.data;
 };

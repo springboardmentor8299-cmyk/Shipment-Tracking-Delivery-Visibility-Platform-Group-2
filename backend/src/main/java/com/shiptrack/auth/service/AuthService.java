@@ -73,6 +73,7 @@ public class AuthService {
                 .name(request.getName())
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .phoneNumber(request.getPhoneNumber())
                 .role(Role.CUSTOMER) // by default role customer
                 .build();
 
@@ -181,12 +182,6 @@ public class AuthService {
         return user;
     }
 
-    // Forgot Password
-    //
-    // Always returns the same generic message whether or not the username
-    // exists, so this endpoint can't be used to check which usernames are
-    // registered. The actual email is only sent when a matching account is
-    // found.
     @Transactional
     public void forgotPassword(String username) {
 
@@ -198,8 +193,6 @@ public class AuthService {
 
         User user = optionalUser.get();
 
-        // Invalidate any previous outstanding reset links for this user so
-        // only the most recently requested link can be used.
         passwordResetTokenRepository.invalidateAllActiveTokensForUser(user);
 
         String rawToken = generateSecureToken();
@@ -219,8 +212,6 @@ public class AuthService {
         try {
             emailService.sendPasswordResetEmail(user.getUsername(), resetLink);
         } catch (Exception e) {
-            // Don't leak email-delivery failures to the caller — that would
-            // reveal whether the username exists. Log server-side instead.
             System.err.println("Failed to send password reset email: " + e.getMessage());
         }
 

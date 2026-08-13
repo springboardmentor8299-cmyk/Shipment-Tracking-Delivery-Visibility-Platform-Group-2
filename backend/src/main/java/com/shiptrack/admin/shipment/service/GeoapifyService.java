@@ -4,6 +4,7 @@ import com.shiptrack.admin.shipment.dto.GeoapifyGeocodeResponse;
 import com.shiptrack.admin.shipment.dto.GeoapifyRoutingResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -13,6 +14,15 @@ public class GeoapifyService {
     private String apiKey;
 
     private final RestTemplate restTemplate = new RestTemplate();
+
+    private void logGeoapifyFailure(String context, Exception e) {
+        if (e instanceof HttpStatusCodeException httpEx) {
+            System.err.println("Geoapify " + context + " error: HTTP " + httpEx.getStatusCode()
+                    + " — " + httpEx.getResponseBodyAsString());
+        } else {
+            System.err.println("Geoapify " + context + " error: " + e.getMessage());
+        }
+    }
 
     public RouteMetrics calculateRouteMetrics(Double currentLat, Double currentLon, Double destLat, Double destLon) {
         if (currentLat == null || currentLon == null || destLat == null || destLon == null) {
@@ -34,7 +44,7 @@ public class GeoapifyService {
                 return new RouteMetrics(distanceKm, durationMinutes);
             }
         } catch (Exception e) {
-            System.err.println("Geoapify routing API error: " + e.getMessage());
+            logGeoapifyFailure("routing", e);
         }
 
         return new RouteMetrics(null, null);
@@ -61,7 +71,7 @@ public class GeoapifyService {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Geoapify geocode API error: " + e.getMessage());
+            logGeoapifyFailure("geocode", e);
         }
 
         return null;
@@ -94,7 +104,7 @@ public class GeoapifyService {
                 return new RouteMetrics(distanceKm, durationMinutes);
             }
         } catch (Exception e) {
-            System.err.println("Geoapify routing API error (type=" + geoapifyType + "): " + e.getMessage());
+            logGeoapifyFailure("routing (type=" + geoapifyType + ")", e);
         }
 
         return new RouteMetrics(null, null);

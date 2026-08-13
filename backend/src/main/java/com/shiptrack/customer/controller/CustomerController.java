@@ -1,66 +1,111 @@
 package com.shiptrack.customer.controller;
 
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.shiptrack.admin.pod.dto.PodResponse;
 import com.shiptrack.customer.dto.CustomerDashboardResponse;
 import com.shiptrack.customer.dto.CustomerProfileResponse;
-import com.shiptrack.customer.service.CustomerService;
-
-import java.util.List;
 import com.shiptrack.customer.dto.CustomerShipmentResponse;
 import com.shiptrack.customer.dto.ShipmentTrackingResponse;
+import com.shiptrack.customer.service.CustomerService;
 
 @RestController
 @RequestMapping("/api/customer")
 public class CustomerController {
 
-    private final CustomerService customerService;
+        private final CustomerService customerService;
 
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
-    }
+        public CustomerController(CustomerService customerService) {
+                this.customerService = customerService;
+        }
 
-    @GetMapping("/dashboard")
-    public CustomerDashboardResponse getDashboard(Authentication authentication) {
+        // Customer Dashboard
+        @GetMapping("/dashboard")
+        public CustomerDashboardResponse getDashboard(
+                        Authentication authentication) {
 
-        String username = authentication.getName();
+                String username = authentication.getName();
 
-        return customerService.getDashboard(username);
-    }
+                return customerService.getDashboard(username);
+        }
 
-    @GetMapping("/shipments")
-    public List<CustomerShipmentResponse> getMyShipments(Authentication authentication) {
+        // Customer Shipments
+        @GetMapping("/shipments")
+        public List<CustomerShipmentResponse> getMyShipments(
+                        Authentication authentication) {
 
-        return customerService.getMyShipments(authentication.getName());
-    }
+                return customerService.getMyShipments(
+                                authentication.getName());
+        }
 
-    @GetMapping("/tracking/{trackingId}")
-    public ShipmentTrackingResponse getTracking(
+        // Shipment Tracking
+        @GetMapping("/tracking/{trackingId}")
+        public ShipmentTrackingResponse getTracking(
 
-            @PathVariable String trackingId,
+                        @PathVariable String trackingId,
 
-            Authentication authentication
+                        Authentication authentication) {
 
-    ) {
+                return customerService.getTracking(
+                                authentication.getName(),
+                                trackingId);
+        }
 
-        return customerService.getTracking(
+        @GetMapping("/pod/{trackingId}")
+        public PodResponse getBill(
+                        @PathVariable String trackingId,
+                        Authentication authentication) {
 
-                authentication.getName(),
+                return customerService.getBillForCustomer(
+                                authentication.getName(),
+                                trackingId);
+        }
 
-                trackingId
+        // Customer Profile
+        @GetMapping("/profile")
+        public CustomerProfileResponse getProfile(
+                        Authentication authentication) {
 
-        );
+                return customerService.getProfile(
+                                authentication.getName());
+        }
 
-    }
+        // Update Customer Phone Number
+        @PutMapping("/profile/phone")
+        public ResponseEntity<?> updatePhoneNumber(
 
-    @GetMapping("/profile")
-    public CustomerProfileResponse getProfile(Authentication authentication) {
+                        @RequestBody java.util.Map<String, String> request,
 
-        return customerService.getProfile(authentication.getName());
+                        Authentication authentication) {
 
-    }
+                String phoneNumber = request.get("phoneNumber");
+
+                if (phoneNumber == null ||
+                                phoneNumber.trim().isEmpty()) {
+
+                        return ResponseEntity
+                                        .badRequest()
+                                        .body("Phone number cannot be empty");
+                }
+
+                String updatedPhone = customerService.updatePhoneNumber(
+                                authentication.getName(),
+                                phoneNumber);
+
+                return ResponseEntity.ok(
+                                java.util.Map.of(
+                                                "message",
+                                                "Phone number updated successfully",
+                                                "phoneNumber",
+                                                updatedPhone));
+        }
 }

@@ -14,6 +14,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.shiptrack.auth.service.JwtService;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +24,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
+
+    public static final String AUTH_ERROR_ATTR = "jwt_auth_error";
 
     @Autowired
     private JwtService jwtService;
@@ -35,7 +40,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
-        // Skip JWT validation for authentication endpoints
         String path = request.getServletPath();
 
         if (path.startsWith("/api/auth")) {
@@ -45,21 +49,24 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
 
-        String token = null;
-        String username = null;
-
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            request.setAttribute(AUTH_ERROR_ATTR,
+                    "No Authorization header (or it doesn't start with 'Bearer ') was sent with this request.");
             filterChain.doFilter(request, response);
             return;
         }
 
-        token = authHeader.substring(7);
+        String token = authHeader.substring(7);
+        String username;
 
         try {
             username = jwtService.extractUsername(token);
-
-        } catch (Exception e) {
-            // Invalid or expired token
+        } catch (ExpiredJwtException e) {
+            request.setAttribute(AUTH_ERROR_ATTR, "Your session has expired. Please log in again.");
+            filterChain.doFilter(request, response);
+            return;
+        } catch (JwtException | IllegalArgumentException e) {
+            request.setAttribute(AUTH_ERROR_ATTR, "The auth token is invalid or malformed: " + e.getMessage());
             filterChain.doFilter(request, response);
             return;
         }
@@ -67,12 +74,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (username != null
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            UserDetails userDetails;
+            try {
+                userDetails = userDetailsService.loadUserByUsername(username);
+            } catch (Exception e) {
+                request.setAttribute(AUTH_ERROR_ATTR,
+                        "Token is valid but the user '" + username + "' no longer exists.");
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-            /*
-             * System.out.println("Username : " + username);
-             * System.out.println("Authorities : " + userDetails.getAuthorities());
-             */
             if (jwtService.isTokenValid(token, userDetails.getUsername())) {
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
@@ -86,6 +97,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext()
                         .setAuthentication(authentication);
+            } else {
+                request.setAttribute(AUTH_ERROR_ATTR, "Token failed validation for user '" + username + "'.");
             }
         }
 
