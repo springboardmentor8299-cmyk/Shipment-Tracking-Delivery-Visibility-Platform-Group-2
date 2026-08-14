@@ -76,3 +76,35 @@ export function disconnectAdmin() {
         adminClient = null;
     }
 }
+
+let supportChatClient = null;
+
+export function connectToSupportChat(queryId, onUpdate) {
+    if (supportChatClient && supportChatClient.active) {
+        supportChatClient.deactivate();
+    }
+
+    supportChatClient = new Client({
+        webSocketFactory: () => new SockJS('/ws'),
+        connectHeaders: {},
+        debug: () => {},
+        reconnectDelay: 5000,
+        onConnect: () => {
+            supportChatClient.subscribe(`/topic/support/${queryId}`, (message) => {
+                if (onUpdate) onUpdate(JSON.parse(message.body));
+            });
+        },
+        onStompError: (error) => {
+            console.error('STOMP support chat error:', error);
+        }
+    });
+
+    supportChatClient.activate();
+}
+
+export function disconnectSupportChat() {
+    if (supportChatClient) {
+        supportChatClient.deactivate();
+        supportChatClient = null;
+    }
+}

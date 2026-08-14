@@ -85,6 +85,7 @@ function LiveTrackingMap({
   destination,
   currentLocation,
   routePolyline,
+  historyPoints,
   originLabel,
   destLabel,
   originAddress,
@@ -98,6 +99,7 @@ function LiveTrackingMap({
   const mapInstanceRef = useRef(null);
   const markerRef = useRef(null);
   const routeRef = useRef(null);
+  const historyRef = useRef(null);
   const originMarkerRef = useRef(null);
   const destMarkerRef = useRef(null);
   const animationRef = useRef(null);
@@ -349,6 +351,30 @@ function LiveTrackingMap({
       }
     }
   }, [routePolyline]);
+
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    if (!map) return;
+
+    if (historyRef.current) {
+      map.removeLayer(historyRef.current);
+      historyRef.current = null;
+    }
+
+    if (historyPoints && historyPoints.length > 1) {
+      const coords = historyPoints
+        .map((p) => [p.latitude, p.longitude])
+        .filter(([lat, lng]) => lat != null && lng != null);
+      if (coords.length > 1) {
+        historyRef.current = L.polyline(coords, {
+          color: "#64748B",
+          weight: 3,
+          opacity: 0.8,
+          dashArray: "6 8",
+        }).addTo(map);
+      }
+    }
+  }, [historyPoints]);
 
   useEffect(() => {
     if (status === "DELIVERED") {

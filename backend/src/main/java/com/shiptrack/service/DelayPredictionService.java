@@ -3,9 +3,11 @@ package com.shiptrack.service;
 import com.shiptrack.dto.DelayStatusResponse;
 import com.shiptrack.dto.LatLng;
 import com.shiptrack.entity.DelayPrediction;
+import com.shiptrack.entity.RouteHistoryPoint;
 import com.shiptrack.entity.Shipment;
 import com.shiptrack.entity.TrackingEvent;
 import com.shiptrack.repository.DelayPredictionRepository;
+import com.shiptrack.repository.RouteHistoryPointRepository;
 import com.shiptrack.repository.ShipmentRepository;
 import com.shiptrack.repository.TrackingEventRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -27,6 +30,7 @@ public class DelayPredictionService {
 
     private final ShipmentRepository shipmentRepository;
     private final TrackingEventRepository trackingEventRepository;
+    private final RouteHistoryPointRepository routeHistoryPointRepository;
     private final DelayPredictionRepository delayPredictionRepository;
     private final GeocodingService geocodingService;
     private final LiveTrackingService liveTrackingService;
@@ -48,6 +52,13 @@ public class DelayPredictionService {
                 .max(Comparator.comparing(TrackingEvent::getId))
                 .orElse(null);
 
+        RouteHistoryPoint latestPoint = routeHistoryPointRepository
+                .findTopByShipmentIdOrderByRecordedAtDesc(shipmentId)
+                .orElse(null);
+
+        LocalDateTime lastKnownTime = latestPoint != null ? latestPoint.getRecordedAt()
+                : (latest != null ? latest.getRecordedAt() : null);
+
         DelayPrediction.DelayPredictionBuilder builder = DelayPrediction.builder()
                 .shipment(shipment)
                 .detectedAt(LocalDateTime.now());
@@ -57,8 +68,8 @@ public class DelayPredictionService {
         Double probability = null;
 
         // Check 1: Stale tracking - no update in 30+ minutes during active delivery
-        if (latest != null && ("IN_TRANSIT".equals(status) || "OUT_FOR_DELIVERY".equals(status))) {
-            long minutesSinceUpdate = ChronoUnit.MINUTES.between(latest.getRecordedAt(), LocalDateTime.now());
+        if (lastKnownTime != null && ("IN_TRANSIT".equals(status) || "OUT_FOR_DELIVERY".equals(status))) {
+            long minutesSinceUpdate = ChronoUnit.MINUTES.between(lastKnownTime, LocalDateTime.now());
             if (minutesSinceUpdate > 30) {
                 reason = "No location update for " + minutesSinceUpdate + " minutes";
                 delayMinutes = (int) Math.min(minutesSinceUpdate, 120);
@@ -100,6 +111,23 @@ public class DelayPredictionService {
         }
 
         if (reason != null) {
+            Optional<DelayPrediction> existing = delayPredictionRepository
+                    .findTopByShipmentAndIsActiveTrueOrderByDetectedAtDesc(shipment);
+
+            if (existing.isPresent()
+                    && Objects.equals(existing.get().getDelayReason(), reason)
+                    && Objects.equals(existing.get().getDelayMinutes(), delayMinutes)) {
+                log.debug("Delay already active for shipment {}: {}", shipmentId, reason);
+                return existing;
+            }
+
+            List<DelayPrediction> actives = delayPredictionRepository.findByShipmentAndIsActiveTrue(shipment);
+            if (!actives.isEmpty()) {
+                actives.forEach(d -> d.setIsActive(false));
+                delayPredictionRepository.saveAll(actives);
+                log.info("Superseded {} stale delay prediction(s) for shipment {}", actives.size(), shipmentId);
+            }
+
             builder.delayReason(reason)
                     .delayMinutes(delayMinutes)
                     .probability(probability)
@@ -112,6 +140,13 @@ public class DelayPredictionService {
 
             log.warn("Delay detected for shipment {}: {} ({} min)", shipmentId, reason, delayMinutes);
             return Optional.of(prediction);
+        }
+
+        List<DelayPrediction> active = delayPredictionRepository.findByShipmentAndIsActiveTrue(shipment);
+        if (!active.isEmpty()) {
+            active.forEach(d -> d.setIsActive(false));
+            delayPredictionRepository.saveAll(active);
+            log.info("Delay resolved for shipment {}", shipmentId);
         }
 
         return Optional.empty();

@@ -51,12 +51,16 @@ function Login() {
                 token: response.token,
                 name: response.name,
                 role: response.role,
+                id: response.id,
+                email: response.email,
             });
 
             if (response.role === "ADMIN") {
                 navigate("/admin");
             } else if (response.role === "SUPPORT_ASSISTANT") {
                 navigate("/support");
+            } else if (response.role === "DELIVERY_OPERATOR") {
+                navigate("/delivery-operator");
             } else {
                 navigate("/customer");
             }
@@ -144,6 +148,16 @@ function Login() {
                 >
 
                     {loading ? "Logging in..." : "Login"}
+
+                </button>
+
+                <button
+                    type="button"
+                    className="btn google-btn mt-3"
+                >
+
+                    <i className="bi bi-google"></i>
+                    Sign in with Google
 
                 </button>
 

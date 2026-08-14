@@ -76,5 +76,35 @@ public class AdminInitializer implements CommandLineRunner {
             System.out.println();
 
         }
+
+        String deliveryEmail = "delivery@shiptrack.com";
+
+        if (!userRepository.existsByEmail(deliveryEmail)) {
+
+            User delivery = User.builder()
+                    .name("Delivery Team")
+                    .email(deliveryEmail)
+                    .phone("9123456780")
+                    .password(passwordEncoder.encode("delivery1234"))
+                    .role("DELIVERY_OPERATOR")
+                    .build();
+
+            userRepository.save(delivery);
+
+            System.out.println();
+            System.out.println("======================================");
+            System.out.println(" ShipTrack-Pro Delivery Operator Created");
+            System.out.println(" Email    : delivery@shiptrack.com");
+            System.out.println(" Password : delivery1234");
+            System.out.println("======================================");
+            System.out.println();
+
+        } else {
+
+            System.out.println();
+            System.out.println("Delivery operator account already exists.");
+            System.out.println();
+
+        }
     }
 }

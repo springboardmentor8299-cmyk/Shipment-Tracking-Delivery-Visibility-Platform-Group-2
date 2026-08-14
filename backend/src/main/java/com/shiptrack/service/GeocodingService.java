@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -233,14 +234,25 @@ public class GeocodingService {
 
     private String coordsToPolyline(List<?> coords) {
         if (coords == null || coords.isEmpty()) return null;
-        return PolylineEncoder.encode(
-                coords.stream().map(c -> {
-                    List<?> point = (List<?>) c;
-                    return new double[]{
-                            ((Number) point.get(0)).doubleValue(),
-                            ((Number) point.get(1)).doubleValue()
-                    };
-                }).toList());
+        List<double[]> points = new ArrayList<>();
+        flattenCoordinates(coords, points);
+        if (points.isEmpty()) return null;
+        return PolylineEncoder.encode(points);
+    }
+
+    private void flattenCoordinates(List<?> coords, List<double[]> points) {
+        for (Object coord : coords) {
+            if (coord instanceof List<?> list) {
+                if (list.size() >= 2 && list.get(0) instanceof Number && list.get(1) instanceof Number) {
+                    points.add(new double[]{
+                            ((Number) list.get(0)).doubleValue(),
+                            ((Number) list.get(1)).doubleValue()
+                    });
+                } else {
+                    flattenCoordinates(list, points);
+                }
+            }
+        }
     }
 
     public Long calculateDuration(LatLng origin, LatLng destination) {

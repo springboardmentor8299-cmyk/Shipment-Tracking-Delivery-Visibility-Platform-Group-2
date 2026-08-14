@@ -12,8 +12,16 @@ export const getAllQueries = () => {
     return api.get("/support-queries");
 };
 
-export const respondToQuery = (id, data) => {
-    return api.patch(`/support-queries/${id}/respond`, data);
+export const getMessages = (id) => {
+    return api.get(`/support-queries/${id}/messages`);
+};
+
+export const sendMessage = (id, data) => {
+    return api.post(`/support-queries/${id}/messages`, data);
+};
+
+export const resolveQuery = (id) => {
+    return api.patch(`/support-queries/${id}/resolve`);
 };
 
 export const deleteQuery = (id) => {

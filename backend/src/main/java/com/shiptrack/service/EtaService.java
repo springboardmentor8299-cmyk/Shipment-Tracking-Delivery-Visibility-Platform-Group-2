@@ -2,8 +2,10 @@ package com.shiptrack.service;
 
 import com.shiptrack.dto.EtaResponse;
 import com.shiptrack.dto.LatLng;
+import com.shiptrack.entity.RouteHistoryPoint;
 import com.shiptrack.entity.Shipment;
 import com.shiptrack.entity.TrackingEvent;
+import com.shiptrack.repository.RouteHistoryPointRepository;
 import com.shiptrack.repository.ShipmentRepository;
 import com.shiptrack.repository.TrackingEventRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
@@ -24,8 +28,11 @@ public class EtaService {
 
     private final ShipmentRepository shipmentRepository;
     private final TrackingEventRepository trackingEventRepository;
+    private final RouteHistoryPointRepository routeHistoryPointRepository;
     private final GeocodingService geocodingService;
     private final LiveTrackingService liveTrackingService;
+
+    private final Set<Long> warnedNoDestination = ConcurrentHashMap.newKeySet();
 
     @Transactional
     public EtaResponse calculateEta(Long shipmentId) {
@@ -33,9 +40,27 @@ public class EtaService {
         if (shipment == null) return null;
 
         if (shipment.getDestinationLatitude() == null || shipment.getDestinationLongitude() == null) {
-            log.warn("Cannot calculate ETA for shipment {}: no destination coordinates", shipmentId);
+            if (warnedNoDestination.add(shipmentId)) {
+                log.warn("Cannot calculate ETA for shipment {}: no destination coordinates. Falling back to distance estimate.", shipmentId);
+            }
+
+            if (shipment.getTotalDistance() != null) {
+                Long durationMin = estimateDurationByDistance(shipment);
+                LocalDateTime estimatedDeliveryTime = LocalDateTime.now().plusMinutes(durationMin);
+                shipmentRepository.updateEtaFields(shipmentId, durationMin, estimatedDeliveryTime);
+                liveTrackingService.broadcastEtaUpdate(shipmentId, estimatedDeliveryTime);
+                return EtaResponse.builder()
+                        .estimatedDeliveryTime(estimatedDeliveryTime)
+                        .estimatedDurationMin(durationMin)
+                        .totalDistanceKm(shipment.getTotalDistance())
+                        .lastRecalculatedAt(LocalDateTime.now())
+                        .build();
+            }
+
             return null;
         }
+
+        warnedNoDestination.remove(shipmentId);
 
         List<TrackingEvent> events = trackingEventRepository
                 .findByShipmentIdOrderByRecordedAtAsc(shipment.getId());
@@ -44,12 +69,20 @@ public class EtaService {
                 .max(Comparator.comparing(TrackingEvent::getId))
                 .orElse(null);
 
-        Double originLat = latest != null && latest.getLatitude() != null
-                ? latest.getLatitude()
-                : shipment.getOriginLatitude();
-        Double originLng = latest != null && latest.getLongitude() != null
-                ? latest.getLongitude()
-                : shipment.getOriginLongitude();
+        RouteHistoryPoint latestPoint = routeHistoryPointRepository
+                .findTopByShipmentIdOrderByRecordedAtDesc(shipmentId)
+                .orElse(null);
+
+        Double originLat = latestPoint != null && latestPoint.getLatitude() != null
+                ? latestPoint.getLatitude()
+                : (latest != null && latest.getLatitude() != null
+                        ? latest.getLatitude()
+                        : shipment.getOriginLatitude());
+        Double originLng = latestPoint != null && latestPoint.getLongitude() != null
+                ? latestPoint.getLongitude()
+                : (latest != null && latest.getLongitude() != null
+                        ? latest.getLongitude()
+                        : shipment.getOriginLongitude());
 
         if (originLat == null || originLng == null) {
             return null;
@@ -88,6 +121,7 @@ public class EtaService {
     }
 
     @Scheduled(fixedRate = 120000)
+    @Transactional
     public void recalculateActiveEtas() {
         List<Shipment> activeShipments = shipmentRepository
                 .findByStatusIn(List.of("IN_TRANSIT", "OUT_FOR_DELIVERY"));

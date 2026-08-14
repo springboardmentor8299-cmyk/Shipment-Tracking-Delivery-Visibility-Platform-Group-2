@@ -8,6 +8,8 @@ import com.shiptrack.exception.ForbiddenException;
 import com.shiptrack.exception.ResourceNotFoundException;
 import com.shiptrack.repository.DelayPredictionRepository;
 import com.shiptrack.repository.DeliveryPredictionRepository;
+import com.shiptrack.repository.ProofOfDeliveryRepository;
+import com.shiptrack.repository.RouteHistoryPointRepository;
 import com.shiptrack.repository.ShipmentRepository;
 import com.shiptrack.repository.TrackingEventRepository;
 import com.shiptrack.repository.UserRepository;
@@ -43,6 +45,9 @@ public class ShipmentService {
     private final DeliveryPredictionRepository deliveryPredictionRepository;
     private final DelayPredictionRepository delayPredictionRepository;
     private final DelayPredictionService delayPredictionService;
+    private final ProofOfDeliveryRepository proofOfDeliveryRepository;
+    private final RouteHistoryPointRepository routeHistoryPointRepository;
+    private final RouteHistoryService routeHistoryService;
     private final SecureRandom random = new SecureRandom();
 
     // ==================== Helpers ====================
@@ -62,6 +67,15 @@ public class ShipmentService {
         String role = user.getRole();
         if (!"ADMIN".equalsIgnoreCase(role) && !"SUPPORT_ASSISTANT".equalsIgnoreCase(role)) {
             throw new ForbiddenException("Access denied. Admins or Support only.");
+        }
+    }
+
+    private void requireStaff(User user) {
+        String role = user.getRole();
+        if (!"ADMIN".equalsIgnoreCase(role)
+                && !"SUPPORT_ASSISTANT".equalsIgnoreCase(role)
+                && !"DELIVERY_OPERATOR".equalsIgnoreCase(role)) {
+            throw new ForbiddenException("Access denied. Admins, Support or Delivery Operators only.");
         }
     }
 
@@ -85,6 +99,23 @@ public class ShipmentService {
             case "RETURNED" -> 0;
             default -> 0;
         };
+    }
+
+    private LatLng resolvePosition(Shipment shipment, Double latitude, Double longitude) {
+        if (latitude != null && longitude != null) {
+            return new LatLng(latitude, longitude);
+        }
+        TrackingEvent last = trackingEventRepository.findByShipmentIdOrderByRecordedAtAsc(shipment.getId())
+                .stream()
+                .max(Comparator.comparing(TrackingEvent::getId))
+                .orElse(null);
+        if (last != null && last.getLatitude() != null && last.getLongitude() != null) {
+            return new LatLng(last.getLatitude(), last.getLongitude());
+        }
+        if (shipment.getOriginLatitude() != null && shipment.getOriginLongitude() != null) {
+            return new LatLng(shipment.getOriginLatitude(), shipment.getOriginLongitude());
+        }
+        return null;
     }
 
     private ShipmentResponse toResponse(Shipment shipment, boolean includeEvents) {
@@ -115,6 +146,9 @@ public class ShipmentService {
                 .actualDeliveryTime(shipment.getActualDeliveryTime())
                 .estimatedDuration(shipment.getEstimatedDuration())
                 .totalDistance(shipment.getTotalDistance())
+                .podVerificationStatus(proofOfDeliveryRepository.findByShipmentId(shipment.getId())
+                        .map(p -> p.getVerificationStatus())
+                        .orElse(null))
                 .createdAt(shipment.getCreatedAt());
 
         try {
@@ -233,7 +267,7 @@ public class ShipmentService {
     @Transactional(readOnly = true)
     public List<ShipmentResponse> getAllShipments(String currentUserEmail) {
 
-        requireAdminOrSupport(getUserByEmail(currentUserEmail));
+        requireStaff(getUserByEmail(currentUserEmail));
 
         return shipmentRepository.findAllByOrderByCreatedAtDesc()
                 .stream()
@@ -262,17 +296,24 @@ public class ShipmentService {
         boolean isOwner = shipment.getCreatedBy() != null
                 && shipment.getCreatedBy().getId().equals(currentUser.getId());
 
-        if (!isOwner && !"ADMIN".equalsIgnoreCase(currentUser.getRole()) && !"SUPPORT_ASSISTANT".equalsIgnoreCase(currentUser.getRole())) {
+        if (!isOwner && !isStaff(currentUser)) {
             throw new ForbiddenException("You do not have access to this shipment.");
         }
 
         return toResponse(shipment, true);
     }
 
+    private boolean isStaff(User user) {
+        String role = user.getRole();
+        return "ADMIN".equalsIgnoreCase(role)
+                || "SUPPORT_ASSISTANT".equalsIgnoreCase(role)
+                || "DELIVERY_OPERATOR".equalsIgnoreCase(role);
+    }
+
     @Transactional
     public ShipmentDetailResponse getShipmentDetail(Long id, String currentUserEmail) {
         User currentUser = getUserByEmail(currentUserEmail);
-        requireAdminOrSupport(currentUser);
+        requireStaff(currentUser);
 
         Shipment shipment = shipmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Shipment not found."));
@@ -349,7 +390,18 @@ public class ShipmentService {
     @Transactional
     public ShipmentResponse updateStatus(Long id, ShipmentStatusUpdateRequest request, String currentUserEmail) {
 
-        requireAdmin(getUserByEmail(currentUserEmail));
+        User currentUser = getUserByEmail(currentUserEmail);
+        String role = currentUser.getRole();
+
+        if ("ADMIN".equalsIgnoreCase(role)) {
+            // Admins may set any valid status.
+        } else if ("DELIVERY_OPERATOR".equalsIgnoreCase(role)) {
+            if (!"OUT_FOR_DELIVERY".equalsIgnoreCase(request.getStatus())) {
+                throw new ForbiddenException("Access denied. Delivery operators can only mark shipments OUT_FOR_DELIVERY.");
+            }
+        } else {
+            throw new ForbiddenException("Access denied. Admins only.");
+        }
 
         String newStatus = request.getStatus().toUpperCase();
 
@@ -371,17 +423,23 @@ public class ShipmentService {
 
         shipmentRepository.save(shipment);
 
+        LatLng position = resolvePosition(shipment, request.getLatitude(), request.getLongitude());
+
         TrackingEvent event = TrackingEvent.builder()
                 .shipment(shipment)
                 .status(newStatus)
-                .latitude(request.getLatitude())
-                .longitude(request.getLongitude())
+                .latitude(position != null ? position.getLatitude() : request.getLatitude())
+                .longitude(position != null ? position.getLongitude() : request.getLongitude())
                 .build();
 
         trackingEventRepository.save(event);
 
-        if (request.getLatitude() != null && request.getLongitude() != null) {
-            liveTrackingService.broadcastLocationUpdate(id, request.getLatitude(), request.getLongitude(), newStatus);
+        if (position != null) {
+            routeHistoryService.recordPoint(shipment, position, null, (double) progressForStatus(newStatus));
+        }
+
+        if (position != null) {
+            liveTrackingService.broadcastLocationUpdate(id, position.getLatitude(), position.getLongitude(), newStatus);
         }
 
         if ("IN_TRANSIT".equals(newStatus) || "OUT_FOR_DELIVERY".equals(newStatus)) {
@@ -414,6 +472,11 @@ public class ShipmentService {
                 .build();
 
         event = trackingEventRepository.save(event);
+
+        LatLng position = resolvePosition(shipment, request.getLatitude(), request.getLongitude());
+        if (position != null) {
+            routeHistoryService.recordPoint(shipment, position, null, null);
+        }
 
         return toEventResponse(event);
     }
@@ -480,6 +543,8 @@ public class ShipmentService {
         trackingEventRepository.deleteByShipmentId(id);
         deliveryPredictionRepository.deleteByShipmentId(id);
         delayPredictionRepository.deleteByShipmentId(id);
+        proofOfDeliveryRepository.deleteByShipmentId(id);
+        routeHistoryPointRepository.deleteByShipmentId(id);
         shipmentRepository.deleteById(id);
     }
 

@@ -22,6 +22,10 @@ public class SupportQueryResponse {
     private String customerName;
     private String customerEmail;
     private String respondedByName;
+    private String resolvedByName;
     private LocalDateTime createdAt;
     private LocalDateTime respondedAt;
+    private LocalDateTime resolvedAt;
+    private long messageCount;
+    private LocalDateTime lastMessageAt;
 }

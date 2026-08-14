@@ -1,7 +1,8 @@
 package com.shiptrack.controller;
 
+import com.shiptrack.dto.SupportMessageRequest;
+import com.shiptrack.dto.SupportMessageResponse;
 import com.shiptrack.dto.SupportQueryRequest;
-import com.shiptrack.dto.SupportQueryRespondRequest;
 import com.shiptrack.dto.SupportQueryResponse;
 import com.shiptrack.service.SupportQueryService;
 import jakarta.validation.Valid;
@@ -39,12 +40,26 @@ public class SupportQueryController {
         return ResponseEntity.ok(supportQueryService.getAllQueries(authentication.getName()));
     }
 
-    @PatchMapping("/{id}/respond")
-    public ResponseEntity<SupportQueryResponse> respondToQuery(
+    @GetMapping("/{id}/messages")
+    public ResponseEntity<List<SupportMessageResponse>> getMessages(
             @PathVariable Long id,
-            @Valid @RequestBody SupportQueryRespondRequest request,
             Authentication authentication) {
-        return ResponseEntity.ok(supportQueryService.respondToQuery(id, request, authentication.getName()));
+        return ResponseEntity.ok(supportQueryService.getMessages(id, authentication.getName()));
+    }
+
+    @PostMapping("/{id}/messages")
+    public ResponseEntity<SupportMessageResponse> sendMessage(
+            @PathVariable Long id,
+            @Valid @RequestBody SupportMessageRequest request,
+            Authentication authentication) {
+        return ResponseEntity.ok(supportQueryService.sendMessage(id, request, authentication.getName()));
+    }
+
+    @PatchMapping("/{id}/resolve")
+    public ResponseEntity<SupportQueryResponse> resolveQuery(
+            @PathVariable Long id,
+            Authentication authentication) {
+        return ResponseEntity.ok(supportQueryService.resolveQuery(id, authentication.getName()));
     }
 
     @DeleteMapping("/{id}")

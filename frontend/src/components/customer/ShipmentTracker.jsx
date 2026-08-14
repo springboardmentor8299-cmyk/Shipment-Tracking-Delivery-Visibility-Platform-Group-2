@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { track } from "../../services/shipmentService";
+import { fetchPodByShipment } from "../../services/podService";
 import { getStatusLabel } from "../../utils/constants";
+import PodView from "../shared/PodView";
 
 function ShipmentTracker() {
 
     const [trackingId, setTrackingId] = useState("");
     const [result, setResult] = useState(null);
+    const [pod, setPod] = useState(null);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -20,11 +23,21 @@ function ShipmentTracker() {
         setLoading(true);
         setError("");
         setResult(null);
+        setPod(null);
 
         try {
 
             const shipment = await track(trackingId.trim());
             setResult(shipment);
+
+            if (shipment.status === "DELIVERED" && shipment.id) {
+                try {
+                    const podData = await fetchPodByShipment(shipment.id);
+                    setPod(podData);
+                } catch {
+                    setPod(null);
+                }
+            }
 
         } catch (err) {
 
@@ -125,6 +138,12 @@ function ShipmentTracker() {
                             </ul>
                         )}
 
+                    </div>
+                )}
+
+                {pod && (
+                    <div className="mt-3">
+                        <PodView pod={pod} />
                     </div>
                 )}
 

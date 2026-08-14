@@ -93,6 +93,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/shipments/*/eta").permitAll()
                         .requestMatchers("/api/shipments/*/forecast").permitAll()
                         .requestMatchers("/api/shipments/*/delay-status").permitAll()
+                        .requestMatchers("/api/shipments/*/route-history").permitAll()
                         .anyRequest().authenticated())
 
                 .authenticationProvider(authenticationProvider())

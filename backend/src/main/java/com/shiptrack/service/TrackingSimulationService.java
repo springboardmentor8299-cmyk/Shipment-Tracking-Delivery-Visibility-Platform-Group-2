@@ -2,7 +2,9 @@ package com.shiptrack.service;
 
 import com.shiptrack.dto.LatLng;
 import com.shiptrack.entity.Shipment;
+import com.shiptrack.entity.TrackingEvent;
 import com.shiptrack.repository.ShipmentRepository;
+import com.shiptrack.repository.TrackingEventRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,9 +24,13 @@ public class TrackingSimulationService {
 
     private final ShipmentRepository shipmentRepository;
     private final LiveTrackingService liveTrackingService;
+    private final RouteHistoryService routeHistoryService;
+    private final TrackingEventRepository trackingEventRepository;
 
     private final Map<Long, LatLng> lastPositions = new ConcurrentHashMap<>();
     private final Map<Long, LocalDateTime> lastTimestamps = new ConcurrentHashMap<>();
+    private final Map<Long, LocalDateTime> activeSince = new ConcurrentHashMap<>();
+    private final Map<Long, String> lastStatuses = new ConcurrentHashMap<>();
 
     @Scheduled(fixedRate = 30000)
     public void simulateActiveShipments() {
@@ -38,13 +45,29 @@ public class TrackingSimulationService {
         }
     }
 
+    private LocalDateTime getActiveSince(Shipment s) {
+        String status = s.getStatus();
+        if (!status.equals(lastStatuses.get(s.getId()))) {
+            LocalDateTime found = trackingEventRepository.findByShipmentIdOrderByRecordedAtAsc(s.getId())
+                    .stream()
+                    .filter(e -> "IN_TRANSIT".equals(e.getStatus()) || "OUT_FOR_DELIVERY".equals(e.getStatus()))
+                    .filter(e -> e.getRecordedAt() != null)
+                    .min(Comparator.comparing(TrackingEvent::getRecordedAt))
+                    .map(TrackingEvent::getRecordedAt)
+                    .orElse(null);
+            activeSince.put(s.getId(), found != null ? found : LocalDateTime.now());
+            lastStatuses.put(s.getId(), status);
+        }
+        return activeSince.get(s.getId());
+    }
+
     private void simulateOne(Shipment s) {
         if (s.getCreatedAt() == null) return;
 
         long estimatedDuration = s.getEstimatedDuration() != null ? s.getEstimatedDuration() : estimateDuration(s);
         if (estimatedDuration <= 0) return;
 
-        long elapsedMinutes = ChronoUnit.MINUTES.between(s.getCreatedAt(), LocalDateTime.now());
+        long elapsedMinutes = ChronoUnit.MINUTES.between(getActiveSince(s), LocalDateTime.now());
         double progress = Math.min((double) elapsedMinutes / estimatedDuration, 1.0);
 
         if (progress >= 1.0) return;
@@ -67,6 +90,8 @@ public class TrackingSimulationService {
 
         lastPositions.put(s.getId(), position);
         lastTimestamps.put(s.getId(), LocalDateTime.now());
+
+        routeHistoryService.recordPoint(s, position, speed, progress);
 
         liveTrackingService.broadcastLocationUpdate(
                 s.getId(),
@@ -94,7 +119,8 @@ public class TrackingSimulationService {
             }
         }
 
-        if (s.getOriginLatitude() != null && s.getDestinationLatitude() != null) {
+        if (s.getOriginLatitude() != null && s.getOriginLongitude() != null
+                && s.getDestinationLatitude() != null && s.getDestinationLongitude() != null) {
             return List.of(
                     new LatLng(s.getOriginLatitude(), s.getOriginLongitude()),
                     new LatLng(s.getDestinationLatitude(), s.getDestinationLongitude())

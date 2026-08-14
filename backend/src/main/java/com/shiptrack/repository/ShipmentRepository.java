@@ -25,6 +25,12 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
 
     List<Shipment> findByStatusIn(List<String> statuses);
 
+    List<Shipment> findByStatus(String status);
+
+    List<Shipment> findByCreatedAtAfter(LocalDateTime createdAt);
+
+    List<Shipment> findByActualDeliveryTimeAfter(LocalDateTime actualDeliveryTime);
+
     @Modifying
     @Query("UPDATE Shipment s SET s.estimatedDuration = :duration, s.estimatedDeliveryTime = :deliveryTime WHERE s.id = :id")
     void updateEtaFields(@Param("id") Long id, @Param("duration") Long duration, @Param("deliveryTime") LocalDateTime deliveryTime);

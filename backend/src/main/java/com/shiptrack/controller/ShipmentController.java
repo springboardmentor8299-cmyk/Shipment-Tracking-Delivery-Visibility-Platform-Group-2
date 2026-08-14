@@ -4,6 +4,7 @@ import com.shiptrack.dto.*;
 import com.shiptrack.service.DelayPredictionService;
 import com.shiptrack.service.EtaService;
 import com.shiptrack.service.ForecastService;
+import com.shiptrack.service.RouteHistoryService;
 import com.shiptrack.service.ShipmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class ShipmentController {
     private final EtaService etaService;
     private final ForecastService forecastService;
     private final DelayPredictionService delayPredictionService;
+    private final RouteHistoryService routeHistoryService;
 
     @PostMapping
     public ResponseEntity<ShipmentResponse> createShipment(
@@ -108,6 +110,11 @@ public class ShipmentController {
         DelayStatusResponse status = delayPredictionService.getDelayStatus(id);
         if (status == null) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(status);
+    }
+
+    @GetMapping("/{id}/route-history")
+    public ResponseEntity<List<RouteHistoryPointResponse>> getRouteHistory(@PathVariable Long id) {
+        return ResponseEntity.ok(routeHistoryService.getRouteHistory(id));
     }
 
     @PatchMapping("/{id}")

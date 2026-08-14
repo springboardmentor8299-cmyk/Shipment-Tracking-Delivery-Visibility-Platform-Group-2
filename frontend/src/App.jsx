@@ -6,6 +6,7 @@ import Register from "./pages/auth/Register";
 
 import AdminDashboard from "./pages/admin/Dashboard";
 import SupportDashboard from "./pages/support/Dashboard";
+import DeliveryOperatorDashboard from "./pages/delivery-operator/Dashboard";
 import CustomerDashboard from "./pages/customer/Dashboard";
 import LiveTrackingPage from "./pages/customer/LiveTrackingPage";
 
@@ -26,6 +27,11 @@ function App() {
             <Route path="/support" element={
                 <ProtectedRoute allowedRole="SUPPORT_ASSISTANT">
                     <SupportDashboard />
+                </ProtectedRoute>
+            } />
+            <Route path="/delivery-operator" element={
+                <ProtectedRoute allowedRole="DELIVERY_OPERATOR">
+                    <DeliveryOperatorDashboard />
                 </ProtectedRoute>
             } />
             <Route path="/customer" element={

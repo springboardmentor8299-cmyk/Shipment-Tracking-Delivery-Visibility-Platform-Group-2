@@ -14,6 +14,7 @@ import {
     updateLocation,
     getEta,
     getForecast,
+    getDelayStatus,
     getShipmentDetail,
 } from "../api/shipmentApi";
 

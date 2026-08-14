@@ -1,8 +1,10 @@
 package com.shiptrack.controller;
 
 import com.shiptrack.dto.*;
+import com.shiptrack.entity.RouteHistoryPoint;
 import com.shiptrack.entity.Shipment;
 import com.shiptrack.entity.TrackingEvent;
+import com.shiptrack.repository.RouteHistoryPointRepository;
 import com.shiptrack.repository.ShipmentRepository;
 import com.shiptrack.repository.TrackingEventRepository;
 import com.shiptrack.service.GeocodingService;
@@ -15,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +33,7 @@ public class LiveTrackingController {
     private final LiveTrackingService liveTrackingService;
     private final ShipmentRepository shipmentRepository;
     private final TrackingEventRepository trackingEventRepository;
+    private final RouteHistoryPointRepository routeHistoryPointRepository;
     private final GeocodingService geocodingService;
 
     @GetMapping("/{id}/live")
@@ -46,6 +50,17 @@ public class LiveTrackingController {
                 .max(Comparator.comparing(TrackingEvent::getId))
                 .orElse(null);
 
+        RouteHistoryPoint latestPoint = routeHistoryPointRepository
+                .findTopByShipmentIdOrderByRecordedAtDesc(shipment.getId())
+                .orElse(null);
+
+        Double latitude = latestPoint != null ? latestPoint.getLatitude()
+                : (latest != null ? latest.getLatitude() : shipment.getOriginLatitude());
+        Double longitude = latestPoint != null ? latestPoint.getLongitude()
+                : (latest != null ? latest.getLongitude() : shipment.getOriginLongitude());
+        LocalDateTime lastUpdatedAt = latestPoint != null ? latestPoint.getRecordedAt()
+                : (latest != null ? latest.getRecordedAt() : null);
+
         List<TrackingEventResponse> recentEvents = events.stream()
                 .skip(Math.max(0, events.size() - 5))
                 .map(e -> TrackingEventResponse.builder()
@@ -57,33 +72,12 @@ public class LiveTrackingController {
                         .build())
                 .collect(Collectors.toList());
 
-        String polyline = shipment.getRoutePolyline();
-
-        if (polyline == null && shipment.getOriginLatitude() != null && shipment.getDestinationLatitude() != null) {
-            try {
-                LatLng origin = LatLng.builder()
-                        .latitude(shipment.getOriginLatitude())
-                        .longitude(shipment.getOriginLongitude())
-                        .build();
-                LatLng dest = LatLng.builder()
-                        .latitude(shipment.getDestinationLatitude())
-                        .longitude(shipment.getDestinationLongitude())
-                        .build();
-                RouteInfo route = geocodingService.calculateRoute(origin, dest);
-                if (route != null) {
-                    polyline = route.getPolylinePoints();
-                }
-            } catch (Exception e) {
-                log.warn("Failed to calculate route for live tracking shipment {}", id, e);
-            }
-        }
-
         LiveTrackingResponse response = LiveTrackingResponse.builder()
                 .shipmentId(shipment.getId())
                 .trackingNumber(shipment.getTrackingNumber())
                 .status(shipment.getStatus())
-                .latitude(latest != null ? latest.getLatitude() : null)
-                .longitude(latest != null ? latest.getLongitude() : null)
+                .latitude(latitude)
+                .longitude(longitude)
                 .originLatitude(shipment.getOriginLatitude())
                 .originLongitude(shipment.getOriginLongitude())
                 .destinationLatitude(shipment.getDestinationLatitude())
@@ -91,13 +85,13 @@ public class LiveTrackingController {
                 .estimatedDeliveryTime(shipment.getEstimatedDeliveryTime())
                 .estimatedDuration(shipment.getEstimatedDuration())
                 .totalDistance(shipment.getTotalDistance())
-                .routePolyline(polyline)
+                .routePolyline(shipment.getRoutePolyline())
                 .senderName(shipment.getSenderName())
                 .receiverName(shipment.getReceiverName())
                 .senderAddress(shipment.getSenderAddress())
                 .deliveryAddress(shipment.getDeliveryAddress())
                 .createdAt(shipment.getCreatedAt())
-                .lastUpdatedAt(latest != null ? latest.getRecordedAt() : null)
+                .lastUpdatedAt(lastUpdatedAt)
                 .recentEvents(recentEvents)
                 .build();
 

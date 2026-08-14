@@ -1,9 +1,10 @@
-import { lazy, Suspense, useState, useEffect } from "react";
+import { lazy, Suspense, useState, useEffect, useCallback } from "react";
 import { useAuth } from "../../context/AuthContext";
 import CustomerNavbar from "../../components/customer/CustomerNavbar";
 import CurrentShipment from "../../components/customer/CurrentShipment";
 import ShipmentTracker from "../../components/customer/ShipmentTracker";
 import MyOrders from "../../components/customer/MyOrders";
+import ChatThread from "../../components/support/ChatThread";
 import { track } from "../../services/shipmentService";
 import { submitQuery, fetchMyQueries } from "../../services/supportService";
 
@@ -19,26 +20,28 @@ function CustomerDashboard() {
 
     const [supportForm, setSupportForm] = useState({ subject: "", message: "", trackingNumber: "" });
     const [myQueries, setMyQueries] = useState([]);
+    const [activeQueryId, setActiveQueryId] = useState(null);
     const [queriesLoading, setQueriesLoading] = useState(false);
     const [supportSubmitting, setSupportSubmitting] = useState(false);
     const [supportSuccess, setSupportSuccess] = useState("");
     const [supportError, setSupportError] = useState("");
 
-    useEffect(() => {
-        loadMyQueries();
-    }, []);
-
-    const loadMyQueries = async () => {
-        setQueriesLoading(true);
+    const loadMyQueries = useCallback(async (silent = false) => {
+        if (!silent) setQueriesLoading(true);
         try {
             const data = await fetchMyQueries();
             setMyQueries(data);
+            setActiveQueryId((current) => current ?? data[0]?.id ?? null);
         } catch {
             // silent
         } finally {
-            setQueriesLoading(false);
+            if (!silent) setQueriesLoading(false);
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        loadMyQueries();
+    }, [loadMyQueries]);
 
     const handleSupportSubmit = async (e) => {
         e.preventDefault();
@@ -47,14 +50,15 @@ function CustomerDashboard() {
         setSupportError("");
         setSupportSuccess("");
         try {
-            await submitQuery({
+            const created = await submitQuery({
                 subject: supportForm.subject,
                 message: supportForm.message,
                 trackingNumber: supportForm.trackingNumber || undefined,
             });
             setSupportSuccess("Your query has been submitted. Support will respond shortly.");
             setSupportForm({ subject: "", message: "", trackingNumber: "" });
-            loadMyQueries();
+            setActiveQueryId(created.id);
+            await loadMyQueries();
         } catch {
             setSupportError("Failed to submit query. Please try again.");
         } finally {
@@ -200,33 +204,59 @@ const tabs = [
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <div className="card border-0 shadow-sm rounded-4 p-4 h-100">
-                                <h4 className="fw-bold mb-3" style={{ color: "var(--brand-primary)" }}>My Queries</h4>
+                            <div className="card border-0 shadow-sm rounded-4 p-4 h-100 d-flex flex-column">
+                                <h4 className="fw-bold mb-3" style={{ color: "var(--brand-primary)" }}>My Conversations</h4>
                                 {queriesLoading ? (
                                     <p className="text-muted">Loading...</p>
                                 ) : myQueries.length === 0 ? (
-                                    <p className="text-muted">No queries submitted yet.</p>
+                                    <p className="text-muted">No conversations yet. Submit a query to start chatting with support.</p>
                                 ) : (
-                                    <div className="list-group">
+                                    <div className="list-group flex-grow-1 overflow-auto" style={{ maxHeight: "480px" }}>
                                         {myQueries.map((q) => (
-                                            <div key={q.id} className="list-group-item">
-                                                <div className="d-flex justify-content-between">
+                                            <button
+                                                key={q.id}
+                                                type="button"
+                                                className={`list-group-item list-group-item-action text-start ${activeQueryId === q.id ? "active" : ""}`}
+                                                onClick={() => setActiveQueryId(q.id)}
+                                            >
+                                                <div className="d-flex justify-content-between align-items-center">
                                                     <strong>{q.subject}</strong>
-                                                    <span className={`badge ${q.status === "PENDING" ? "bg-warning" : "bg-success"}`}>{q.status}</span>
+                                                    <span className={`badge ${q.status === "ACTIVE" ? "bg-warning" : "bg-success"}`}>{q.status}</span>
                                                 </div>
-                                                <p className="mb-1 small text-muted mt-1">{q.message}</p>
-                                                {q.response && (
-                                                    <div className="mt-2 p-2 bg-light rounded">
-                                                        <small className="fw-semibold">Response:</small>
-                                                        <p className="mb-0 small">{q.response}</p>
-                                                        {q.respondedByName && <small className="text-muted">— {q.respondedByName}</small>}
-                                                    </div>
-                                                )}
-                                                <small className="text-muted">{q.createdAt ? new Date(q.createdAt).toLocaleDateString() : ""}</small>
-                                            </div>
+                                                <p className="mb-1 small text-muted mt-1 text-truncate">
+                                                    {q.messageCount > 0 ? `${q.messageCount} ${q.messageCount === 1 ? "message" : "messages"} in this conversation` : q.message}
+                                                </p>
+                                                <small className="text-muted">
+                                                    {q.lastMessageAt ? new Date(q.lastMessageAt).toLocaleString() : q.createdAt ? new Date(q.createdAt).toLocaleDateString() : ""}
+                                                </small>
+                                            </button>
                                         ))}
                                     </div>
                                 )}
+                            </div>
+                        </div>
+                        <div className="col-lg-6">
+                            <div className="card border-0 shadow-sm rounded-4 p-4 h-100">
+                                <h4 className="fw-bold mb-3" style={{ color: "var(--brand-primary)" }}>
+                                    {(() => {
+                                        const q = myQueries.find((x) => x.id === activeQueryId);
+                                        return q ? q.subject : "Chat";
+                                    })()}
+                                </h4>
+                                {(() => {
+                                    const q = myQueries.find((x) => x.id === activeQueryId);
+                                    if (!q) {
+                                        return <p className="text-muted">Select a conversation to view it.</p>;
+                                    }
+                                    return (
+                                        <ChatThread
+                                            query={q}
+                                            currentUser={user}
+                                            onChanged={() => loadMyQueries(true)}
+                                            onError={setSupportError}
+                                        />
+                                    );
+                                })()}
                             </div>
                         </div>
                     </div>

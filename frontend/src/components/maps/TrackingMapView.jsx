@@ -8,6 +8,8 @@ function TrackingMapView({ shipmentId, trackingNumber }) {
     const [shipment, setShipment] = useState(null);
     const [currentLocation, setCurrentLocation] = useState(null);
     const [routePolyline, setRoutePolyline] = useState(null);
+    const [historyPoints, setHistoryPoints] = useState([]);
+    const [showHistory, setShowHistory] = useState(true);
     const [eta, setEta] = useState(null);
     const [delay, setDelay] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -19,7 +21,7 @@ function TrackingMapView({ shipmentId, trackingNumber }) {
             const data = id ? await fetchLiveTracking(id) : null;
             if (data) {
                 setShipment(data);
-                if (data.latitude && data.longitude) {
+                if (data.latitude != null && data.longitude != null) {
                     setCurrentLocation({
                         latitude: data.latitude,
                         longitude: data.longitude,
@@ -39,9 +41,34 @@ function TrackingMapView({ shipmentId, trackingNumber }) {
         }
     }, [shipmentId]);
 
+    const loadHistory = useCallback(async () => {
+        if (!shipmentId) return;
+        try {
+            const response = await fetch(`/api/shipments/${shipmentId}/route-history`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token") || ""}` },
+            });
+            if (response.ok) {
+                const points = await response.json();
+                if (Array.isArray(points) && points.length > 0) {
+                    setHistoryPoints(points.filter((p) => p.latitude != null && p.longitude != null));
+                }
+            }
+        } catch {
+            // Route history is optional; ignore failures
+        }
+    }, [shipmentId]);
+
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         loadShipment();
-    }, [loadShipment]);
+        loadHistory();
+
+        const historyTimer = setInterval(() => {
+            loadHistory();
+        }, 60000);
+
+        return () => clearInterval(historyTimer);
+    }, [loadShipment, loadHistory]);
 
     useEffect(() => {
         if (!shipmentId) return;
@@ -53,6 +80,16 @@ function TrackingMapView({ shipmentId, trackingNumber }) {
                     latitude: data.latitude,
                     longitude: data.longitude,
                 });
+                if (data.latitude != null && data.longitude != null) {
+                    setHistoryPoints((prev) => [
+                        ...prev,
+                        {
+                            latitude: data.latitude,
+                            longitude: data.longitude,
+                            recordedAt: data.timestamp || new Date().toISOString(),
+                        },
+                    ]);
+                }
             },
             (data) => {
                 setEta(data.estimatedDeliveryTime);
@@ -116,6 +153,7 @@ function TrackingMapView({ shipmentId, trackingNumber }) {
                 destination={destination}
                 currentLocation={currentLocation}
                 routePolyline={routePolyline}
+                historyPoints={showHistory ? historyPoints : []}
                 originLabel={shipment.senderName}
                 destLabel={shipment.receiverName}
                 originAddress={shipment.senderAddress}
@@ -125,6 +163,42 @@ function TrackingMapView({ shipmentId, trackingNumber }) {
                 createdAt={shipment.createdAt}
                 status={shipment.status}
             />
+
+            {historyPoints.length > 0 && (
+                <div className="mt-3">
+                    <div className="card border-0 bg-body-tertiary rounded-3 p-3">
+                        <div className="d-flex justify-content-between align-items-center">
+                            <h6 className="fw-bold mb-0" style={{ color: 'var(--brand-primary)' }}>
+                                <i className="bi bi-route me-1" />
+                                Route History
+                            </h6>
+                            <button
+                                className="btn btn-sm btn-outline-secondary"
+                                onClick={() => setShowHistory((prev) => !prev)}
+                            >
+                                {showHistory ? 'Hide' : 'Show'} on map
+                            </button>
+                        </div>
+                        <div className="mt-2 text-muted small">
+                            <span className="me-3">
+                                <i className="bi bi-geo-alt me-1"></i>{historyPoints.length} tracked positions
+                            </span>
+                            <span className="me-3">
+                                <i className="bi bi-flag me-1"></i>Started:{' '}
+                                {historyPoints[0]?.recordedAt
+                                    ? new Date(historyPoints[0].recordedAt).toLocaleString()
+                                    : '-'}
+                            </span>
+                            <span>
+                                <i className="bi bi-clock me-1"></i>Last:{' '}
+                                {historyPoints[historyPoints.length - 1]?.recordedAt
+                                    ? new Date(historyPoints[historyPoints.length - 1].recordedAt).toLocaleString()
+                                    : '-'}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div className="mt-3">
                 <div className="row g-3">

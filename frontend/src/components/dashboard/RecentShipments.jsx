@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchAllShipments, updateStatus, removeShipment } from "../../services/shipmentService";
-import { getStatusLabel, getStatusBadgeClass, ALL_STATUSES } from "../../utils/constants";
+import { getStatusLabel, getStatusBadgeClass, getPodStatusLabel, getPodStatusBadgeClass, ALL_STATUSES } from "../../utils/constants";
 import CreateShipmentForm from "../shared/CreateShipmentForm";
 
 function RecentShipments({ onDataChanged, isSupport, onViewDetails, onEdit }) {
@@ -45,12 +45,16 @@ function RecentShipments({ onDataChanged, isSupport, onViewDetails, onEdit }) {
         }
     };
 
-    const handleStatusChange = async (id, newStatus) => {
-        setUpdatingId(id);
+    const handleStatusChange = async (shipment, newStatus) => {
+        setUpdatingId(shipment.id);
         try {
-            const updated = await updateStatus(id, { status: newStatus });
+            const updated = await updateStatus(shipment.id, {
+                status: newStatus,
+                latitude: shipment.latestLatitude ?? shipment.originLatitude,
+                longitude: shipment.latestLongitude ?? shipment.originLongitude,
+            });
             setShipments((prev) =>
-                prev.map((s) => (s.id === id ? updated : s))
+                prev.map((s) => (s.id === shipment.id ? updated : s))
             );
             if (onDataChanged) onDataChanged();
         } catch (err) {
@@ -88,6 +92,7 @@ function RecentShipments({ onDataChanged, isSupport, onViewDetails, onEdit }) {
                                 <th>Sender Name</th>
                                 <th>Receiver Name</th>
                                 <th>Status</th>
+                                <th>POD</th>
                                 <th>Created</th>
                                 {isSupport ? <th>Details</th> : <><th>Live</th><th></th></>}
                             </tr>
@@ -109,12 +114,21 @@ function RecentShipments({ onDataChanged, isSupport, onViewDetails, onEdit }) {
                                                 style={{ minWidth: "160px" }}
                                                 value={shipment.status}
                                                 disabled={updatingId === shipment.id}
-                                                onChange={(e) => handleStatusChange(shipment.id, e.target.value)}
+                                                onChange={(e) => handleStatusChange(shipment, e.target.value)}
                                             >
                                                 {ALL_STATUSES.map((status) => (
                                                     <option key={status} value={status}>{getStatusLabel(status)}</option>
                                                 ))}
                                             </select>
+                                        )}
+                                    </td>
+                                    <td>
+                                        {shipment.podVerificationStatus ? (
+                                            <span className={`badge ${getPodStatusBadgeClass(shipment.podVerificationStatus)}`}>
+                                                {getPodStatusLabel(shipment.podVerificationStatus)}
+                                            </span>
+                                        ) : (
+                                            <span className="text-muted">—</span>
                                         )}
                                     </td>
                                     <td>{shipment.createdAt ? new Date(shipment.createdAt).toLocaleDateString() : "-"}</td>

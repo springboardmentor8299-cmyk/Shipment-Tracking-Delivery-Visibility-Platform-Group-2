@@ -43,6 +43,9 @@ public class ShipmentResponse {
     private Long estimatedDuration;
     private Double totalDistance;
 
+    // Verification status of the shipment's proof of delivery, if one exists (nullable)
+    private String podVerificationStatus;
+
     // Included only on detail/track responses
     private List<TrackingEventResponse> events;
 }

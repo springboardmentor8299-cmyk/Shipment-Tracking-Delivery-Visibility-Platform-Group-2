@@ -38,3 +38,33 @@ export const ALL_STATUSES = [
     "CANCELLED",
     "RETURNED",
 ];
+
+// Proof of Delivery verification status labels + badges
+export const POD_STATUS_LABELS = {
+    PENDING: "Pending",
+    VERIFIED: "Verified",
+    REJECTED: "Rejected",
+};
+
+export const getPodStatusLabel = (status) => POD_STATUS_LABELS[status] || status;
+
+export const getPodStatusBadgeClass = (status) => {
+    switch (status) {
+        case "VERIFIED":
+            return "bg-success-subtle text-success";
+        case "REJECTED":
+            return "bg-danger-subtle text-danger";
+        default:
+            return "bg-warning-subtle text-warning";
+    }
+};
+
+export const POD_STATUSES = ["PENDING", "VERIFIED", "REJECTED"];
+
+// Proof of Delivery capture method labels
+export const POD_METHOD_LABELS = {
+    DIGITAL: "On-screen signature",
+    PHYSICAL: "Paper signature",
+};
+
+export const getPodMethodLabel = (method) => POD_METHOD_LABELS[method] || method;

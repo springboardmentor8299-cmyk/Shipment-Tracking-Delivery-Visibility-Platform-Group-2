@@ -58,13 +58,13 @@ public class LiveTrackingService {
     }
 
     public void broadcastDelayAlert(Long shipmentId, String reason, Integer delayMinutes, Double probability) {
-        Map<String, Object> payload = Map.of(
-                "shipmentId", shipmentId,
-                "delayReason", reason,
-                "delayMinutes", delayMinutes,
-                "probability", probability,
-                "timestamp", LocalDateTime.now().toString()
-        );
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("type", "delay_alert");
+        payload.put("shipmentId", shipmentId);
+        payload.put("delayReason", reason);
+        payload.put("delayMinutes", delayMinutes);
+        payload.put("probability", probability);
+        payload.put("timestamp", LocalDateTime.now().toString());
         messagingTemplate.convertAndSend("/topic/delay/" + shipmentId, payload);
         messagingTemplate.convertAndSend("/topic/admin/alerts", payload);
         log.warn("Delay alert for shipment {}: {} ({} min, {}% probability)",

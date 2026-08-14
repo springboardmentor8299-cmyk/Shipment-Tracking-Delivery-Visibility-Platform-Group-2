@@ -1,15 +1,19 @@
 package com.shiptrack.service;
 
+import com.shiptrack.dto.SupportMessageRequest;
+import com.shiptrack.dto.SupportMessageResponse;
 import com.shiptrack.dto.SupportQueryRequest;
-import com.shiptrack.dto.SupportQueryRespondRequest;
 import com.shiptrack.dto.SupportQueryResponse;
+import com.shiptrack.entity.SupportMessage;
 import com.shiptrack.entity.SupportQuery;
 import com.shiptrack.entity.User;
 import com.shiptrack.exception.ForbiddenException;
 import com.shiptrack.exception.ResourceNotFoundException;
+import com.shiptrack.repository.SupportMessageRepository;
 import com.shiptrack.repository.SupportQueryRepository;
 import com.shiptrack.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +26,9 @@ import java.util.stream.Collectors;
 public class SupportQueryService {
 
     private final SupportQueryRepository repository;
+    private final SupportMessageRepository messageRepository;
     private final UserRepository userRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
     private User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
@@ -36,7 +42,44 @@ public class SupportQueryService {
         }
     }
 
+    private boolean isSupportOrAdmin(User user) {
+        String role = user.getRole();
+        return "ADMIN".equalsIgnoreCase(role) || "SUPPORT_ASSISTANT".equalsIgnoreCase(role);
+    }
+
+    private SupportQuery getQuery(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Query not found."));
+    }
+
+    private void requireParticipant(SupportQuery query, User user) {
+        if (!isSupportOrAdmin(user) && !query.getCreatedBy().getId().equals(user.getId())) {
+            throw new ForbiddenException("Access denied to this conversation.");
+        }
+    }
+
+    private SupportMessageResponse toMessageResponse(SupportMessage message) {
+        return SupportMessageResponse.builder()
+                .id(message.getId())
+                .senderId(message.getSender().getId())
+                .senderName(message.getSender().getName())
+                .senderEmail(message.getSender().getEmail())
+                .senderRole(message.getSender().getRole())
+                .content(message.getContent())
+                .sentAt(message.getSentAt())
+                .build();
+    }
+
     private SupportQueryResponse toResponse(SupportQuery query) {
+        List<SupportMessage> messages = messageRepository.findByQueryIdOrderBySentAtAsc(query.getId());
+        LocalDateTime lastMessageAt = query.getRespondedAt();
+        long messageCount = messages.size();
+        if (!messages.isEmpty()) {
+            lastMessageAt = messages.get(messages.size() - 1).getSentAt();
+        } else if (query.getResponse() != null) {
+            messageCount = 1;
+        }
+
         SupportQueryResponse.SupportQueryResponseBuilder builder = SupportQueryResponse.builder()
                 .id(query.getId())
                 .subject(query.getSubject())
@@ -47,10 +90,16 @@ public class SupportQueryService {
                 .customerName(query.getCreatedBy().getName())
                 .customerEmail(query.getCreatedBy().getEmail())
                 .createdAt(query.getCreatedAt())
-                .respondedAt(query.getRespondedAt());
+                .respondedAt(query.getRespondedAt())
+                .resolvedAt(query.getResolvedAt())
+                .messageCount(messageCount)
+                .lastMessageAt(lastMessageAt);
 
         if (query.getRespondedBy() != null) {
             builder.respondedByName(query.getRespondedBy().getName());
+        }
+        if (query.getResolvedBy() != null) {
+            builder.resolvedByName(query.getResolvedBy().getName());
         }
 
         return builder.build();
@@ -64,11 +113,19 @@ public class SupportQueryService {
                 .subject(request.getSubject())
                 .message(request.getMessage())
                 .trackingNumber(request.getTrackingNumber())
-                .status("PENDING")
+                .status("ACTIVE")
                 .createdBy(currentUser)
                 .build();
 
         query = repository.save(query);
+
+        SupportMessage firstMessage = SupportMessage.builder()
+                .query(query)
+                .sender(currentUser)
+                .content(request.getMessage())
+                .build();
+        messageRepository.save(firstMessage);
+
         return toResponse(query);
     }
 
@@ -91,21 +148,70 @@ public class SupportQueryService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public SupportQueryResponse respondToQuery(Long id, SupportQueryRespondRequest request, String currentUserEmail) {
+    @Transactional(readOnly = true)
+    public List<SupportMessageResponse> getMessages(Long id, String currentUserEmail) {
         User currentUser = getUserByEmail(currentUserEmail);
-        requireSupportOrAdmin(currentUser);
+        SupportQuery query = getQuery(id);
+        requireParticipant(query, currentUser);
 
-        SupportQuery query = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Query not found."));
+        List<SupportMessage> messages = messageRepository.findByQueryIdOrderBySentAtAsc(id);
 
-        query.setResponse(request.getResponse());
+        if (messages.isEmpty() && query.getResponse() != null && query.getRespondedBy() != null) {
+            SupportMessage legacy = SupportMessage.builder()
+                    .id(0L)
+                    .query(query)
+                    .sender(query.getRespondedBy())
+                    .content(query.getResponse())
+                    .sentAt(query.getRespondedAt())
+                    .build();
+            return List.of(toMessageResponse(legacy));
+        }
+
+        return messages.stream()
+                .map(this::toMessageResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public SupportMessageResponse sendMessage(Long id, SupportMessageRequest request, String currentUserEmail) {
+        User currentUser = getUserByEmail(currentUserEmail);
+        SupportQuery query = getQuery(id);
+        requireParticipant(query, currentUser);
+
+        if ("RESOLVED".equalsIgnoreCase(query.getStatus())) {
+            throw new IllegalStateException("This conversation has been resolved and is read-only.");
+        }
+
+        SupportMessage message = SupportMessage.builder()
+                .query(query)
+                .sender(currentUser)
+                .content(request.getContent().trim())
+                .build();
+        message = messageRepository.save(message);
+
+        notifyUpdated(query);
+        return toMessageResponse(message);
+    }
+
+    @Transactional
+    public SupportQueryResponse resolveQuery(Long id, String currentUserEmail) {
+        User currentUser = getUserByEmail(currentUserEmail);
+        SupportQuery query = getQuery(id);
+        requireParticipant(query, currentUser);
+
         query.setStatus("RESOLVED");
-        query.setRespondedBy(currentUser);
-        query.setRespondedAt(LocalDateTime.now());
-
+        query.setResolvedBy(currentUser);
+        query.setResolvedAt(LocalDateTime.now());
         query = repository.save(query);
+
+        notifyUpdated(query);
         return toResponse(query);
+    }
+
+    private void notifyUpdated(SupportQuery query) {
+        messagingTemplate.convertAndSend(
+                "/topic/support/" + query.getId(),
+                "{\"queryId\": " + query.getId() + ", \"type\": \"UPDATED\"}");
     }
 
     @Transactional

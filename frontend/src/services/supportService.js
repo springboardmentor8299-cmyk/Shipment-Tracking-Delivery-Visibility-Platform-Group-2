@@ -2,7 +2,9 @@ import {
     createQuery,
     getMyQueries,
     getAllQueries,
-    respondToQuery,
+    getMessages,
+    sendMessage,
+    resolveQuery,
     deleteQuery,
 } from "../api/supportApi";
 
@@ -21,8 +23,18 @@ export const fetchAllQueries = async () => {
     return response.data;
 };
 
-export const respond = async (id, data) => {
-    const response = await respondToQuery(id, data);
+export const fetchMessages = async (id) => {
+    const response = await getMessages(id);
+    return response.data;
+};
+
+export const postMessage = async (id, content) => {
+    const response = await sendMessage(id, { content });
+    return response.data;
+};
+
+export const resolveChat = async (id) => {
+    const response = await resolveQuery(id);
     return response.data;
 };
 

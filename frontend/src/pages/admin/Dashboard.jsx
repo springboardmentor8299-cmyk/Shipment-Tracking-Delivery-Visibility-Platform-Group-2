@@ -6,6 +6,10 @@ import QuickActions from "../../components/dashboard/QuickActions";
 import RecentShipments from "../../components/dashboard/RecentShipments";
 import DeliveryProgress from "../../components/dashboard/DeliveryProgress";
 import ShipmentChart from "../../components/dashboard/ShipmentChart";
+import AnalyticsDashboard from "../../components/dashboard/AnalyticsDashboard";
+import PodPanel from "../../components/dashboard/PodPanel";
+import EmployeesPanel from "../../components/admin/EmployeesPanel";
+import QueriesPanel from "../../components/support/QueriesPanel";
 import { fetchStats } from "../../services/shipmentService";
 
 const AdminLiveTracking = lazy(() => import("../../components/dashboard/AdminLiveTracking"));
@@ -14,6 +18,7 @@ function Dashboard() {
 
     const [stats, setStats] = useState(null);
     const [refreshKey, setRefreshKey] = useState(0);
+    const [activeTab, setActiveTab] = useState("dashboard");
 
     const loadStats = async () => {
 
@@ -52,103 +57,143 @@ function Dashboard() {
 
                 <WelcomeCard />
 
-                <div className="row mt-4 g-4">
+                <ul className="nav nav-tabs mt-4 mb-4">
+                    <li className="nav-item">
+                        <button className={`nav-link ${activeTab === "dashboard" ? "active" : ""}`} onClick={() => setActiveTab("dashboard")}>
+                            <i className="bi bi-speedometer2 me-1"></i> Dashboard
+                        </button>
+                    </li>
+                    <li className="nav-item">
+                        <button className={`nav-link ${activeTab === "analytics" ? "active" : ""}`} onClick={() => setActiveTab("analytics")}>
+                            <i className="bi bi-bar-chart-line me-1"></i> Analytics
+                        </button>
+                    </li>
+                    <li className="nav-item">
+                        <button className={`nav-link ${activeTab === "pod" ? "active" : ""}`} onClick={() => setActiveTab("pod")}>
+                            <i className="bi bi-clipboard-check me-1"></i> Proof of Delivery
+                        </button>
+                    </li>
+                    <li className="nav-item">
+                        <button className={`nav-link ${activeTab === "employees" ? "active" : ""}`} onClick={() => setActiveTab("employees")}>
+                            <i className="bi bi-people me-1"></i> Employees
+                        </button>
+                    </li>
+                    <li className="nav-item">
+                        <button className={`nav-link ${activeTab === "queries" ? "active" : ""}`} onClick={() => setActiveTab("queries")}>
+                            <i className="bi bi-chat-dots me-1"></i> Queries
+                        </button>
+                    </li>
+                </ul>
 
-                    <div className="col-lg-8">
+                {activeTab === "dashboard" && (
+                    <>
+                        <div className="row mt-2 g-4">
 
-                        <div className="row g-4">
+                            <div className="col-lg-8">
 
-                            <div className="col-md-4">
-                                <StatCard
-                                    icon="bi-box-seam"
-                                    title="Total Shipments"
-                                    value={stats?.total ?? 0}
-                                    color="#0F4C81"
-                                />
+                                <div className="row g-4">
+
+                                    <div className="col-md-4">
+                                        <StatCard
+                                            icon="bi-box-seam"
+                                            title="Total Shipments"
+                                            value={stats?.total ?? 0}
+                                            color="#0F4C81"
+                                        />
+                                    </div>
+
+                                    <div className="col-md-4">
+                                        <StatCard
+                                            icon="bi-truck"
+                                            title="In Transit"
+                                            value={stats?.inTransit ?? 0}
+                                            color="#2563EB"
+                                        />
+                                    </div>
+
+                                    <div className="col-md-4">
+                                        <StatCard
+                                            icon="bi-geo-alt"
+                                            title="Out for Delivery"
+                                            value={stats?.outForDelivery ?? 0}
+                                            color="#0EA5E9"
+                                        />
+                                    </div>
+
+                                    <div className="col-md-4">
+                                        <StatCard
+                                            icon="bi-check-circle"
+                                            title="Delivered"
+                                            value={stats?.delivered ?? 0}
+                                            color="#16A34A"
+                                        />
+                                    </div>
+
+                                    <div className="col-md-4">
+                                        <StatCard
+                                            icon="bi-clock-history"
+                                            title="Pending"
+                                            value={stats?.created ?? 0}
+                                            color="#F59E0B"
+                                        />
+                                    </div>
+
+                                    <div className="col-md-4">
+                                        <StatCard
+                                            icon="bi-x-circle"
+                                            title="Cancelled"
+                                            value={stats?.cancelled ?? 0}
+                                            color="#EF4444"
+                                        />
+                                    </div>
+
+                                </div>
+
                             </div>
 
-                            <div className="col-md-4">
-                                <StatCard
-                                    icon="bi-truck"
-                                    title="In Transit"
-                                    value={stats?.inTransit ?? 0}
-                                    color="#2563EB"
-                                />
+                            <div className="col-lg-4">
+
+                                <QuickActions onShipmentCreated={handleDataChanged} />
+
                             </div>
 
-                            <div className="col-md-4">
-                                <StatCard
-                                    icon="bi-geo-alt"
-                                    title="Out for Delivery"
-                                    value={stats?.outForDelivery ?? 0}
-                                    color="#0EA5E9"
-                                />
+
+                        </div>
+                        <div className="mt-5">
+
+                            <RecentShipments onDataChanged={handleDataChanged} />
+
+                        </div>
+                        <div className="row mt-5 g-4">
+
+                            <div className="col-lg-4">
+
+                                <DeliveryProgress stats={stats} />
+
                             </div>
 
-                            <div className="col-md-4">
-                                <StatCard
-                                    icon="bi-check-circle"
-                                    title="Delivered"
-                                    value={stats?.delivered ?? 0}
-                                    color="#16A34A"
-                                />
-                            </div>
+                            <div className="col-lg-8">
 
-                            <div className="col-md-4">
-                                <StatCard
-                                    icon="bi-clock-history"
-                                    title="Pending"
-                                    value={stats?.created ?? 0}
-                                    color="#F59E0B"
-                                />
-                            </div>
+                                <ShipmentChart stats={stats} />
 
-                            <div className="col-md-4">
-                                <StatCard
-                                    icon="bi-x-circle"
-                                    title="Cancelled"
-                                    value={stats?.cancelled ?? 0}
-                                    color="#EF4444"
-                                />
                             </div>
 
                         </div>
+                        <div className="mt-5">
+                            <Suspense fallback={<div className="text-center py-5"><div className="spinner-border text-primary" role="status"><span className="visually-hidden">Loading live tracking...</span></div></div>}>
+                                <AdminLiveTracking />
+                            </Suspense>
+                        </div>
+                    </>
+                )}
 
-                    </div>
+                {activeTab === "analytics" && <AnalyticsDashboard />}
 
-                    <div className="col-lg-4">
+                {activeTab === "pod" && <PodPanel onDataChanged={handleDataChanged} />}
 
-                        <QuickActions onShipmentCreated={handleDataChanged} />
+                {activeTab === "employees" && <EmployeesPanel onDataChanged={handleDataChanged} />}
 
-                    </div>
-
-
-                </div>
-                <div className="mt-5">
-
-                    <RecentShipments onDataChanged={handleDataChanged} />
-
-                </div>
-                <div className="row mt-5 g-4">
-
-                    <div className="col-lg-4">
-
-                        <DeliveryProgress stats={stats} />
-
-                    </div>
-
-                    <div className="col-lg-8">
-
-                        <ShipmentChart stats={stats} />
-
-                    </div>
-
-                </div>
-                <div className="mt-5">
-                    <Suspense fallback={<div className="text-center py-5"><div className="spinner-border text-primary" role="status"><span className="visually-hidden">Loading live tracking...</span></div></div>}>
-                        <AdminLiveTracking />
-                    </Suspense>
-                </div>
+                {activeTab === "queries" && <QueriesPanel />}
 
             </div>
 

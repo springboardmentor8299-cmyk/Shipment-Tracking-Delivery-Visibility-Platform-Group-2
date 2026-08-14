@@ -3,6 +3,7 @@ package com.shiptrack.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "support_queries")
@@ -45,6 +46,16 @@ public class SupportQuery {
 
     @Column(name = "responded_at")
     private LocalDateTime respondedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "resolved_by")
+    private User resolvedBy;
+
+    @Column(name = "resolved_at")
+    private LocalDateTime resolvedAt;
+
+    @OneToMany(mappedBy = "query", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SupportMessage> messages;
 
     @PrePersist
     public void prePersist() {

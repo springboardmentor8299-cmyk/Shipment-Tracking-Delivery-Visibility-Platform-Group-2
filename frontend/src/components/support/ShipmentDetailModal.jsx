@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import { getStatusLabel, getStatusBadgeClass } from "../../utils/constants";
 import { fetchShipmentDetail } from "../../services/shipmentService";
+import { fetchPodByShipment } from "../../services/podService";
+import PodView from "../shared/PodView";
 
 function ShipmentDetailModal({ shipmentId, onClose }) {
     const [detail, setDetail] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [pod, setPod] = useState(null);
 
     useEffect(() => {
         if (!shipmentId) return;
@@ -14,6 +17,13 @@ function ShipmentDetailModal({ shipmentId, onClose }) {
             .then(setDetail)
             .catch(() => setError("Failed to load shipment details."))
             .finally(() => setLoading(false));
+    }, [shipmentId]);
+
+    useEffect(() => {
+        if (!shipmentId) return;
+        fetchPodByShipment(shipmentId)
+            .then(setPod)
+            .catch(() => setPod(null));
     }, [shipmentId]);
 
     return (
@@ -231,6 +241,21 @@ function ShipmentDetailModal({ shipmentId, onClose }) {
                                         </div>
                                     </div>
                                 )}
+
+                                <div className="mt-4">
+                                    {pod ? (
+                                        <PodView pod={pod} />
+                                    ) : (
+                                        <div className="card border-dashed">
+                                            <div className="card-body d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 className="card-title text-muted mb-1">Proof of Delivery</h6>
+                                                    <p className="text-muted small mb-0">No proof of delivery captured yet.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
                             </>
                         )}
                     </div>

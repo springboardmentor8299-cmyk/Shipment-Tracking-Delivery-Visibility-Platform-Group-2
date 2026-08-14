@@ -1,0 +1,2849 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< com.shiptrack:shiptrack-backend >-------------------
+[INFO] Building shiptrack-backend 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.5.3:run (default-cli) > test-compile @ shiptrack-backend >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ shiptrack-backend ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ shiptrack-backend ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ shiptrack-backend ---
+[INFO] skip non existing resourceDirectory E:\Raju-Working\ShipTrack-Pro\backend\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ shiptrack-backend ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] <<< spring-boot:3.5.3:run (default-cli) < test-compile @ shiptrack-backend <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.5.3:run (default-cli) @ shiptrack-backend ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.3)
+
+2026-08-12T17:46:32.407+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] c.shiptrack.ShiptrackBackendApplication  : Starting ShiptrackBackendApplication using Java 26 with PID 14372 (E:\Raju-Working\ShipTrack-Pro\backend\target\classes started by rajus in E:\Raju-Working\ShipTrack-Pro\backend)
+2026-08-12T17:46:32.408+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] c.shiptrack.ShiptrackBackendApplication  : No active profile set, falling back to 1 default profile: "default"
+2026-08-12T17:46:32.440+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-08-12T17:46:32.440+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-08-12T17:46:32.842+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-12T17:46:32.887+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 40 ms. Found 9 JPA repository interfaces.
+2026-08-12T17:46:33.235+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-08-12T17:46:33.243+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-08-12T17:46:33.243+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.42]
+2026-08-12T17:46:33.269+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-08-12T17:46:33.269+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 829 ms
+2026-08-12T17:46:33.351+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-08-12T17:46:33.377+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.18.Final
+2026-08-12T17:46:33.397+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-08-12T17:46:33.576+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-12T17:46:33.590+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-08-12T17:46:33.721+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1571716e
+2026-08-12T17:46:33.723+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-08-12T17:46:33.758+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 18.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-12T17:46:34.439+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-12T17:46:34.868+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-12T17:46:35.078+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-08-12T17:46:37.263+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] com.shiptrack.service.GeocodingService   : Geoapify API key validated successfully.
+2026-08-12T17:46:37.514+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-08-12T17:46:37.515+05:30  WARN 14372 --- [shiptrack-backend] [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-08-12T17:46:37.774+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-08-12T17:46:37.782+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2026-08-12T17:46:37.783+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5bac8bec]]
+2026-08-12T17:46:37.783+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2026-08-12T17:46:37.789+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-08-12T17:46:37.794+05:30  INFO 14372 --- [shiptrack-backend] [  restartedMain] c.shiptrack.ShiptrackBackendApplication  : Started ShiptrackBackendApplication in 5.608 seconds (process running for 5.839)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.email=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+
+Admin account already exists.
+
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.email=? 
+    fetch
+        first ? rows only
+
+Support assistant account already exists.
+
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.email=? 
+    fetch
+        first ? rows only
+
+Delivery operator account already exists.
+
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active 
+    order by
+        dp1_0.detected_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    insert 
+    into
+        route_history_points
+        (latitude, longitude, progress, recorded_at, shipment_id, speed) 
+    values
+        (?, ?, ?, ?, ?, ?)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active 
+    order by
+        dp1_0.detected_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+2026-08-12T17:46:37.924+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-4] c.shiptrack.service.LiveTrackingService  : Broadcast location update for shipment 24: 15.30064,74.08526
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    insert 
+    into
+        route_history_points
+        (latitude, longitude, progress, recorded_at, shipment_id, speed) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:46:37.934+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-4] c.shiptrack.service.LiveTrackingService  : Broadcast location update for shipment 52: 21.500597576996995,86.89055664604425
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+2026-08-12T17:46:38.394+05:30  WARN 14372 --- [shiptrack-backend] [MessageBroker-2] com.shiptrack.service.GeocodingService   : No Geoapify route found
+2026-08-12T17:46:38.394+05:30  WARN 14372 --- [shiptrack-backend] [MessageBroker-2] com.shiptrack.service.GeocodingService   : Geoapify routing failed, trying OSRM fallback...
+Hibernate: 
+    update
+        shipments s1_0 
+    set
+        estimated_duration=?,
+        estimated_delivery_time=? 
+    where
+        s1_0.id=?
+2026-08-12T17:46:39.360+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-1] com.shiptrack.service.EtaService         : ETA calculated for shipment 24: 479 min, delivery at 2026-08-13T01:45:39.343592600
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+2026-08-12T17:46:39.814+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-2] com.shiptrack.service.GeocodingService   : OSRM route found: 615.1 km, 462 min
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active 
+    order by
+        dp1_0.detected_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active 
+    order by
+        dp1_0.detected_at desc 
+    fetch
+        first ? rows only
+2026-08-12T17:46:39.922+05:30  INFO 14372 --- [shiptrack-backend] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-08-12T17:46:39.923+05:30  INFO 14372 --- [shiptrack-backend] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-08-12T17:46:39.924+05:30  INFO 14372 --- [shiptrack-backend] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+Hibernate: 
+    update
+        shipments s1_0 
+    set
+        estimated_duration=?,
+        estimated_delivery_time=? 
+    where
+        s1_0.id=?
+2026-08-12T17:46:40.977+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-1] com.shiptrack.service.EtaService         : ETA calculated for shipment 22: 506 min, delivery at 2026-08-13T02:12:40.974520400
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+2026-08-12T17:46:41.392+05:30  WARN 14372 --- [shiptrack-backend] [MessageBroker-1] com.shiptrack.service.GeocodingService   : No Geoapify route found
+2026-08-12T17:46:41.392+05:30  WARN 14372 --- [shiptrack-backend] [MessageBroker-1] com.shiptrack.service.GeocodingService   : Geoapify routing failed, trying OSRM fallback...
+2026-08-12T17:46:43.314+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-1] com.shiptrack.service.GeocodingService   : OSRM route found: 370.8 km, 280 min
+Hibernate: 
+    update
+        shipments s1_0 
+    set
+        estimated_duration=?,
+        estimated_delivery_time=? 
+    where
+        s1_0.id=?
+2026-08-12T17:46:43.318+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-1] com.shiptrack.service.EtaService         : ETA calculated for shipment 52: 279 min, delivery at 2026-08-12T22:25:43.315574800
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    update
+        shipments s1_0 
+    set
+        estimated_duration=?,
+        estimated_delivery_time=? 
+    where
+        s1_0.id=?
+2026-08-12T17:46:43.958+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-1] com.shiptrack.service.EtaService         : ETA calculated for shipment 53: 1 min, delivery at 2026-08-12T17:47:43.955086400
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    insert 
+    into
+        route_history_points
+        (latitude, longitude, progress, recorded_at, shipment_id, speed) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:47:07.810+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-1] c.shiptrack.service.LiveTrackingService  : Broadcast location update for shipment 24: 15.30064,74.08526
+Hibernate: 
+    insert 
+    into
+        route_history_points
+        (latitude, longitude, progress, recorded_at, shipment_id, speed) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:47:07.817+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-1] c.shiptrack.service.LiveTrackingService  : Broadcast location update for shipment 52: 21.421961235547908,86.82676111231933
+2026-08-12T17:47:37.781+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-7] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[1 current WS(1)-HttpStream(0)-HttpPoll(0), 1 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(1)-CONNECTED(1)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 6, active threads = 0, queued tasks = 0, completed tasks = 6], outboundChannel[pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1], sockJsScheduler[pool size = 16, active threads = 1, queued tasks = 5, completed tasks = 18]
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    insert 
+    into
+        route_history_points
+        (latitude, longitude, progress, recorded_at, shipment_id, speed) 
+    values
+        (?, ?, ?, ?, ?, ?)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+2026-08-12T17:47:37.800+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-9] c.shiptrack.service.LiveTrackingService  : Broadcast location update for shipment 24: 15.30064,74.08526
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    insert 
+    into
+        route_history_points
+        (latitude, longitude, progress, recorded_at, shipment_id, speed) 
+    values
+        (?, ?, ?, ?, ?, ?)
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active 
+    order by
+        dp1_0.detected_at desc 
+    fetch
+        first ? rows only
+2026-08-12T17:47:37.803+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-9] c.shiptrack.service.LiveTrackingService  : Broadcast location update for shipment 52: 21.40886021238273,86.81076874263506
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.id=?
+Hibernate: 
+    update
+        delay_predictions 
+    set
+        delay_minutes=?,
+        delay_reason=?,
+        detected_at=?,
+        is_active=?,
+        probability=?,
+        shipment_id=? 
+    where
+        id=?
+2026-08-12T17:47:37.814+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-15] c.s.service.DelayPredictionService       : Superseded 1 stale delay prediction(s) for shipment 24
+Hibernate: 
+    insert 
+    into
+        delay_predictions
+        (delay_minutes, delay_reason, detected_at, is_active, probability, shipment_id) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:47:37.817+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-15] c.shiptrack.service.LiveTrackingService  : Delay alert for shipment 24: Shipment is behind schedule (22250 min, 0.95% probability)
+2026-08-12T17:47:37.817+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-15] c.s.service.DelayPredictionService       : Delay detected for shipment 24: Shipment is behind schedule (22250 min)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active 
+    order by
+        dp1_0.detected_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.id=?
+Hibernate: 
+    update
+        delay_predictions 
+    set
+        delay_minutes=?,
+        delay_reason=?,
+        detected_at=?,
+        is_active=?,
+        probability=?,
+        shipment_id=? 
+    where
+        id=?
+2026-08-12T17:47:37.827+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-15] c.s.service.DelayPredictionService       : Superseded 1 stale delay prediction(s) for shipment 22
+Hibernate: 
+    insert 
+    into
+        delay_predictions
+        (delay_minutes, delay_reason, detected_at, is_active, probability, shipment_id) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:47:37.829+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-15] c.shiptrack.service.LiveTrackingService  : Delay alert for shipment 22: No location update for 20125 minutes (120 min, 0.9% probability)
+2026-08-12T17:47:37.829+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-15] c.s.service.DelayPredictionService       : Delay detected for shipment 22: No location update for 20125 minutes (120 min)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+2026-08-12T17:47:38.670+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-15] com.shiptrack.service.GeocodingService   : No Geoapify route found
+2026-08-12T17:47:38.670+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-15] com.shiptrack.service.GeocodingService   : Geoapify routing failed, trying OSRM fallback...
+2026-08-12T17:47:40.025+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-15] com.shiptrack.service.GeocodingService   : OSRM route found: 615.1 km, 462 min
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active 
+    order by
+        dp1_0.detected_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.id=?
+Hibernate: 
+    update
+        delay_predictions 
+    set
+        delay_minutes=?,
+        delay_reason=?,
+        detected_at=?,
+        is_active=?,
+        probability=?,
+        shipment_id=? 
+    where
+        id=?
+2026-08-12T17:47:40.036+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-15] c.s.service.DelayPredictionService       : Superseded 1 stale delay prediction(s) for shipment 52
+Hibernate: 
+    insert 
+    into
+        delay_predictions
+        (delay_minutes, delay_reason, detected_at, is_active, probability, shipment_id) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:47:40.039+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-15] c.shiptrack.service.LiveTrackingService  : Delay alert for shipment 52: Heavy traffic detected on route (182 min, 0.85% probability)
+2026-08-12T17:47:40.039+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-15] c.s.service.DelayPredictionService       : Delay detected for shipment 52: Heavy traffic detected on route (182 min)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active 
+    order by
+        dp1_0.detected_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.id=?
+Hibernate: 
+    update
+        delay_predictions 
+    set
+        delay_minutes=?,
+        delay_reason=?,
+        detected_at=?,
+        is_active=?,
+        probability=?,
+        shipment_id=? 
+    where
+        id=?
+2026-08-12T17:47:40.048+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-15] c.s.service.DelayPredictionService       : Superseded 1 stale delay prediction(s) for shipment 53
+Hibernate: 
+    insert 
+    into
+        delay_predictions
+        (delay_minutes, delay_reason, detected_at, is_active, probability, shipment_id) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:47:40.050+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-15] c.shiptrack.service.LiveTrackingService  : Delay alert for shipment 53: No location update for 86 minutes (86 min, 0.7866666666666666% probability)
+2026-08-12T17:47:40.050+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-15] c.s.service.DelayPredictionService       : Delay detected for shipment 53: No location update for 86 minutes (86 min)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    insert 
+    into
+        route_history_points
+        (latitude, longitude, progress, recorded_at, shipment_id, speed) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:48:07.792+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-6] c.shiptrack.service.LiveTrackingService  : Broadcast location update for shipment 24: 15.297939876492679,74.07600692191514
+Hibernate: 
+    insert 
+    into
+        route_history_points
+        (latitude, longitude, progress, recorded_at, shipment_id, speed) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:48:07.795+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-6] c.shiptrack.service.LiveTrackingService  : Broadcast location update for shipment 52: 21.40886021238273,86.81076874263506
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    insert 
+    into
+        route_history_points
+        (latitude, longitude, progress, recorded_at, shipment_id, speed) 
+    values
+        (?, ?, ?, ?, ?, ?)
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+2026-08-12T17:48:37.810+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-10] c.shiptrack.service.LiveTrackingService  : Broadcast location update for shipment 24: 15.297939876492679,74.07600692191514
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active 
+    order by
+        dp1_0.detected_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    insert 
+    into
+        route_history_points
+        (latitude, longitude, progress, recorded_at, shipment_id, speed) 
+    values
+        (?, ?, ?, ?, ?, ?)
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active
+2026-08-12T17:48:37.825+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-10] c.shiptrack.service.LiveTrackingService  : Broadcast location update for shipment 52: 21.391594154880934,86.80040982814761
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.id=?
+Hibernate: 
+    update
+        delay_predictions 
+    set
+        delay_minutes=?,
+        delay_reason=?,
+        detected_at=?,
+        is_active=?,
+        probability=?,
+        shipment_id=? 
+    where
+        id=?
+2026-08-12T17:48:37.835+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-13] c.s.service.DelayPredictionService       : Superseded 1 stale delay prediction(s) for shipment 24
+Hibernate: 
+    insert 
+    into
+        delay_predictions
+        (delay_minutes, delay_reason, detected_at, is_active, probability, shipment_id) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:48:37.841+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-13] c.shiptrack.service.LiveTrackingService  : Delay alert for shipment 24: Shipment is behind schedule (22251 min, 0.95% probability)
+2026-08-12T17:48:37.841+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-13] c.s.service.DelayPredictionService       : Delay detected for shipment 24: Shipment is behind schedule (22251 min)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active 
+    order by
+        dp1_0.detected_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.id=?
+Hibernate: 
+    update
+        delay_predictions 
+    set
+        delay_minutes=?,
+        delay_reason=?,
+        detected_at=?,
+        is_active=?,
+        probability=?,
+        shipment_id=? 
+    where
+        id=?
+2026-08-12T17:48:37.865+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-13] c.s.service.DelayPredictionService       : Superseded 1 stale delay prediction(s) for shipment 22
+Hibernate: 
+    insert 
+    into
+        delay_predictions
+        (delay_minutes, delay_reason, detected_at, is_active, probability, shipment_id) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:48:37.870+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-13] c.shiptrack.service.LiveTrackingService  : Delay alert for shipment 22: No location update for 20126 minutes (120 min, 0.9% probability)
+2026-08-12T17:48:37.870+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-13] c.s.service.DelayPredictionService       : Delay detected for shipment 22: No location update for 20126 minutes (120 min)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+2026-08-12T17:48:38.665+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-13] com.shiptrack.service.GeocodingService   : No Geoapify route found
+2026-08-12T17:48:38.665+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-13] com.shiptrack.service.GeocodingService   : Geoapify routing failed, trying OSRM fallback...
+Hibernate: 
+    update
+        shipments s1_0 
+    set
+        estimated_duration=?,
+        estimated_delivery_time=? 
+    where
+        s1_0.id=?
+2026-08-12T17:48:39.283+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-12] com.shiptrack.service.EtaService         : ETA calculated for shipment 24: 485 min, delivery at 2026-08-13T01:53:39.276253600
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+2026-08-12T17:48:40.182+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-13] com.shiptrack.service.GeocodingService   : OSRM route found: 615.1 km, 462 min
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active 
+    order by
+        dp1_0.detected_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active 
+    order by
+        dp1_0.detected_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.id=?
+Hibernate: 
+    update
+        delay_predictions 
+    set
+        delay_minutes=?,
+        delay_reason=?,
+        detected_at=?,
+        is_active=?,
+        probability=?,
+        shipment_id=? 
+    where
+        id=?
+2026-08-12T17:48:40.215+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-13] c.s.service.DelayPredictionService       : Superseded 1 stale delay prediction(s) for shipment 53
+Hibernate: 
+    insert 
+    into
+        delay_predictions
+        (delay_minutes, delay_reason, detected_at, is_active, probability, shipment_id) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:48:40.220+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-13] c.shiptrack.service.LiveTrackingService  : Delay alert for shipment 53: No location update for 87 minutes (87 min, 0.79% probability)
+2026-08-12T17:48:40.220+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-13] c.s.service.DelayPredictionService       : Delay detected for shipment 53: No location update for 87 minutes (87 min)
+Hibernate: 
+    update
+        shipments s1_0 
+    set
+        estimated_duration=?,
+        estimated_delivery_time=? 
+    where
+        s1_0.id=?
+2026-08-12T17:48:40.501+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-12] com.shiptrack.service.EtaService         : ETA calculated for shipment 22: 506 min, delivery at 2026-08-13T02:14:40.497933300
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+2026-08-12T17:48:41.067+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-12] com.shiptrack.service.GeocodingService   : No Geoapify route found
+2026-08-12T17:48:41.067+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-12] com.shiptrack.service.GeocodingService   : Geoapify routing failed, trying OSRM fallback...
+2026-08-12T17:48:42.694+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-12] com.shiptrack.service.GeocodingService   : OSRM route found: 355.0 km, 268 min
+Hibernate: 
+    update
+        shipments s1_0 
+    set
+        estimated_duration=?,
+        estimated_delivery_time=? 
+    where
+        s1_0.id=?
+2026-08-12T17:48:42.697+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-12] com.shiptrack.service.EtaService         : ETA calculated for shipment 52: 268 min, delivery at 2026-08-12T22:16:42.694655100
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    update
+        shipments s1_0 
+    set
+        estimated_duration=?,
+        estimated_delivery_time=? 
+    where
+        s1_0.id=?
+2026-08-12T17:48:43.145+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-12] com.shiptrack.service.EtaService         : ETA calculated for shipment 53: 1 min, delivery at 2026-08-12T17:49:43.143462800
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    insert 
+    into
+        route_history_points
+        (latitude, longitude, progress, recorded_at, shipment_id, speed) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:49:07.788+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-5] c.shiptrack.service.LiveTrackingService  : Broadcast location update for shipment 24: 15.30083093558222,74.06793655965639
+Hibernate: 
+    insert 
+    into
+        route_history_points
+        (latitude, longitude, progress, recorded_at, shipment_id, speed) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:49:07.791+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-5] c.shiptrack.service.LiveTrackingService  : Broadcast location update for shipment 52: 21.323561384403273,86.73343974794848
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    insert 
+    into
+        route_history_points
+        (latitude, longitude, progress, recorded_at, shipment_id, speed) 
+    values
+        (?, ?, ?, ?, ?, ?)
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+2026-08-12T17:49:37.792+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-3] c.shiptrack.service.LiveTrackingService  : Broadcast location update for shipment 24: 15.30083093558222,74.06793655965639
+Hibernate: 
+    insert 
+    into
+        route_history_points
+        (latitude, longitude, progress, recorded_at, shipment_id, speed) 
+    values
+        (?, ?, ?, ?, ?, ?)
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active 
+    order by
+        dp1_0.detected_at desc 
+    fetch
+        first ? rows only
+2026-08-12T17:49:37.795+05:30  INFO 14372 --- [shiptrack-backend] [MessageBroker-3] c.shiptrack.service.LiveTrackingService  : Broadcast location update for shipment 52: 21.311139920528717,86.71571624703367
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.id=?
+Hibernate: 
+    update
+        delay_predictions 
+    set
+        delay_minutes=?,
+        delay_reason=?,
+        detected_at=?,
+        is_active=?,
+        probability=?,
+        shipment_id=? 
+    where
+        id=?
+2026-08-12T17:49:37.798+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-11] c.s.service.DelayPredictionService       : Superseded 1 stale delay prediction(s) for shipment 24
+Hibernate: 
+    insert 
+    into
+        delay_predictions
+        (delay_minutes, delay_reason, detected_at, is_active, probability, shipment_id) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:49:37.800+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-11] c.shiptrack.service.LiveTrackingService  : Delay alert for shipment 24: Shipment is behind schedule (22246 min, 0.95% probability)
+2026-08-12T17:49:37.800+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-11] c.s.service.DelayPredictionService       : Delay detected for shipment 24: Shipment is behind schedule (22246 min)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active 
+    order by
+        dp1_0.detected_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.id=?
+Hibernate: 
+    update
+        delay_predictions 
+    set
+        delay_minutes=?,
+        delay_reason=?,
+        detected_at=?,
+        is_active=?,
+        probability=?,
+        shipment_id=? 
+    where
+        id=?
+2026-08-12T17:49:37.812+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-11] c.s.service.DelayPredictionService       : Superseded 1 stale delay prediction(s) for shipment 22
+Hibernate: 
+    insert 
+    into
+        delay_predictions
+        (delay_minutes, delay_reason, detected_at, is_active, probability, shipment_id) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:49:37.814+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-11] c.shiptrack.service.LiveTrackingService  : Delay alert for shipment 22: No location update for 20127 minutes (120 min, 0.9% probability)
+2026-08-12T17:49:37.814+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-11] c.s.service.DelayPredictionService       : Delay detected for shipment 22: No location update for 20127 minutes (120 min)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+2026-08-12T17:49:38.527+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-11] com.shiptrack.service.GeocodingService   : No Geoapify route found
+2026-08-12T17:49:38.527+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-11] com.shiptrack.service.GeocodingService   : Geoapify routing failed, trying OSRM fallback...
+2026-08-12T17:49:40.603+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-11] com.shiptrack.service.GeocodingService   : OSRM route found: 615.1 km, 462 min
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active 
+    order by
+        dp1_0.detected_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.id=?
+Hibernate: 
+    update
+        delay_predictions 
+    set
+        delay_minutes=?,
+        delay_reason=?,
+        detected_at=?,
+        is_active=?,
+        probability=?,
+        shipment_id=? 
+    where
+        id=?
+2026-08-12T17:49:40.611+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-11] c.s.service.DelayPredictionService       : Superseded 1 stale delay prediction(s) for shipment 52
+Hibernate: 
+    insert 
+    into
+        delay_predictions
+        (delay_minutes, delay_reason, detected_at, is_active, probability, shipment_id) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:49:40.613+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-11] c.shiptrack.service.LiveTrackingService  : Delay alert for shipment 52: Heavy traffic detected on route (193 min, 0.85% probability)
+2026-08-12T17:49:40.613+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-11] c.s.service.DelayPredictionService       : Delay detected for shipment 52: Heavy traffic detected on route (193 min)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        te1_0.id,
+        te1_0.latitude,
+        te1_0.longitude,
+        te1_0.recorded_at,
+        te1_0.shipment_id,
+        te1_0.status 
+    from
+        tracking_events te1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=te1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        te1_0.recorded_at
+Hibernate: 
+    select
+        rhp1_0.id,
+        rhp1_0.latitude,
+        rhp1_0.longitude,
+        rhp1_0.progress,
+        rhp1_0.recorded_at,
+        rhp1_0.shipment_id,
+        rhp1_0.speed 
+    from
+        route_history_points rhp1_0 
+    left join
+        shipments s1_0 
+            on s1_0.id=rhp1_0.shipment_id 
+    where
+        s1_0.id=? 
+    order by
+        rhp1_0.recorded_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active 
+    order by
+        dp1_0.detected_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.shipment_id=? 
+        and dp1_0.is_active
+Hibernate: 
+    select
+        dp1_0.id,
+        dp1_0.delay_minutes,
+        dp1_0.delay_reason,
+        dp1_0.detected_at,
+        dp1_0.is_active,
+        dp1_0.probability,
+        dp1_0.shipment_id 
+    from
+        delay_predictions dp1_0 
+    where
+        dp1_0.id=?
+Hibernate: 
+    update
+        delay_predictions 
+    set
+        delay_minutes=?,
+        delay_reason=?,
+        detected_at=?,
+        is_active=?,
+        probability=?,
+        shipment_id=? 
+    where
+        id=?
+2026-08-12T17:49:40.622+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-11] c.s.service.DelayPredictionService       : Superseded 1 stale delay prediction(s) for shipment 53
+Hibernate: 
+    insert 
+    into
+        delay_predictions
+        (delay_minutes, delay_reason, detected_at, is_active, probability, shipment_id) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:49:40.623+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-11] c.shiptrack.service.LiveTrackingService  : Delay alert for shipment 53: No location update for 88 minutes (88 min, 0.7933333333333333% probability)
+2026-08-12T17:49:40.624+05:30  WARN 14372 --- [shiptrack-backend] [essageBroker-11] c.s.service.DelayPredictionService       : Delay detected for shipment 53: No location update for 88 minutes (88 min)
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.actual_delivery_time,
+        s1_0.created_at,
+        s1_0.created_by,
+        s1_0.delivery_address,
+        s1_0.destination_latitude,
+        s1_0.destination_longitude,
+        s1_0.estimated_delivery_time,
+        s1_0.estimated_duration,
+        s1_0.origin_latitude,
+        s1_0.origin_longitude,
+        s1_0.receiver_name,
+        s1_0.route_polyline,
+        s1_0.sender_address,
+        s1_0.sender_name,
+        s1_0.status,
+        s1_0.total_distance,
+        s1_0.tracking_number 
+    from
+        shipments s1_0 
+    where
+        s1_0.status in (?, ?)
+Hibernate: 
+    insert 
+    into
+        route_history_points
+        (latitude, longitude, progress, recorded_at, shipment_id, speed) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:50:07.787+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-13] c.shiptrack.service.LiveTrackingService  : Broadcast location update for shipment 24: 15.302378261107425,74.0573069555703
+Hibernate: 
+    insert 
+    into
+        route_history_points
+        (latitude, longitude, progress, recorded_at, shipment_id, speed) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-08-12T17:50:07.790+05:30  INFO 14372 --- [shiptrack-backend] [essageBroker-13] c.shiptrack.service.LiveTrackingService  : Broadcast location update for shipment 52: 21.311139920528717,86.71571624703367
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  03:52 min
+[INFO] Finished at: 2026-08-12T17:50:23+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:3.5.3:run (default-cli) on project shiptrack-backend: Process terminated with exit code: -1 -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
