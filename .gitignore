@@ -16,6 +16,7 @@ target/
 # Environment / secrets
 .env
 *.env.local
+application-local.properties
 
 # Build tools
 keycloak-26.0.0.zip
