@@ -15,6 +15,12 @@ target/
 
 # Node
 node_modules/
+dist/
+
+# Environment files
+.env
+*.env
+
 
 # Logs
 *.log
