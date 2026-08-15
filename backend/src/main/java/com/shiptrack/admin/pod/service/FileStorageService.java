@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+// (vi) Delivery evidence storage.
+// Writes files under <app.upload.dir>/pod/<trackingId>/ on local disk and
+// hands back a URL served by WebConfig's /uploads/** resource handler.
 @Service
 public class FileStorageService {
 
@@ -48,6 +51,8 @@ public class FileStorageService {
         }
     }
 
+    // Deletes a previously stored file given the URL returned by store().
+    // Best-effort: a missing file on disk is not an error at delete time.
     public void delete(String fileUrl) {
         if (fileUrl == null || fileUrl.isBlank()) {
             return;
@@ -57,6 +62,7 @@ public class FileStorageService {
             Path path = Paths.get(uploadDir, relative);
             Files.deleteIfExists(path);
         } catch (IOException ignored) {
+            // Evidence file cleanup is best-effort; the DB record removal is what matters.
         }
     }
 

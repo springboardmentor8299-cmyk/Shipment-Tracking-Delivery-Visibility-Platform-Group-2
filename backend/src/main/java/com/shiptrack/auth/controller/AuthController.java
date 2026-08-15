@@ -21,7 +21,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "https://shipment-tracking-platform.onrender.com"
+})
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

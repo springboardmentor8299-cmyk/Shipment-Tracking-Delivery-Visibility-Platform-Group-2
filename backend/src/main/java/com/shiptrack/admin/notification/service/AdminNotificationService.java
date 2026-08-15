@@ -26,6 +26,11 @@ import com.shiptrack.auth.repository.UserRepository;
 import com.shiptrack.notification.entity.NotificationType;
 import com.shiptrack.notification.service.NotificationService;
 
+// Lets an admin manually push a notification either to every user in one
+// or more roles, or to specific individuals picked from the recipient
+// list (a customer's tracking ID, a named support agent, etc). Admins
+// aren't a valid target: this is a one-way broadcast tool from the admin,
+// not a way to message other admins.
 @Service
 public class AdminNotificationService {
 
@@ -52,6 +57,7 @@ public class AdminNotificationService {
         this.activityService = activityService;
     }
 
+    // Feeds the recipient pickers in the UI — one list per targetable role.
     public NotificationRecipientOptionsResponse getRecipientOptions() {
 
         List<CustomerOption> customers = shipmentRepository.findAll().stream()
@@ -93,6 +99,8 @@ public class AdminNotificationService {
         List<Role> roles = parseRoles(rawRoles);
         NotificationType type = parseType(request.getType());
 
+        // Keyed by user id so a person matched both by role and by an
+        // explicit pick (or picked twice) only gets notified once.
         Map<Long, User> recipients = new LinkedHashMap<>();
 
         for (Role role : roles) {
@@ -104,7 +112,7 @@ public class AdminNotificationService {
         if (!rawUserIds.isEmpty()) {
             for (User user : userRepository.findAllById(rawUserIds)) {
                 if (!ALLOWED_TARGET_ROLES.contains(user.getRole())) {
-                    continue;
+                    continue; // silently skip anything that isn't a valid target (e.g. stray admin id)
                 }
                 recipients.put(user.getId(), user);
             }

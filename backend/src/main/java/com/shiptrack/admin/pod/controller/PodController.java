@@ -28,6 +28,9 @@ public class PodController {
         this.podOtpService = podOtpService;
     }
 
+    // (iv) OTP verification workflow — step 1: admin/operator selects OTP
+    // as the method, backend generates + stores the code and notifies
+    // the customer.
     @PostMapping("/otp/send")
     public ResponseEntity<Map<String, Object>> sendOtp(@RequestParam String trackingId) {
         PodOtpService.OtpSendResult result = podOtpService.sendOtp(trackingId);
@@ -36,6 +39,8 @@ public class PodController {
                 "expiresInSeconds", result.expiresInSeconds()));
     }
 
+    // (iv) OTP verification workflow — step 2: admin/operator enters the
+    // code the customer gave them; backend verifies it server-side.
     @PostMapping("/otp/verify")
     public ResponseEntity<Map<String, Object>> verifyOtp(
             @RequestParam String trackingId,

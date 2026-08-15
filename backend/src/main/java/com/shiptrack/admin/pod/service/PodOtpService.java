@@ -13,6 +13,17 @@ import com.shiptrack.admin.shipment.repository.ShipmentRepository;
 import com.shiptrack.notification.entity.NotificationType;
 import com.shiptrack.notification.service.NotificationService;
 
+// (iv) OTP verification workflow
+//
+//   Admin/Operator selects OTP -> Backend generates OTP -> Backend stores OTP
+//   temporarily -> Backend sends customer notification -> Customer gives OTP
+//   -> Admin/Operator enters OTP -> Backend verifies OTP -> POD confirmed
+//   -> Delivery notification
+//
+// OTPs are short-lived and only ever needed to gate a single POD submission,
+// so they are kept in memory (not persisted) rather than in the database.
+// A restart simply invalidates any codes in flight, which is the right
+// behaviour for a one-time code.
 @Service
 public class PodOtpService {
 
@@ -22,6 +33,7 @@ public class PodOtpService {
     private final ShipmentRepository shipmentRepository;
     private final NotificationService notificationService;
 
+    // keyed by tracking ID — one in-flight OTP per shipment at a time
     private final ConcurrentHashMap<String, OtpEntry> otpStore = new ConcurrentHashMap<>();
 
     public PodOtpService(ShipmentRepository shipmentRepository, NotificationService notificationService) {
@@ -29,6 +41,7 @@ public class PodOtpService {
         this.notificationService = notificationService;
     }
 
+    // Backend generates + stores the OTP, then notifies the customer.
     public OtpSendResult sendOtp(String trackingId) {
         Shipment shipment = shipmentRepository.findByTrackingId(trackingId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -38,6 +51,8 @@ public class PodOtpService {
         LocalDateTime expiresAt = LocalDateTime.now().plusMinutes(EXPIRY_MINUTES);
         otpStore.put(trackingId, new OtpEntry(code, expiresAt, false));
 
+        // Customer notification — best-effort, same pattern as the rest of
+        // the app: a failed email/SMS channel must not block the workflow.
         try {
             notificationService.notify(
                     shipment.getCustomerId(),
@@ -52,6 +67,8 @@ public class PodOtpService {
         return new OtpSendResult(EXPIRY_MINUTES * 60);
     }
 
+    // Backend verifies the OTP the admin/operator typed in against the one
+    // it generated and stored. Returns true only on an exact, unexpired match.
     public boolean verifyOtp(String trackingId, String code) {
         OtpEntry entry = otpStore.get(trackingId);
         if (entry == null) {
@@ -71,11 +88,16 @@ public class PodOtpService {
         return true;
     }
 
+    // Gate used by PodService before a POD can actually be submitted with
+    // the OTP method — makes sure verifyOtp() succeeded for this shipment
+    // and the verified result hasn't since expired.
     public boolean isVerified(String trackingId) {
         OtpEntry entry = otpStore.get(trackingId);
         return entry != null && entry.verified() && entry.expiresAt().isAfter(LocalDateTime.now());
     }
 
+    // Called once the POD carrying this OTP has been saved, so the code
+    // can't be replayed for a second submission.
     public void clear(String trackingId) {
         otpStore.remove(trackingId);
     }

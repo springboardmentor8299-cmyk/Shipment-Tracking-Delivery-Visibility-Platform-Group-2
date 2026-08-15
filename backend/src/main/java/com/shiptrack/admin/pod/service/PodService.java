@@ -47,6 +47,7 @@ public class PodService {
         this.podOtpService = podOtpService;
     }
 
+    // (iii)(iv)(v)(vi) Submit: confirmation + verification + evidence storage
     @Transactional
     public PodResponse submitPod(PodSubmitRequest request, String submittedBy) {
 
@@ -60,6 +61,11 @@ public class PodService {
 
         VerificationMethod method = parseVerificationMethod(request.getVerificationMethod());
 
+        // (iv) OTP verification workflow — the code itself was already
+        // checked server-side via POST /api/admin/pod/otp/verify. Submission
+        // only needs to confirm that verification actually happened (and
+        // hasn't since expired) rather than re-trusting whatever code the
+        // client sends along.
         if (method == VerificationMethod.OTP) {
             if (request.getVerificationCode() == null || request.getVerificationCode().isBlank()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -106,6 +112,7 @@ public class PodService {
                 "Proof of delivery captured for " + shipment.getTrackingId()
                         + " (received by " + record.getReceiverName() + ")");
 
+        // (iii) Delivery confirmation alert, now that proof of delivery is on file.
         try {
             notificationService.notify(
                     shipment.getCustomerId(),
@@ -123,6 +130,7 @@ public class PodService {
         return toResponse(saved);
     }
 
+    // (v) POD record management
     public List<PodResponse> getAllPods() {
         return podRecordRepository.findAllByOrderByDeliveredAtDesc()
                 .stream()

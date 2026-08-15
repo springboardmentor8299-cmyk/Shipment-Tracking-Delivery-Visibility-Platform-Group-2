@@ -34,6 +34,9 @@ public class SupportRequestServiceImpl implements SupportRequestService {
 
         private final NotificationService notificationService;
 
+        /**
+         * Returns the currently logged-in support agent.
+         */
         private User getLoggedInSupportAgent() {
 
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -50,6 +53,9 @@ public class SupportRequestServiceImpl implements SupportRequestService {
                 return user;
         }
 
+        /**
+         * Notify customer.
+         */
         private void notifyCustomer(
                         User customer,
                         String title,
@@ -187,15 +193,19 @@ public class SupportRequestServiceImpl implements SupportRequestService {
         @Override
         public void assignToCurrentAgent(Long id) {
 
+                // Logged-in Support Agent
                 User supportAgent = getLoggedInSupportAgent();
 
+                // Find Request
                 CustomerSupportRequest request = customerSupportRepository.findById(id)
                                 .orElseThrow(() -> new RuntimeException("Support Request not found."));
 
+                // Prevent duplicate assignment
                 if (request.getAssignedTo() != null) {
                         throw new RuntimeException("Request is already assigned.");
                 }
 
+                // Assign support agent
                 request.setAssignedTo(supportAgent);
 
                 customerSupportRepository.save(request);
@@ -244,6 +254,7 @@ public class SupportRequestServiceImpl implements SupportRequestService {
 
                                 );
 
+                // Notify Customer
                 notifyCustomer(
 
                                 request.getCustomer(),
@@ -282,6 +293,7 @@ public class SupportRequestServiceImpl implements SupportRequestService {
 
                 customerSupportRepository.save(request);
 
+                // Notify Customer
                 notifyCustomer(
 
                                 request.getCustomer(),
@@ -298,6 +310,7 @@ public class SupportRequestServiceImpl implements SupportRequestService {
 
                 );
 
+                // Notify Assigned Support Agent
                 if (request.getAssignedTo() != null) {
 
                         notificationService.notify(
@@ -320,6 +333,7 @@ public class SupportRequestServiceImpl implements SupportRequestService {
 
                 }
 
+                // Notify all Admins
                 userRepository.findAll()
 
                                 .stream()
@@ -357,6 +371,7 @@ public class SupportRequestServiceImpl implements SupportRequestService {
                 CustomerSupportRequest request = customerSupportRepository.findById(id)
                                 .orElseThrow(() -> new RuntimeException("Support Request not found."));
 
+                // Already resolved?
                 if (request.getStatus() == RequestStatus.RESOLVED) {
                         throw new RuntimeException("Support Request is already resolved.");
                 }
@@ -365,6 +380,7 @@ public class SupportRequestServiceImpl implements SupportRequestService {
 
                 customerSupportRepository.save(request);
 
+                // Notify Customer
                 notifyCustomer(
 
                                 request.getCustomer(),
@@ -380,6 +396,7 @@ public class SupportRequestServiceImpl implements SupportRequestService {
 
                 );
 
+                // Notify Assigned Support Agent
                 if (request.getAssignedTo() != null) {
 
                         notificationService.notify(
@@ -402,6 +419,7 @@ public class SupportRequestServiceImpl implements SupportRequestService {
 
                 }
 
+                // Notify all Admins
                 userRepository.findAll()
                                 .stream()
                                 .filter(user -> user.getRole() == Role.ADMIN)

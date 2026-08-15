@@ -19,6 +19,7 @@ public class GeoapifyGeocodeResponse {
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Geometry {
+        // GeoJSON order is [longitude, latitude]
         private List<Double> coordinates;
     }
 }

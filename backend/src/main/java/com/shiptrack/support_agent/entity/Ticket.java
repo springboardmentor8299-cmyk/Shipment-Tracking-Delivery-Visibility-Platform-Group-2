@@ -25,10 +25,12 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Customer who created the ticket
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private User customer;
 
+    // Shipment related to this ticket
     @ManyToOne
     @JoinColumn(name = "shipment_id")
     private Shipment shipment;
@@ -42,6 +44,7 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private TicketStatus status;
 
+    // Support agent handling the ticket
     @ManyToOne
     @JoinColumn(name = "assigned_to")
     private User assignedTo;

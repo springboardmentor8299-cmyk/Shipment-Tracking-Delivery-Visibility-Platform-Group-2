@@ -16,11 +16,18 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/customer/support")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+                "http://localhost:5173",
+                "http://localhost:5174",
+                "https://shipment-tracking-platform.onrender.com"
+})
 public class CustomerSupportController {
 
         private final CustomerSupportService customerSupportService;
 
+        /**
+         * Customer submits a shipment request.
+         */
         @PostMapping("/shipment")
         public ResponseEntity<String> createShipmentRequest(
                         @RequestBody ShipmentRequestDto request) {
@@ -31,6 +38,9 @@ public class CustomerSupportController {
                                 "Shipment request submitted successfully.");
         }
 
+        /**
+         * Customer raises an issue.
+         */
         @PostMapping(value = "/issue", consumes = { "multipart/form-data" })
         public ResponseEntity<String> raiseIssue(
 
@@ -45,6 +55,9 @@ public class CustomerSupportController {
                                 "Issue submitted successfully.");
         }
 
+        /**
+         * Customer views all his/her requests.
+         */
         @GetMapping("/my-requests")
         public ResponseEntity<List<CustomerSupportResponseDto>> getMyRequests() {
 

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+// Body for PUT /api/notifications/preferences — matches the `prefs` state
+// object built from CHANNELS + CATEGORIES in NotificationPreferences.jsx.
 @Getter
 @Setter
 @NoArgsConstructor

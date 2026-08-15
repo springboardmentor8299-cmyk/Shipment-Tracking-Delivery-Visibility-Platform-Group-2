@@ -32,6 +32,8 @@ import com.shiptrack.notification.service.NotificationService;
 @Service
 public class DriverService {
 
+    // A driver is considered to still need attention (i.e. is "unassigned"
+    // eligible) as long as it isn't in one of these terminal states.
     private static final List<ShipmentStatus> TERMINAL_STATUSES = List.of(
             ShipmentStatus.DELIVERED,
             ShipmentStatus.CANCELLED,
@@ -168,6 +170,9 @@ public class DriverService {
                     "Cannot remove a driver who currently has an active shipment. Unassign it first.");
         }
 
+        // Detach this driver from any past shipments (e.g. delivered ones)
+        // so the foreign key doesn't block deletion. The shipment record
+        // itself is untouched — only the driver attribution is cleared.
         shipmentRepository.findByAssignedDriver_Id(driver.getId())
                 .forEach(s -> s.setAssignedDriver(null));
 
@@ -194,6 +199,8 @@ public class DriverService {
             throw new RuntimeException("Driver is offline and cannot be assigned a shipment");
         }
 
+        // Capacity depends on the driver's vehicle: BIKE 10, VAN 20,
+        // MINI_TRUCK 30, TRUCK 50 concurrent (non-terminal) shipments.
         long activeCount = shipmentRepository.findByAssignedDriver_Id(driver.getId())
                 .stream()
                 .filter(s -> !TERMINAL_STATUSES.contains(s.getStatus()))
@@ -263,6 +270,9 @@ public class DriverService {
         return toResponse(getDriverByUsernameOrThrow(username));
     }
 
+    // Returns every shipment currently assigned to this driver that hasn't
+    // reached a terminal status yet -- a driver can now hold several at once
+    // (up to their vehicle's capacity), not just one.
     @Transactional(readOnly = true)
     public List<DriverShipmentResponse> getMyActiveShipments(String username) {
         Driver driver = getDriverByUsernameOrThrow(username);
@@ -292,6 +302,8 @@ public class DriverService {
                 .toList();
     }
 
+    // trackingId picks which of the driver's (possibly several) active
+    // shipments this update applies to.
     @Transactional
     public DriverShipmentResponse updateMyShipmentStatus(String username, String trackingId,
             StatusUpdateRequest request) {
@@ -311,6 +323,8 @@ public class DriverService {
 
         Shipment updated = shipmentService.updateShipmentStatus(shipment.getTrackingId(), request);
 
+        // Once a job reaches a terminal state, free the driver up again
+        // (unless they somehow have another active job already).
         if (TERMINAL_STATUSES.contains(updated.getStatus())) {
             boolean hasOtherActiveShipment = shipmentRepository
                     .findByAssignedDriver_Id(driver.getId())
@@ -443,6 +457,9 @@ public class DriverService {
                 .filter(s -> !TERMINAL_STATUSES.contains(s.getStatus()))
                 .toList();
 
+        // Self-heals any driver stuck on ON_DELIVERY with no active
+        // shipment (e.g. from a shipment that reached DELIVERED before
+        // this reconciliation existed) the next time they're read.
         if (active.isEmpty() && driver.getStatus() == DriverStatus.ON_DELIVERY) {
             driver.setStatus(DriverStatus.AVAILABLE);
             driver = driverRepository.save(driver);

@@ -60,6 +60,8 @@ public class CustomerController {
                                 trackingId);
         }
 
+        // Delivery Bill (same data the admin "Generate Bill" PDF uses,
+        // scoped to the logged-in customer's own shipment)
         @GetMapping("/pod/{trackingId}")
         public PodResponse getBill(
                         @PathVariable String trackingId,

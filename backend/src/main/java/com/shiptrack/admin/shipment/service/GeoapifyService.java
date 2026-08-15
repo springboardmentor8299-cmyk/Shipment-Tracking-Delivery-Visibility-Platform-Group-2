@@ -15,6 +15,10 @@ public class GeoapifyService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
+    // Logs the actual Geoapify response body (invalid key, quota exceeded,
+    // bad request, etc.) instead of just the terse exception message, so a
+    // failure is diagnosable from the backend console instead of just
+    // silently degrading to "address not found".
     private void logGeoapifyFailure(String context, Exception e) {
         if (e instanceof HttpStatusCodeException httpEx) {
             System.err.println("Geoapify " + context + " error: HTTP " + httpEx.getStatusCode()

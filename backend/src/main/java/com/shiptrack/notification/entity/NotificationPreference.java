@@ -16,6 +16,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+// One row per user. Created lazily with sane defaults the first time
+// a user's preferences are read or updated.
 @Entity
 @Table(name = "notification_preferences")
 @Getter
@@ -46,6 +48,7 @@ public class NotificationPreference {
     @Builder.Default
     private boolean pushEnabled = false;
 
+    // (vi) Categories
     @Column(name = "shipment_updates", nullable = false)
     @Builder.Default
     private boolean shipmentUpdates = true;

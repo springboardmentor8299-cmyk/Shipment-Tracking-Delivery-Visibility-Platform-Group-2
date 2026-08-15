@@ -14,6 +14,9 @@ import com.shiptrack.driver.dto.DriverShipmentResponse;
 import com.shiptrack.driver.dto.DriverStatusUpdateRequest;
 import com.shiptrack.driver.service.DriverService;
 
+// Self-service portal for a logged-in DRIVER -- everything here is scoped
+// to the calling driver's own account/shipment, unlike DriverController
+// (under /api/operator) which lets an operator manage *any* driver.
 @RestController
 @RequestMapping("/api/driver")
 public class DriverPortalController {
@@ -37,6 +40,8 @@ public class DriverPortalController {
         return driverService.updateMyStatus(authentication.getName(), request);
     }
 
+    // A driver can now hold several active shipments at once (up to their
+    // vehicle's capacity), so this returns all of them rather than one.
     @GetMapping("/shipments")
     public List<DriverShipmentResponse> getActiveShipments(Authentication authentication) {
         return driverService.getMyActiveShipments(authentication.getName());

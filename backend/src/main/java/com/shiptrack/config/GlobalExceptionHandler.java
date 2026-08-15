@@ -10,6 +10,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+/**
+ * Previously there was no exception handling anywhere in the app, so any
+ * unhandled RuntimeException (duplicate email, validation failures, "not
+ * found", etc.) fell through to Spring Boot's default /error forward. That
+ * path isn't permitted in SecurityConfig, and JwtAuthFilter skips itself on
+ * ERROR dispatches (its default behaviour), so the forward looked
+ * unauthenticated to Spring Security and came back as a misleading 401
+ * "Not authenticated" -- masking whatever the real error was.
+ *
+ * This translates business-rule RuntimeExceptions into a real 400 with the
+ * actual message, so the frontend (and whoever's debugging) sees the truth.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

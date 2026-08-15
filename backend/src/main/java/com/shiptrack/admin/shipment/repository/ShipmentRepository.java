@@ -15,30 +15,32 @@ import com.shiptrack.auth.entity.User;
 
 public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
 
-        long countByStatus(ShipmentStatus status);
+    long countByStatus(ShipmentStatus status);
 
-        long countByStatusAndDeliveryDate(
-                        ShipmentStatus status,
-                        LocalDate deliveryDate);
+    long countByStatusAndDeliveryDate(
+            ShipmentStatus status,
+            LocalDate deliveryDate);
 
-        @Query("SELECT MONTH(s.shipmentDate), YEAR(s.shipmentDate), COUNT(s) " +
-                        "FROM Shipment s " +
-                        "WHERE s.shipmentDate >= :fromDate " +
-                        "GROUP BY YEAR(s.shipmentDate), MONTH(s.shipmentDate) " +
-                        "ORDER BY YEAR(s.shipmentDate), MONTH(s.shipmentDate)")
-        List<Object[]> countShipmentsByMonthSince(@Param("fromDate") LocalDate fromDate);
+    @Query("SELECT MONTH(s.shipmentDate), YEAR(s.shipmentDate), COUNT(s) " +
+            "FROM Shipment s " +
+            "WHERE s.shipmentDate >= :fromDate " +
+            "GROUP BY YEAR(s.shipmentDate), MONTH(s.shipmentDate) " +
+            "ORDER BY YEAR(s.shipmentDate), MONTH(s.shipmentDate)")
+    List<Object[]> countShipmentsByMonthSince(@Param("fromDate") LocalDate fromDate);
 
-        @Query("SELECT s.status, COUNT(s) FROM Shipment s GROUP BY s.status")
-        List<Object[]> countShipmentsByStatus();
+    @Query("SELECT s.status, COUNT(s) FROM Shipment s GROUP BY s.status")
+    List<Object[]> countShipmentsByStatus();
 
-        List<Shipment> findByCustomerId(User customerId);
+    List<Shipment> findByCustomerId(User customerId);
 
-        Optional<Shipment> findByTrackingId(String trackingId);
+    Optional<Shipment> findByTrackingId(String trackingId);
 
-        List<Shipment> findByAssignedDriverIsNullAndStatusNotIn(List<ShipmentStatus> excludedStatuses);
+    // Shipments still needing a driver: no driver assigned yet and not in a
+    // terminal state.
+    List<Shipment> findByAssignedDriverIsNullAndStatusNotIn(List<ShipmentStatus> excludedStatuses);
 
-        List<Shipment> findByAssignedDriver_Id(Long driverId);
+    List<Shipment> findByAssignedDriver_Id(Long driverId);
 
-        long countByAssignedDriver_IdAndStatus(Long driverId, ShipmentStatus status);
+    long countByAssignedDriver_IdAndStatus(Long driverId, ShipmentStatus status);
 
 }

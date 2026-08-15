@@ -10,10 +10,19 @@ import com.shiptrack.customer.support.dto.ShipmentRequestDto;
 
 public interface CustomerSupportService {
 
+    /**
+     * Customer submits a shipment request.
+     */
     void createShipmentRequest(ShipmentRequestDto request);
 
+    /**
+     * Customer raises an issue for an existing shipment.
+     */
     void raiseIssue(RaiseIssueDto request, MultipartFile attachment);
 
+    /**
+     * Returns all requests created by the logged-in customer.
+     */
     List<CustomerSupportResponseDto> getMyRequests();
 
     Object getSupportRequestById(Long id);

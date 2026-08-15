@@ -14,7 +14,11 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/support/requests")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+                "http://localhost:5173",
+                "http://localhost:5174",
+                "https://shipment-tracking-platform.onrender.com"
+})
 public class SupportRequestController {
 
         private final SupportRequestService supportRequestService;

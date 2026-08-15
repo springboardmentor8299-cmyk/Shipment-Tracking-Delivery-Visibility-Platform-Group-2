@@ -25,6 +25,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
+    // Read by JwtAuthenticationEntryPoint when a request ends up unauthenticated,
+    // so the client gets a real reason instead of a bare 403/401.
     public static final String AUTH_ERROR_ATTR = "jwt_auth_error";
 
     @Autowired

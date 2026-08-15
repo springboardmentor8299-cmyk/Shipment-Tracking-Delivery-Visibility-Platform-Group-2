@@ -11,6 +11,9 @@ import com.shiptrack.admin.shipment.entity.Shipment;
 import jakarta.persistence.*;
 import lombok.*;
 
+// (v) POD record management (vi) Delivery evidence storage
+// One row per delivery confirmation. Evidence files (signature + photos)
+// are stored on disk by FileStorageService; only their served URLs live here.
 @Entity
 @Table(name = "pod_records")
 @Getter
@@ -34,6 +37,7 @@ public class PodRecord {
     @Column(length = 2000)
     private String deliveryNotes;
 
+    // (iv) Verification workflows
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private VerificationMethod verificationMethod;
@@ -47,8 +51,10 @@ public class PodRecord {
     @Column(name = "item_value")
     private Map<String, Boolean> verificationChecklist = new LinkedHashMap<>();
 
+    // (i) Digital signature capture — URL of the stored signature image
     private String signatureUrl;
 
+    // (ii) Delivery photo upload — URLs of stored evidence photos
     @Builder.Default
     @ElementCollection
     @CollectionTable(name = "pod_photo_urls", joinColumns = @JoinColumn(name = "pod_id"))
@@ -59,6 +65,7 @@ public class PodRecord {
     @Column(nullable = false)
     private LocalDateTime deliveredAt;
 
+    // Username of the staff member who captured this POD
     private String deliveredBy;
 
     @PrePersist

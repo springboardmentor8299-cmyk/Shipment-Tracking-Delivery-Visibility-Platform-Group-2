@@ -43,6 +43,7 @@ public class RouteService {
         this.activityService = activityService;
     }
 
+    // (i) ROUTE PLANNING
     public Route planRoute(RoutePlanRequest request, String createdBy) {
         if (request.getOrigin() == null || request.getOrigin().isBlank()
                 || request.getDestination() == null || request.getDestination().isBlank()) {
@@ -107,6 +108,7 @@ public class RouteService {
         return saved;
     }
 
+    // (ii) ROUTE OPTIMIZATION
     public Route optimizeRoute(Long id, String strategy) {
         Route route = getRouteOrThrow(id);
 
@@ -122,7 +124,7 @@ public class RouteService {
         String geoapifyType = switch (normalizedStrategy) {
             case "FEWER_TURNS" -> "less_maneuvers";
             case "BALANCED" -> "balanced";
-            default -> "short";
+            default -> "short"; // SHORTEST
         };
 
         RouteMetrics optimized = geoapifyService.calculateRouteMetrics(
@@ -162,6 +164,7 @@ public class RouteService {
         return saved;
     }
 
+    // (iii) ROUTE HISTORY
     public List<Route> getHistory() {
         return routeRepository.findByStatusIn(List.of(RouteStatus.COMPLETED, RouteStatus.ARCHIVED));
     }
@@ -191,6 +194,7 @@ public class RouteService {
         routeRepository.delete(route);
     }
 
+    // (iv) DISTANCE CALCULATIONS (ad-hoc, not persisted)
     public DistanceCalculationResponse calculateDistance(String origin, String destination) {
         if (origin == null || origin.isBlank() || destination == null || destination.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Origin and destination are required");
@@ -223,6 +227,7 @@ public class RouteService {
                 .build();
     }
 
+    // (v) TRAFFIC-AWARE ROUTING
     public Route refreshTraffic(Long id) {
         Route route = getRouteOrThrow(id);
 
@@ -281,6 +286,7 @@ public class RouteService {
         };
     }
 
+    // (vi) ROUTE ANALYTICS
     public RouteAnalyticsResponse getAnalytics() {
         List<Route> allRoutes = routeRepository.findAll();
 
@@ -394,6 +400,7 @@ public class RouteService {
                 ? route.getOptimizedDurationMinutes()
                 : route.getDurationMinutes();
 
+        // Prefer the traffic-adjusted duration for the ETA when we have it
         Double etaDuration = route.getTrafficAdjustedDurationMinutes() != null
                 ? route.getTrafficAdjustedDurationMinutes()
                 : baseDuration;

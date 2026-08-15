@@ -26,6 +26,8 @@ import com.shiptrack.notification.service.NotificationService;
 @Service
 public class ShipmentService {
 
+    // Kept in sync with DriverService's TERMINAL_STATUSES — a shipment in
+    // one of these states is no longer "active" for the driver assigned to it.
     private static final List<ShipmentStatus> TERMINAL_STATUSES = List.of(
             ShipmentStatus.DELIVERED,
             ShipmentStatus.CANCELLED,
@@ -160,6 +162,7 @@ public class ShipmentService {
         if (!shipmentRepository1.existsById(id)) {
             throw new RuntimeException("Shipment not found");
         }
+        // capture tracking id for activity
         shipmentRepository1.findById(id).ifPresent(s -> {
             try {
                 activityService.save(null, "SHIPMENT_DELETED", "Shipment " + s.getTrackingId() + " deleted");
@@ -173,6 +176,12 @@ public class ShipmentService {
         return "TRK-" + java.util.UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
+    // If this shipment just landed on a terminal status (DELIVERED,
+    // CANCELLED, FAILED_DELIVERY) and it has a driver assigned, free that
+    // driver back up to AVAILABLE — unless they have another active
+    // shipment. Called from every path that can change a shipment's
+    // status (generic update, status endpoint, GPS auto-delivery) so the
+    // driver never gets stuck on ON_DELIVERY no matter which one fired.
     private void releaseDriverIfTerminal(Shipment shipment) {
         Driver driver = shipment.getAssignedDriver();
         if (driver == null || !TERMINAL_STATUSES.contains(shipment.getStatus())) {
@@ -189,6 +198,8 @@ public class ShipmentService {
             driverRepository.save(driver);
         }
     }
+
+    // ================= HELPER METHODS =================
 
     private String formatWeight(String weight) {
         if (weight == null || weight.isBlank())
@@ -228,13 +239,19 @@ public class ShipmentService {
         }
     }
 
+    // 1. Live Location Update & Delay Prediction Logic
     public Shipment updateLiveLocation(String trackingId, LocationUpdateRequest request) {
 
         Shipment shipment = shipmentRepository.findByTrackingId(trackingId)
                 .orElseThrow(() -> new RuntimeException("Shipment not found : " + trackingId));
 
+        // Snapshot the ETA as it stood before this ping, so we can tell
+        // whether the new one is a small fluctuation (ignore), a real
+        // update (notify ETA_UPDATE) or a slip backwards (notify
+        // DELAY_WARNING) further down.
         LocalDateTime previousEta = shipment.getEstimatedDeliveryTime();
 
+        // Save Current GPS Location
         shipment.setCurrentLatitude(request.getCurrentLatitude());
         shipment.setCurrentLongitude(request.getCurrentLongitude());
         shipment.setTruckSpeed(request.getTruckSpeed());
@@ -245,6 +262,7 @@ public class ShipmentService {
             shipment.setCurrentLocationName(request.getCurrentLocationName());
         }
 
+        // Calculate Remaining Distance
         GeoapifyService.RouteMetrics metrics = geoapifyService.calculateRouteMetrics(
                 request.getCurrentLatitude(),
                 request.getCurrentLongitude(),
@@ -283,6 +301,10 @@ public class ShipmentService {
         Shipment saved = shipmentRepository.save(shipment);
         releaseDriverIfTerminal(saved);
 
+        // (ii)(iv) ETA notifications / delay warnings, and the auto-delivered
+        // delivery alert. Throttled so a routine GPS ping (every few seconds)
+        // doesn't spam a notification per call — only a first-time ETA, a
+        // meaningful shift, or an actual slip fires one.
         try {
             if (autoDelivered) {
                 notificationService.notify(
@@ -333,6 +355,7 @@ public class ShipmentService {
         return saved;
     }
 
+    // 2. Status Management
     public Shipment updateShipmentStatus(String trackingId, StatusUpdateRequest request) {
         Shipment shipment = shipmentRepository.findByTrackingId(trackingId)
                 .orElseThrow(() -> new RuntimeException("Shipment not found with ID: " + trackingId));
@@ -357,6 +380,8 @@ public class ShipmentService {
         Shipment saved = shipmentRepository.save(shipment);
         releaseDriverIfTerminal(saved);
 
+        // (i)(iii)(iv) Shipment update / delivery alert / delay warning,
+        // depending on which status was just entered.
         if (request.getStatus() != previousStatus) {
             try {
                 notifyStatusChange(saved, request.getStatus());
@@ -410,6 +435,7 @@ public class ShipmentService {
                 shipment.getTrackingId());
     }
 
+    // 3. Get Tracking Details
     public TrackingResponseDto getTrackingDetails(String trackingId) {
         Shipment shipment = shipmentRepository.findByTrackingId(trackingId)
                 .orElseThrow(() -> new RuntimeException("Shipment not found with ID: " + trackingId));

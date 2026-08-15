@@ -86,6 +86,10 @@ public class Route {
     @Column(length = 1000)
     private String notes;
 
+    // NOT PERSISTED — set on the response after plan/optimize/refresh-traffic to
+    // tell the frontend whether the linked shipment (by assignedTrackingId) was
+    // found and updated.
+
     @Transient
     private Boolean shipmentSynced;
 

@@ -9,6 +9,12 @@ import com.shiptrack.auth.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * Operational profile for a driver. Login/identity (name, phone, password)
+ * lives on the linked {@link User} (role = DRIVER) so a driver can
+ * authenticate through the normal /api/auth/login flow; this entity only
+ * holds driver-specific fields plus their live status.
+ */
 @Entity
 @Table(name = "drivers")
 @Getter

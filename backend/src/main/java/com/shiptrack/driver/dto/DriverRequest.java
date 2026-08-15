@@ -17,6 +17,7 @@ public class DriverRequest {
 
     private String phone;
 
+    // Doubles as the driver's login username, so it's required.
     private String email;
 
     private String licenseNumber;

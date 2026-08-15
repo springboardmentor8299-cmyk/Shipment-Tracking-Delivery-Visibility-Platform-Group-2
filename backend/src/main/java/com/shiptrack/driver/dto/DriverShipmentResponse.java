@@ -11,6 +11,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+// Fuller shipment view for the driver portal (current job + history rows) --
+// ShipmentBrief is intentionally minimal for embedding inside DriverResponse,
+// this carries what a driver actually needs to see/act on a job.
 @Getter
 @Setter
 @NoArgsConstructor

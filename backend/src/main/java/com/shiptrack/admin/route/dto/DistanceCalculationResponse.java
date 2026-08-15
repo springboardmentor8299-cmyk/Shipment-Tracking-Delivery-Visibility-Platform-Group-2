@@ -21,9 +21,11 @@ public class DistanceCalculationResponse {
     private Double destinationLatitude;
     private Double destinationLongitude;
 
+    // Actual road distance/time from the routing engine
     private Double drivingDistanceKm;
     private Double drivingDurationMinutes;
 
+    // Straight-line (as-the-crow-flies) distance, always available as a fallback
     private Double straightLineDistanceKm;
 
 }

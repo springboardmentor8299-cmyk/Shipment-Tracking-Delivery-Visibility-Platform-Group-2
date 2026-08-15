@@ -17,6 +17,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/**
+ * Runs when the request IS authenticated but the account's role doesn't
+ * satisfy the endpoint's required role (a genuine 403). Reports which
+ * authorities the account actually has, so a role mismatch is obvious
+ * immediately instead of a bare 403 with no context.
+ */
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 

@@ -13,8 +13,11 @@ public class BroadcastNotificationResponse {
 
     private List<String> targetedRoles;
 
+    // How many users matched the selected roles.
     private int matchedUserCount;
 
+    // How many actually got a Notification row (a user can be skipped if
+    // they've turned the target category off in their preferences).
     private int notifiedUserCount;
 
 }

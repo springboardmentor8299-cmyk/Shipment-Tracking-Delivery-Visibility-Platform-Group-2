@@ -26,6 +26,9 @@ public class PodResponse {
     private LocalDateTime deliveredAt;
     private String deliveredBy;
 
+    // Carried over from the linked shipment so the "Generate Bill" PDF on
+    // the frontend has everything it needs from this one response — no
+    // second call back to the shipment endpoint required.
     private String origin;
     private String destination;
     private String noOfItems;

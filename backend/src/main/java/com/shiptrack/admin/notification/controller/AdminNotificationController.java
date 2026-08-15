@@ -13,6 +13,8 @@ import com.shiptrack.admin.notification.dto.BroadcastNotificationResponse;
 import com.shiptrack.admin.notification.dto.NotificationRecipientOptionsResponse;
 import com.shiptrack.admin.notification.service.AdminNotificationService;
 
+// Sits under /api/admin/**, so SecurityConfig already restricts this to
+// ADMIN — no extra role check needed here.
 @RestController
 @RequestMapping("/api/admin/notifications")
 public class AdminNotificationController {
@@ -23,6 +25,8 @@ public class AdminNotificationController {
         this.adminNotificationService = adminNotificationService;
     }
 
+    // Feeds the recipient pickers — per-customer tracking IDs, and named
+    // business clients / logistics operators / support agents.
     @GetMapping("/recipients")
     public ResponseEntity<NotificationRecipientOptionsResponse> getRecipientOptions() {
         return ResponseEntity.ok(adminNotificationService.getRecipientOptions());

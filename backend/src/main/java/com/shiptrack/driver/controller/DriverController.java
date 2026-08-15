@@ -10,6 +10,8 @@ import com.shiptrack.driver.dto.DriverRequest;
 import com.shiptrack.driver.dto.DriverResponse;
 import com.shiptrack.driver.service.DriverService;
 
+// Mapped under /api/operator, same base as OperatorController, which is
+// already restricted to ROLE_LOGISTICS_OPERATOR in SecurityConfig.
 @RestController
 @RequestMapping("/api/operator")
 public class DriverController {

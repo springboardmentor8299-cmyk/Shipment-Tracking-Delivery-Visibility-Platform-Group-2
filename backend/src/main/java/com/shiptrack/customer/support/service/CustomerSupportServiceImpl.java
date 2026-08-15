@@ -54,6 +54,9 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
         @Value("${app.upload.dir}")
         private String uploadDir;
 
+        /**
+         * Returns the currently logged-in customer.
+         */
         private User getLoggedInUser() {
 
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -16,6 +16,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Runs whenever a request reaches a protected endpoint without a valid
+ * authenticated principal. Previously Spring's default fallback
+ * (Http403ForbiddenEntryPoint) returned a bare 403 here, which is
+ * misleading -- 401 is the correct code for "you're not authenticated",
+ * and we now say exactly why (missing header / expired token / bad
+ * signature / etc), using the reason JwtAuthFilter left on the request.
+ */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
