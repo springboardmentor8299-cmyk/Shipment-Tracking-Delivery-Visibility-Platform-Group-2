@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import "../../styles/AddShipmentModal.css";
 
+/**
+ * Lets the operator pick an unassigned shipment and hand it to a driver.
+ * On confirm, the backend should create a notification for that driver
+ * (driver sees it in their app / notification bell and the shipment
+ * moves into their active route).
+ *
+ * `driver` - preselected driver (row's "Assign Shipment" button), optional.
+ * `unassignedShipments` - shipments with no driver yet (status CREATED / PICKED_UP).
+ */
 function AssignShipmentModal({
   show,
   driver,

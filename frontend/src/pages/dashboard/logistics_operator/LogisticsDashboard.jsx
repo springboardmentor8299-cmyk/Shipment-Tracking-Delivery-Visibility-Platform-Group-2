@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import OperatorSidebar from "../../../components/operator/OperatorSidebar";
 import OperatorNavbar from "../../../components/operator/OperatorNavbar";
@@ -10,7 +11,7 @@ import QuickActions from "../../../components/QuickActions";
 import Tracking from "../../tracking/Tracking";
 import Delivery from "../../delivery/Delivery";
 
-import RouteManagement from "../../../components/Routemanagement";
+import RouteManagement from "../../../components/RouteManagement";
 import ProofOfDelivery from "../../pod/ProofOfDelivery";
 import DriverManagement from "../../../components/operator/DriverManagement";
 
@@ -34,7 +35,14 @@ function LogisticsDashboard() {
     deliveredToday: 0,
   });
 
-  const [section, setSection] = useState("dashboard");
+  // Section is stored in the URL (?section=xyz) instead of local state so
+  // that every sidebar/navbar click creates a real browser history entry,
+  // letting the Back button step through sections instead of jumping to login.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const section = searchParams.get("section") || "dashboard";
+  const setSection = (key) => {
+    setSearchParams(key === "dashboard" ? {} : { section: key });
+  };
 
   const [searchTerm, setSearchTerm] = useState("");
 

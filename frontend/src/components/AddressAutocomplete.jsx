@@ -3,6 +3,13 @@ import "../styles/AddressAutocomplete.css";
 
 const GEOAPIFY_KEY = import.meta.env.VITE_GEOAPIFY_API_KEY;
 
+/**
+ * Text input with a live address suggestions dropdown (Geoapify Autocomplete API).
+ *
+ * Behaves like a plain controlled <input> (same name/value/onChange contract),
+ * so it's a drop-in replacement for a text field, but also shows a dropdown of
+ * matching real-world addresses as the user types, and lets them click one to fill it in.
+ */
 function AddressAutocomplete({
   name,
   value,
@@ -96,9 +103,7 @@ function AddressAutocomplete({
       setHighlightedIndex((i) => (i + 1) % suggestions.length);
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setHighlightedIndex(
-        (i) => (i - 1 + suggestions.length) % suggestions.length,
-      );
+      setHighlightedIndex((i) => (i - 1 + suggestions.length) % suggestions.length);
     } else if (e.key === "Enter") {
       if (highlightedIndex >= 0) {
         e.preventDefault();

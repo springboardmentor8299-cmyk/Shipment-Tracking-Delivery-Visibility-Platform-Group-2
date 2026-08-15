@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import SupportSidebar from "../../../components/support_agent/SupportSidebar";
 import SupportNavbar from "../../../components/support_agent/SupportNavbar";
@@ -30,7 +31,14 @@ function SupportDashboard() {
     resolvedToday: 0,
   });
 
-  const [section, setSection] = useState("dashboard");
+  // Section is stored in the URL (?section=xyz) instead of local state so
+  // that every sidebar/navbar click creates a real browser history entry,
+  // letting the Back button step through sections instead of jumping to login.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const section = searchParams.get("section") || "dashboard";
+  const setSection = (key) => {
+    setSearchParams(key === "dashboard" ? {} : { section: key });
+  };
 
   const [searchTerm, setSearchTerm] = useState("");
 

@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaEnvelope, FaLock, FaPhone } from "react-icons/fa";
 
-import "../../styles/Register.css";
+import "../../styles/register.css";
 import logo from "../../assets/logo.jpg";
 
 import { register, googleLogin } from "../../services/authService";
-import { applyAuthResponse } from "../../utils/applyAuth";
+import { applyAuthResponse } from "../../utils/Applyauth";
 import GoogleSignInButton from "../../components/GoogleSignInButton";
 
 function Register() {

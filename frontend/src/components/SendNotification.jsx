@@ -12,6 +12,10 @@ import {
 import { NOTIFICATION_TYPES } from "../utils/notificationTypes";
 import "./SendNotification.css";
 
+// Admin-only: manually push a notification either to every user in a role,
+// or to specific people picked from that role once it's checked (a
+// customer identified by tracking ID, or named business clients /
+// operators / support agents). Admins aren't a selectable target.
 const RECIPIENT_GROUPS = [
   { role: "CUSTOMER", label: "Customers", optionsKey: "customers" },
   {
@@ -39,7 +43,9 @@ const TYPE_OPTIONS = Object.entries(NOTIFICATION_TYPES).map(([key, meta]) => ({
 
 export default function SendNotification() {
   const [checkedRoles, setCheckedRoles] = useState([]);
+  // role -> array of selected ids (customerId for CUSTOMER, userId otherwise)
   const [selectedIds, setSelectedIds] = useState({});
+  // role -> search text filtering that role's picker
   const [pickerSearch, setPickerSearch] = useState({});
   const [expandedRole, setExpandedRole] = useState(null);
 
@@ -83,6 +89,9 @@ export default function SendNotification() {
     setResult(null);
     setCheckedRoles((prev) => {
       if (prev.includes(role)) {
+        // Unchecking clears whatever specific picks were made, so a
+        // later re-check starts fresh instead of silently keeping
+        // stale hidden selections.
         setSelectedIds((ids) => ({ ...ids, [role]: [] }));
         if (expandedRole === role) setExpandedRole(null);
         return prev.filter((r) => r !== role);
@@ -163,6 +172,8 @@ export default function SendNotification() {
       return;
     }
 
+    // A role with no specific picks broadcasts to the whole role;
+    // a role with specific picks only targets those ids.
     const wholeRoles = [];
     const specificIds = [];
     checkedRoles.forEach((role) => {

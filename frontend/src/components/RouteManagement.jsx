@@ -11,7 +11,7 @@ import {
   updateRouteStatus,
   deleteRoute,
 } from "../services/routeService";
-import "../styles/Routemanagement.css";
+import "../styles/RouteManagement.css";
 
 const TABS = [
   { id: "routes", label: "Routes" },

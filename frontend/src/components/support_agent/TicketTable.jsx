@@ -1,7 +1,7 @@
 import "../../styles/ShipmentTable.css";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import AddSupportTicketModal from "./AddSupportTicketModal";
-import { getAllTickets, deleteTicket } from "../../services/ticketService";
+import { getAllTickets, deleteTicket } from "../../services/TicketService";
 
 const ITEMS_PER_PAGE = 5;
 

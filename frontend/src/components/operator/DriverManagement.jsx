@@ -30,6 +30,8 @@ import {
 import "../../styles/StatCard.css";
 import "../../styles/DriverManagement.css";
 
+// Used only if the /operator/drivers endpoint isn't live yet, so this page
+// is fully clickable/demoable while the backend Driver entity is built.
 const MOCK_DRIVERS = [
   {
     id: 1,
@@ -105,6 +107,9 @@ const STATUS_META = {
   OFFLINE: { label: "Offline", className: "status-offline" },
 };
 
+// Mirrors the backend's VehicleType capacities — how many shipments a
+// driver on that vehicle can carry at once. Used only for the mock-data
+// fallback; live data gets shipmentCapacity straight from the API.
 const VEHICLE_CAPACITY = {
   BIKE: 10,
   VAN: 20,
@@ -151,6 +156,8 @@ function DriverManagement() {
       setUnassignedShipments(shipmentData || []);
       setUsingMockData(false);
     } catch (error) {
+      // Backend driver endpoints aren't live yet — fall back to sample
+      // data so the page still demos the intended UX.
       console.warn("Driver API not available yet, showing sample data.", error);
       setDrivers(MOCK_DRIVERS);
       setUnassignedShipments(MOCK_UNASSIGNED_SHIPMENTS);

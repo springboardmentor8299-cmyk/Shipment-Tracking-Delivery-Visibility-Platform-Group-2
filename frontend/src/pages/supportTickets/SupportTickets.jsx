@@ -5,7 +5,7 @@ import TicketTable from "../../components/support_agent/TicketTable";
 
 import {
     getAllTickets
-} from "../../services/ticketService";
+} from "../../services/TicketService";
 
 import {
     FaTicketAlt,

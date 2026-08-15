@@ -163,7 +163,7 @@ function CustomerShipmentTable({ searchTerm = "", onTrack }) {
                 </td>
                 <td>{shipment.receiver || "—"}</td>
                 <td>{shipment.items || shipment.itemCount || 1}</td>
-                <td>{shipment.weight ? `${shipment.weight} kg` : "—"}</td>
+                <td>{shipment.weight ? shipment.weight : "—"}</td>
                 <td>{shipment.cost ? `${shipment.cost}` : "—"}</td>
                 <td>{shipment.origin || "—"}</td>
                 <td>{shipment.destination || "—"}</td>

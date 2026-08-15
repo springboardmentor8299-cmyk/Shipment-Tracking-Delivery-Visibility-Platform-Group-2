@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import DriverSidebar from "../../../components/driver/DriverSidebar";
 import DriverNavbar from "../../../components/driver/DriverNavbar";
 import StatCard from "../../../components/StatCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Tracking from "../../tracking/Tracking";
 import DriverNotifications from "./DriverNotifications";
 
@@ -52,7 +52,15 @@ function badgeClass(status) {
 }
 
 function DriverDashboard() {
-  const [section, setSection] = useState("dashboard");
+  // Section is stored in the URL (?section=xyz) instead of local state so
+  // that every sidebar/navbar click creates a real browser history entry,
+  // letting the Back button step through sections instead of jumping to login.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const section = searchParams.get("section") || "dashboard";
+  const setSection = (key) => {
+    setSearchParams(key === "dashboard" ? {} : { section: key });
+  };
+
   const [profile, setProfile] = useState(null);
   const [trackingSearch, setTrackingSearch] = useState("");
 

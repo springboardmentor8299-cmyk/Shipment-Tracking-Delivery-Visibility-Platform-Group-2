@@ -23,8 +23,8 @@ import { getDashboardStats } from "../../../services/adminService";
 import { FaUsers, FaBoxOpen, FaTruck, FaCheckCircle } from "react-icons/fa";
 
 import "../../../styles/StatCard.css";
-import { Route } from "react-router-dom";
-import RouteManagement from "../../../components/Routemanagement";
+import { useSearchParams } from "react-router-dom";
+import RouteManagement from "../../../components/RouteManagement";
 
 function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -38,7 +38,17 @@ function AdminDashboard() {
   });
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [section, setSection] = useState("dashboard");
+
+  // Section is stored in the URL (?section=xyz) instead of local state so
+  // that every sidebar/navbar click creates a real browser history entry.
+  // This makes the browser Back button step through sections (Reports ->
+  // Proof of Delivery -> ... -> Dashboard) instead of jumping straight to
+  // the login page.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const section = searchParams.get("section") || "dashboard";
+  const setSection = (key) => {
+    setSearchParams(key === "dashboard" ? {} : { section: key });
+  };
 
   useEffect(() => {
     loadDashboard();

@@ -1,8 +1,8 @@
-import "../../styles/Login.css";
+import "../../styles/login.css";
 
 import { useState } from "react";
 import { login, googleLogin } from "../../services/authService";
-import { applyAuthResponse } from "../../utils/applyAuth";
+import { applyAuthResponse } from "../../utils/Applyauth";
 import GoogleSignInButton from "../../components/GoogleSignInButton";
 import { Link, useNavigate } from "react-router-dom";
 

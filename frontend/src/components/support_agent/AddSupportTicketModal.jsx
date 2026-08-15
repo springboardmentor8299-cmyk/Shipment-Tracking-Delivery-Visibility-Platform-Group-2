@@ -5,7 +5,7 @@ import "../../styles/AddShipmentModal.css";
 import {
     createTicket,
     updateTicket
-} from "../../services/ticketService";
+} from "../../services/TicketService";
 
 import {
     getAllShipments,
