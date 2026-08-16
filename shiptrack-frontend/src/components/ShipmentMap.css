@@ -21,7 +21,7 @@
   display: inline-block;
   margin-bottom: 7px;
   color: #2563eb;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -59,14 +59,14 @@
   display: block;
   margin-bottom: 5px;
   color: #64748b;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
 }
 
 .shipment-map-summary strong {
   color: #0f172a;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .shipment-map {
@@ -115,7 +115,7 @@
   flex-direction: column;
   gap: 5px;
   color: #334155;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .shipment-map-popup strong {
@@ -162,12 +162,12 @@
 .shipment-map-legend strong {
   margin-bottom: 4px;
   color: #0f172a;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .shipment-map-legend small {
   color: #64748b;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .shipment-map-empty-state {

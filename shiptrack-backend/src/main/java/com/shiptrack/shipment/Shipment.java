@@ -1,5 +1,6 @@
 package com.shiptrack.shipment;
 
+import com.shiptrack.pod.ProofOfDelivery;
 import com.shiptrack.user.User;
 import jakarta.persistence.*;
 
@@ -35,6 +36,12 @@ public class Shipment {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "source_latitude")
+    private Double sourceLatitude;
+
+    @Column(name = "source_longitude")
+    private Double sourceLongitude;
+
     @Column(name = "current_latitude")
     private Double currentLatitude;
 
@@ -62,6 +69,13 @@ public class Shipment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private User customer;
+
+    @OneToOne(
+            mappedBy = "shipment",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    private ProofOfDelivery proofOfDelivery;
 
     public Shipment() {
     }
@@ -131,6 +145,22 @@ public class Shipment {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public Double getSourceLatitude() {
+        return sourceLatitude;
+    }
+
+    public void setSourceLatitude(Double sourceLatitude) {
+        this.sourceLatitude = sourceLatitude;
+    }
+
+    public Double getSourceLongitude() {
+        return sourceLongitude;
+    }
+
+    public void setSourceLongitude(Double sourceLongitude) {
+        this.sourceLongitude = sourceLongitude;
     }
 
     public Double getCurrentLatitude() {
@@ -209,5 +239,15 @@ public class Shipment {
 
     public void setCustomer(User customer) {
         this.customer = customer;
+    }
+
+    public ProofOfDelivery getProofOfDelivery() {
+        return proofOfDelivery;
+    }
+
+    public void setProofOfDelivery(
+            ProofOfDelivery proofOfDelivery
+    ) {
+        this.proofOfDelivery = proofOfDelivery;
     }
 }

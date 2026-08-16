@@ -154,7 +154,7 @@
 
 .shipment-details-brand small {
   color: #64748b;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -173,7 +173,7 @@
   padding: 10px 13px;
   border-radius: 10px;
   color: #94a3b8;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   text-decoration: none;
   transition:
@@ -211,7 +211,7 @@
   background: rgba(15, 23, 42, 0.58);
   color: #cbd5e1;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   text-decoration: none;
   transition:
@@ -311,7 +311,7 @@
   border-radius: 999px;
   background: rgba(37, 99, 235, 0.09);
   color: #93c5fd;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.14em;
 }
@@ -335,7 +335,7 @@
   display: block;
   margin-bottom: 8px;
   color: #64748b;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.17em;
 }
@@ -376,7 +376,7 @@
   padding: 13px 18px;
   border-radius: 14px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 750;
   transition:
     transform 0.25s ease,
@@ -443,7 +443,7 @@
   padding: 10px 14px;
   border: 1px solid transparent;
   border-radius: 999px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -608,7 +608,7 @@
 
 .shipment-details-summary-card span {
   color: #64748b;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 750;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -630,7 +630,7 @@
   display: block;
   margin-top: 5px;
   color: #64748b;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.5;
 }
 
@@ -695,7 +695,7 @@
   display: block;
   margin-bottom: 7px;
   color: #60a5fa;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.16em;
 }
@@ -718,7 +718,7 @@
   border-radius: 999px;
   background: rgba(34, 197, 94, 0.09);
   color: #86efac;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 750;
   white-space: nowrap;
 }
@@ -738,7 +738,7 @@
   border-radius: 999px;
   background: rgba(37, 99, 235, 0.09);
   color: #93c5fd;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 750;
   white-space: nowrap;
 }
@@ -753,7 +753,7 @@
   border-radius: 12px;
   background: rgba(37, 99, 235, 0.1);
   color: #93c5fd;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
 }
 
@@ -811,7 +811,7 @@
   place-items: center;
   border: 1px solid transparent;
   border-radius: 12px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
 }
 
@@ -838,7 +838,7 @@
   display: block;
   margin-bottom: 6px;
   color: #64748b;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 750;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -847,7 +847,7 @@
 .shipment-route-location strong {
   display: block;
   color: #e2e8f0;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 1.55;
   overflow-wrap: anywhere;
@@ -856,7 +856,7 @@
 .shipment-route-location p {
   margin: 5px 0 0;
   color: #64748b;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .shipment-route-progress {
@@ -1018,7 +1018,7 @@
   display: block;
   margin-bottom: 7px;
   color: #60a5fa;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.17em;
 }
@@ -1033,7 +1033,7 @@
 .shipment-map-message p {
   margin: 7px 0 0;
   color: #64748b;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.65;
 }
 
@@ -1070,7 +1070,7 @@
   display: block;
   margin-bottom: 8px;
   color: #64748b;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 750;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -1080,7 +1080,7 @@
   display: block;
   color: #cbd5e1;
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   overflow-wrap: anywhere;
 }
@@ -1171,7 +1171,7 @@
   display: block;
   margin-bottom: 6px;
   color: #60a5fa;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.15em;
 }
@@ -1186,7 +1186,7 @@
 .shipment-timeline-heading time {
   flex-shrink: 0;
   color: #64748b;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.5;
   text-align: right;
 }
@@ -1207,14 +1207,14 @@
 
 .shipment-timeline-meta > div > span {
   flex: 0 0 auto;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.6;
 }
 
 .shipment-timeline-meta p {
   margin: 0;
   color: #94a3b8;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.65;
 }
 
@@ -1253,7 +1253,7 @@
   max-width: 430px;
   margin: 9px 0 0;
   color: #64748b;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.7;
 }
 
@@ -1313,7 +1313,7 @@
   display: block;
   margin-bottom: 5px;
   color: #64748b;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 750;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1351,14 +1351,14 @@
 
 .shipment-details-list span {
   color: #64748b;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 650;
   line-height: 1.55;
 }
 
 .shipment-details-list strong {
   color: #cbd5e1;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 650;
   line-height: 1.6;
   overflow-wrap: anywhere;
@@ -1419,7 +1419,7 @@
   display: block;
   margin-bottom: 8px;
   color: #93c5fd;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.16em;
 }
@@ -1435,7 +1435,7 @@
 .shipment-details-action-panel p {
   margin: 12px 0 22px;
   color: #94a3b8;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.7;
 }
 
@@ -1456,7 +1456,7 @@
     0 14px 34px rgba(37, 99, 235, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   cursor: pointer;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 750;
   transition:
     transform 0.25s ease,
@@ -1565,7 +1565,7 @@
   max-width: 410px;
   margin: 13px 0 0;
   color: #94a3b8;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.75;
 }
 
@@ -1587,7 +1587,7 @@
   padding: 12px 17px;
   border-radius: 13px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 750;
   text-decoration: none;
   transition:
@@ -1834,7 +1834,7 @@
   }
 
   .shipment-details-hero > div:first-child > p {
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.7;
   }
 
@@ -1985,7 +1985,7 @@
   }
 
   .shipment-details-page-badge {
-    font-size: 8px;
+    font-size: 12px;
     letter-spacing: 0.11em;
   }
 
@@ -2004,12 +2004,12 @@
 
   .shipment-details-live-badge {
     padding: 7px 9px;
-    font-size: 8px;
+    font-size: 12px;
   }
 
   .shipment-details-event-count {
     padding: 7px 9px;
-    font-size: 8px;
+    font-size: 12px;
   }
 
   .shipment-coordinate-grid {

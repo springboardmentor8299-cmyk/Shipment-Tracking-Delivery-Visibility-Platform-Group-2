@@ -157,7 +157,7 @@
 
 .update-shipment-brand small {
   color: #64748b;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -176,7 +176,7 @@
   padding: 10px 12px;
   border-radius: 10px;
   color: #94a3b8;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 650;
   text-decoration: none;
   transition:
@@ -213,7 +213,7 @@
   background: rgba(15, 23, 42, 0.58);
   color: #cbd5e1;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   text-decoration: none;
   transition:
@@ -311,7 +311,7 @@
   border-radius: 999px;
   background: rgba(37, 99, 235, 0.09);
   color: #93c5fd;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.14em;
 }
@@ -335,7 +335,7 @@
   display: block;
   margin-bottom: 8px;
   color: #64748b;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.17em;
 }
@@ -376,7 +376,7 @@
   display: block;
   margin-bottom: 7px;
   color: #64748b;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 750;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -404,7 +404,7 @@
   padding: 10px 14px;
   border: 1px solid transparent;
   border-radius: 999px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -511,13 +511,13 @@
 .update-shipment-alert strong {
   display: block;
   color: #f8fafc;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .update-shipment-alert p {
   margin: 4px 0 0;
   color: #94a3b8;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.6;
 }
 
@@ -606,7 +606,7 @@
   display: block;
   margin-bottom: 7px;
   color: #60a5fa;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.16em;
 }
@@ -630,7 +630,7 @@
   border-radius: 13px;
   background: rgba(37, 99, 235, 0.1);
   color: #93c5fd;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
 }
 
@@ -742,7 +742,7 @@
 .update-status-option strong {
   display: block;
   color: #f8fafc;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 750;
 }
 
@@ -750,7 +750,7 @@
   display: block;
   margin-top: 5px;
   color: #64748b;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.5;
 }
 
@@ -763,7 +763,7 @@
   border-radius: 8px;
   background: rgba(15, 23, 42, 0.6);
   color: #93c5fd;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
 }
 
@@ -832,7 +832,7 @@
   display: block;
   margin-bottom: 4px;
   color: #64748b;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 750;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -847,7 +847,7 @@
 .update-selected-status p {
   margin: 5px 0 0;
   color: #64748b;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.55;
 }
 
@@ -878,13 +878,13 @@
   gap: 10px;
   margin-bottom: 9px;
   color: #cbd5e1;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
 }
 
 .update-form-group label span {
   color: #64748b;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 650;
   text-transform: uppercase;
 }
@@ -898,7 +898,7 @@
   border-radius: 14px;
   background: rgba(8, 13, 26, 0.55);
   color: #f8fafc;
-  font-size: 12px;
+  font-size: 14px;
   transition:
     border-color 0.25s ease,
     background 0.25s ease,
@@ -945,7 +945,7 @@
 .update-form-group > small {
   margin-top: 7px;
   color: #64748b;
-  font-size: 9px;
+  font-size: 12px;
   line-height: 1.5;
 }
 
@@ -974,7 +974,7 @@
 .update-field-error {
   margin: 7px 0 0;
   color: #fca5a5;
-  font-size: 9px;
+  font-size: 12px;
   line-height: 1.5;
 }
 
@@ -1002,14 +1002,14 @@
   display: block;
   margin-bottom: 5px;
   color: #60a5fa;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.15em;
 }
 
 .update-coordinate-heading > div strong {
   color: #e2e8f0;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .update-coordinate-heading button {
@@ -1024,7 +1024,7 @@
   background: rgba(37, 99, 235, 0.09);
   color: #93c5fd;
   cursor: pointer;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 750;
   transition:
     transform 0.25s ease,
@@ -1067,20 +1067,20 @@
   border-radius: 10px;
   background: rgba(239, 68, 68, 0.13);
   color: #fca5a5;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
 }
 
 .update-failure-notice strong {
   display: block;
   color: #fecaca;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .update-failure-notice p {
   margin: 5px 0 0;
   color: #94a3b8;
-  font-size: 9px;
+  font-size: 12px;
   line-height: 1.6;
 }
 
@@ -1148,14 +1148,14 @@
 .update-notification-toggle strong {
   display: block;
   color: #e2e8f0;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .update-notification-toggle small {
   display: block;
   margin-top: 4px;
   color: #64748b;
-  font-size: 9px;
+  font-size: 12px;
   line-height: 1.5;
 }
 
@@ -1185,7 +1185,7 @@
   padding: 13px 18px;
   border-radius: 14px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 750;
   transition:
     transform 0.25s ease,
@@ -1322,7 +1322,7 @@
   display: block;
   margin-bottom: 5px;
   color: #64748b;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 750;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -1331,7 +1331,7 @@
 .update-summary-route strong {
   display: block;
   color: #e2e8f0;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.55;
   overflow-wrap: anywhere;
 }
@@ -1339,7 +1339,7 @@
 .update-summary-route p {
   margin: 4px 0 0;
   color: #64748b;
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .update-sidebar-details {
@@ -1361,12 +1361,12 @@
 
 .update-sidebar-details span {
   color: #64748b;
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .update-sidebar-details strong {
   color: #cbd5e1;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.5;
   overflow-wrap: anywhere;
   text-align: right;
@@ -1384,7 +1384,7 @@
   border-radius: 13px;
   background: rgba(37, 99, 235, 0.09);
   color: #93c5fd;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 750;
   text-decoration: none;
   transition:
@@ -1447,19 +1447,19 @@
 .update-activity-item strong {
   display: block;
   color: #e2e8f0;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .update-activity-item p {
   margin: 4px 0;
   color: #64748b;
-  font-size: 9px;
+  font-size: 12px;
   line-height: 1.5;
 }
 
 .update-activity-item small {
   color: #475569;
-  font-size: 8px;
+  font-size: 12px;
 }
 
 .update-activity-empty {
@@ -1487,13 +1487,13 @@
 
 .update-activity-empty strong {
   color: #e2e8f0;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .update-activity-empty p {
   margin: 6px 0 0;
   color: #64748b;
-  font-size: 9px;
+  font-size: 12px;
 }
 
 /* =========================================================
@@ -1532,7 +1532,7 @@
   display: block;
   margin-bottom: 8px;
   color: #93c5fd;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.16em;
 }
@@ -1548,7 +1548,7 @@
 .update-shipment-guidance-card p {
   margin: 12px 0 18px;
   color: #94a3b8;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.7;
 }
 
@@ -1565,7 +1565,7 @@
   align-items: flex-start;
   gap: 9px;
   color: #cbd5e1;
-  font-size: 9px;
+  font-size: 12px;
   line-height: 1.5;
 }
 
@@ -1578,7 +1578,7 @@
   border-radius: 7px;
   background: rgba(34, 197, 94, 0.1);
   color: #86efac;
-  font-size: 9px;
+  font-size: 12px;
 }
 
 /* =========================================================
@@ -1663,7 +1663,7 @@
   max-width: 410px;
   margin: 13px 0 0;
   color: #94a3b8;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.75;
 }
 
@@ -1683,7 +1683,7 @@
   padding: 12px 17px;
   border-radius: 13px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 750;
   text-decoration: none;
   transition:
@@ -1832,7 +1832,7 @@
   }
 
   .update-shipment-hero-content > p {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .update-shipment-hero-summary {
@@ -1901,7 +1901,7 @@
 
 @media (max-width: 470px) {
   .update-shipment-page-badge {
-    font-size: 8px;
+    font-size: 12px;
     letter-spacing: 0.11em;
   }
 

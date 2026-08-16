@@ -8,3 +8,21 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   background-color: #f4f6f9;
 }
+
+/* Readability improvements: visual-only, no functional changes */
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  line-height: 1.5;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}

@@ -331,7 +331,7 @@ function TrackShipmentPage() {
             <div className="track-shipment-details-grid">
               <article className="track-shipment-detail-card">
                 <div className="track-shipment-detail-icon sender">
-                  S
+                   {shipment.senderName?.trim().charAt(0).toUpperCase() }
                 </div>
 
                 <div>
@@ -347,7 +347,7 @@ function TrackShipmentPage() {
 
               <article className="track-shipment-detail-card">
                 <div className="track-shipment-detail-icon receiver">
-                  R
+                  {shipment.receiverName?.trim().charAt(0).toUpperCase()}
                 </div>
 
                 <div>
@@ -394,7 +394,7 @@ function TrackShipmentPage() {
                   <small>Final delivery location</small>
                 </div>
               </article>
-
+{/*
               <article className="track-shipment-detail-card">
                 <div className="track-shipment-detail-icon source">
                   ⌖
@@ -436,7 +436,7 @@ function TrackShipmentPage() {
                   </small>
                 </div>
               </article>
-
+*/}
               <article className="track-shipment-detail-card">
                 <div className="track-shipment-detail-icon sender">
                   ⏱
@@ -834,7 +834,7 @@ function TrackShipmentPage() {
                     <tr>
                       <th>Status</th>
                       <th>Location</th>
-                      <th>Coordinates</th>
+                      
                       <th>Date and Time</th>
                     </tr>
                   </thead>
@@ -868,12 +868,7 @@ function TrackShipmentPage() {
                           </div>
                         </td>
 
-                        <td>
-                          {formatCoordinates(
-                            event.latitude,
-                            event.longitude
-                          )}
-                        </td>
+                        
 
                         <td>
                           {formatDate(event.eventTime)}

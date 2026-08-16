@@ -129,7 +129,7 @@ a {
 
 .my-shipments-brand small {
   color: #64748b;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
@@ -150,7 +150,7 @@ a {
   gap: 9px;
   padding: 0 17px;
   border-radius: 11px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 750;
   text-decoration: none;
   transition:
@@ -224,7 +224,7 @@ a {
   border-radius: 999px;
   color: #93c5fd;
   background: rgba(37, 99, 235, 0.11);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.2px;
 }
@@ -249,7 +249,7 @@ a {
   max-width: 720px;
   margin: 17px 0 0;
   color: #94a3b8;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.75;
 }
 
@@ -264,7 +264,7 @@ a {
   border-radius: 11px;
   color: #cbd5e1;
   background: rgba(255, 255, 255, 0.05);
-  font-size: 9.5px;
+  font-size: 12px;
   font-weight: 750;
   cursor: pointer;
   transition:
@@ -369,7 +369,7 @@ a {
 
 .my-shipments-stat-card span {
   color: #94a3b8;
-  font-size: 8.5px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.75px;
@@ -385,7 +385,7 @@ a {
 .my-shipments-stat-card small {
   margin-top: 4px;
   color: #475569;
-  font-size: 8px;
+  font-size: 12px;
 }
 
 .my-shipments-content-card {
@@ -411,7 +411,7 @@ a {
 
 .my-shipments-section-label {
   color: #60a5fa;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.15px;
 }
@@ -426,7 +426,7 @@ a {
 .my-shipments-content-header p {
   margin: 8px 0 0;
   color: #64748b;
-  font-size: 9.5px;
+  font-size: 12px;
   line-height: 1.6;
 }
 
@@ -448,7 +448,7 @@ a {
 .my-shipments-record-count span,
 .my-shipments-record-count small {
   color: #64748b;
-  font-size: 7.5px;
+  font-size: 12px;
 }
 
 .my-shipments-record-count strong {
@@ -490,7 +490,7 @@ a {
   border-radius: 11px;
   color: #f8fafc;
   background: #111827;
-  font-size: 9.5px;
+  font-size: 12px;
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
@@ -530,7 +530,7 @@ a {
 
 .my-shipments-filter label {
   color: #64748b;
-  font-size: 8.5px;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -543,7 +543,7 @@ a {
   border-radius: 11px;
   color: #cbd5e1;
   background: #111827;
-  font-size: 9px;
+  font-size: 12px;
   cursor: pointer;
 }
 
@@ -572,7 +572,7 @@ a {
   border-bottom: 1px solid rgba(148, 163, 184, 0.12);
   color: #64748b;
   background: rgba(8, 13, 26, 0.44);
-  font-size: 7.8px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.85px;
   text-align: left;
@@ -626,7 +626,7 @@ a {
 .my-shipments-avatar {
   color: #ddd6fe;
   background: rgba(139, 92, 246, 0.13);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
 }
 
@@ -645,7 +645,7 @@ a {
 .my-shipments-tracking-cell span,
 .my-shipments-person-cell span {
   color: #475569;
-  font-size: 7px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.6px;
@@ -654,7 +654,7 @@ a {
 .my-shipments-tracking-cell strong {
   margin-top: 4px;
   color: #93c5fd;
-  font-size: 9px;
+  font-size: 12px;
   letter-spacing: 0.2px;
 }
 
@@ -663,7 +663,7 @@ a {
   margin-top: 4px;
   overflow: hidden;
   color: #dbe4f0;
-  font-size: 9px;
+  font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -708,7 +708,7 @@ a {
 
 .my-shipments-route-point small {
   color: #475569;
-  font-size: 6.7px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -718,7 +718,7 @@ a {
   margin-top: 2px;
   overflow: hidden;
   color: #cbd5e1;
-  font-size: 8px;
+  font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -742,7 +742,7 @@ a {
   border-radius: 999px;
   color: #cbd5e1;
   background: rgba(148, 163, 184, 0.08);
-  font-size: 7.5px;
+  font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.4px;
@@ -833,7 +833,7 @@ a {
   border-radius: 9px;
   color: #bfdbfe;
   background: rgba(59, 130, 246, 0.1);
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 750;
   cursor: pointer;
   white-space: nowrap;
@@ -886,7 +886,7 @@ a {
   max-width: 450px;
   margin: 9px 0 0;
   color: #64748b;
-  font-size: 9.5px;
+  font-size: 12px;
   line-height: 1.65;
 }
 
@@ -915,7 +915,7 @@ a {
   color: #ffffff;
   background: linear-gradient(135deg, #2563eb, #4f46e5);
   box-shadow: 0 12px 25px rgba(37, 99, 235, 0.25);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
   text-decoration: none;
   cursor: pointer;
@@ -955,13 +955,13 @@ a {
 
 .my-shipments-error strong {
   color: #fecaca;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .my-shipments-error p {
   margin: 4px 0 0;
   color: #fca5a5;
-  font-size: 8.5px;
+  font-size: 12px;
 }
 
 .my-shipments-error button {
@@ -971,7 +971,7 @@ a {
   border-radius: 9px;
   color: #fecaca;
   background: rgba(239, 68, 68, 0.1);
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 750;
   cursor: pointer;
 }
@@ -1047,7 +1047,7 @@ a {
 
   .my-shipments-mobile-header > div span {
     color: #475569;
-    font-size: 7px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.6px;
   }
@@ -1055,7 +1055,7 @@ a {
   .my-shipments-mobile-header > div strong {
     margin-top: 5px;
     color: #93c5fd;
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .my-shipments-mobile-people {
@@ -1078,14 +1078,14 @@ a {
 
   .my-shipments-mobile-people span {
     color: #475569;
-    font-size: 7px;
+    font-size: 12px;
     text-transform: uppercase;
   }
 
   .my-shipments-mobile-people strong {
     margin-top: 5px;
     color: #dbe4f0;
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .my-shipments-mobile-route {
@@ -1132,14 +1132,14 @@ a {
 
   .my-shipments-mobile-route small {
     color: #475569;
-    font-size: 7px;
+    font-size: 12px;
     text-transform: uppercase;
   }
 
   .my-shipments-mobile-route strong {
     margin-top: 3px;
     color: #cbd5e1;
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .my-shipments-mobile-route-line {
@@ -1163,7 +1163,7 @@ a {
     border-radius: 10px;
     color: #bfdbfe;
     background: rgba(59, 130, 246, 0.1);
-    font-size: 8.5px;
+    font-size: 12px;
     font-weight: 750;
     cursor: pointer;
   }

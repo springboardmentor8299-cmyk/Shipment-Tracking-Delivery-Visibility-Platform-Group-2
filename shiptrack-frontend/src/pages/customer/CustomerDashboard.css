@@ -127,7 +127,7 @@ a {
 
 .customer-dashboard-brand small {
   color: #64748b;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
@@ -144,7 +144,7 @@ a {
   border-radius: 11px;
   color: #fecaca;
   background: rgba(239, 68, 68, 0.07);
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 750;
   cursor: pointer;
   transition:
@@ -196,7 +196,7 @@ a {
   border-radius: 999px;
   color: #93c5fd;
   background: rgba(37, 99, 235, 0.11);
-  font-size: 9.5px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.25px;
 }
@@ -243,7 +243,7 @@ a {
   gap: 13px;
   padding: 0 21px;
   border-radius: 12px;
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 800;
   text-decoration: none;
   transition:
@@ -331,7 +331,7 @@ a {
 
 .customer-route-card-header > div:first-child span {
   color: #60a5fa;
-  font-size: 8.5px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.2px;
 }
@@ -351,7 +351,7 @@ a {
   border-radius: 999px;
   color: #86efac;
   background: rgba(34, 197, 94, 0.08);
-  font-size: 8.5px;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -437,7 +437,7 @@ a {
 
 .customer-route-point small {
   color: #64748b;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.8px;
@@ -446,7 +446,7 @@ a {
 .customer-route-point strong {
   margin-top: 5px;
   color: #e2e8f0;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .customer-delivery-truck {
@@ -491,7 +491,7 @@ a {
 
 .customer-route-footer span {
   color: #64748b;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.7px;
@@ -500,7 +500,7 @@ a {
 .customer-route-footer strong {
   margin-top: 5px;
   color: #dbeafe;
-  font-size: 10.5px;
+  font-size: 12px;
 }
 
 .customer-dashboard-section {
@@ -521,7 +521,7 @@ a {
 
 .customer-section-label {
   color: #60a5fa;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.3px;
 }
@@ -536,7 +536,7 @@ a {
 .customer-section-header p {
   margin: 10px 0 0;
   color: #64748b;
-  font-size: 10.5px;
+  font-size: 12px;
   line-height: 1.65;
 }
 
@@ -549,7 +549,7 @@ a {
   border-radius: 999px;
   color: #86efac;
   background: rgba(34, 197, 94, 0.07);
-  font-size: 8.5px;
+  font-size: 12px;
   font-weight: 750;
   text-transform: uppercase;
   letter-spacing: 0.45px;
@@ -563,7 +563,7 @@ a {
   border-radius: 50%;
   color: #052e16;
   background: #4ade80;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .customer-dashboard-cards {
@@ -677,7 +677,7 @@ a {
 
 .customer-card-label {
   color: #60a5fa;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.2px;
 }
@@ -700,7 +700,7 @@ a {
 .customer-card-content p {
   margin: 14px 0 0;
   color: #94a3b8;
-  font-size: 10.5px;
+  font-size: 12px;
   line-height: 1.75;
 }
 
@@ -714,7 +714,7 @@ a {
   padding-top: 18px;
   border-top: 1px solid rgba(148, 163, 184, 0.12);
   color: #cbd5e1;
-  font-size: 9.5px;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -764,7 +764,7 @@ a {
 .customer-info-card span {
   display: block;
   color: #60a5fa;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.8px;
 }
@@ -772,13 +772,13 @@ a {
 .customer-info-card h3 {
   margin: 7px 0 0;
   color: #e2e8f0;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .customer-info-card p {
   margin: 8px 0 0;
   color: #64748b;
-  font-size: 9px;
+  font-size: 12px;
   line-height: 1.65;
 }
 

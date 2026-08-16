@@ -8,7 +8,11 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import BusinessDashboard from "./pages/business/Dashboard";
 import CustomerDashboard from "./pages/customer/CustomerDashboard";
 import OperatorDashboard from "./pages/operator/OperatorDashboard";
+import OperatorShipmentsPage from "./pages/operator/OperatorShipmentsPage";
+import ShipmentDetailsPage from "./pages/operator/ShipmentDetailsPage";
 import SupportDashboard from "./pages/support/Dashboard";
+import ProofOfDeliveryPage from "./pages/operator/ProofOfDeliveryPage";
+
 
 import CreateShipmentPage from "./pages/customer/CreateShipmentPage";
 import MyShipmentsPage from "./pages/customer/MyShipmentsPage";
@@ -20,6 +24,7 @@ import CreateStaffPage from "./pages/admin/CreateStaffPage";
 import ManageUsersPage from "./pages/admin/ManageUsersPage";
 import ManageShipmentsPage from "./pages/admin/ManageShipmentsPage";
 import ReportsPage from "./pages/admin/ReportsPage";
+import PodVerificationPage from "./pages/admin/PodVerificationPage";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import RoleBasedRoute from "./components/RoleBasedRoute";
@@ -91,6 +96,17 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+    path="/admin/pod-verification"
+    element={
+        <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={["ADMINISTRATOR"]}>
+                <PodVerificationPage />
+            </RoleBasedRoute>
+        </ProtectedRoute>
+    }
+/>
 
       {/* Customer Routes */}
 
@@ -185,6 +201,48 @@ function App() {
         element={<Navigate to="/operator" replace />}
       />
 
+      <Route
+  path="/operator/shipments/:trackingNumber/proof-of-delivery"
+  element={
+    <ProtectedRoute>
+      <RoleBasedRoute allowedRoles={["LOGISTICS_OPERATOR"]}>
+        <ProofOfDeliveryPage />
+      </RoleBasedRoute>
+    </ProtectedRoute>
+  }
+/>
+
+      <Route
+  path="/operator/shipments"
+  element={
+    <ProtectedRoute>
+      <RoleBasedRoute allowedRoles={["LOGISTICS_OPERATOR"]}>
+        <OperatorShipmentsPage />
+      </RoleBasedRoute>
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/operator/shipments/:id"
+  element={
+    <ProtectedRoute>
+      <RoleBasedRoute allowedRoles={["LOGISTICS_OPERATOR"]}>
+        <ShipmentDetailsPage />
+      </RoleBasedRoute>
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/operator/shipments/:id/update"
+  element={
+    <ProtectedRoute>
+      <RoleBasedRoute allowedRoles={["LOGISTICS_OPERATOR"]}>
+        <UpdateShipmentPage />
+      </RoleBasedRoute>
+    </ProtectedRoute>
+  }
+/>
+
       {/* Support Agent Route */}
 
       <Route
@@ -201,10 +259,7 @@ function App() {
       {/* Unknown Route */}
 
     <Route path="*" element={<Navigate to="/" replace />} />
-    <Route
-  path="/operator/shipments/:id/update"
-  element={<UpdateShipmentPage />}
-/>
+    
     {/* <Route
     path="/operator/shipments"
     element={<OperatorShipmentsPage />}

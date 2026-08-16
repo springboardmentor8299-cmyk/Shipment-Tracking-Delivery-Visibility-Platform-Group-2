@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import RouteMap from "../../components/maps/RouteMap";
 import "./ShipmentDetailsPage.css";
 
 const API_BASE_URL =
@@ -26,102 +27,114 @@ function ShipmentDetailsPage() {
       sessionStorage.getItem("jwtToken")
     );
   };
+const fetchShipmentDetails = async () => {
+  try {
+    setIsLoading(true);
+    setErrorMessage("");
 
-  const fetchShipmentDetails = async () => {
-    try {
-      setIsLoading(true);
-      setErrorMessage("");
+    const token = getStoredToken();
 
-      const token = getStoredToken();
-
-      const shipmentResponse = await fetch(
-        `${API_BASE_URL}/api/shipments/${id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
-        }
-      );
-
-      if (
-        shipmentResponse.status === 401 ||
-        shipmentResponse.status === 403
-      ) {
-        throw new Error(
-          "Your login session has expired or you do not have permission to view this shipment."
-        );
+    const shipmentResponse = await fetch(
+      `${API_BASE_URL}/api/shipments/id/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
       }
+    );
 
-      if (shipmentResponse.status === 404) {
-        throw new Error("The requested shipment could not be found.");
-      }
-
-      if (!shipmentResponse.ok) {
-        throw new Error("Unable to load shipment details.");
-      }
-
-      const shipmentData = await shipmentResponse.json();
-
-      setShipment(
-        shipmentData.shipment ||
-          shipmentData.data ||
-          shipmentData
+    if (
+      shipmentResponse.status === 401 ||
+      shipmentResponse.status === 403
+    ) {
+      throw new Error(
+        "Your login session has expired or you do not have permission to view this shipment."
       );
-
-      await fetchTrackingHistory(token);
-    } catch (error) {
-      console.error("Failed to fetch shipment details:", error);
-
-      setErrorMessage(
-        error.message ||
-          "Something went wrong while loading shipment details."
-      );
-    } finally {
-      setIsLoading(false);
     }
-  };
 
-  const fetchTrackingHistory = async (token) => {
-    try {
-      const possibleEndpoints = [
-        `${API_BASE_URL}/api/shipments/${id}/tracking-events`,
-        `${API_BASE_URL}/api/shipments/${id}/tracking`,
-        `${API_BASE_URL}/api/tracking/shipment/${id}`,
-      ];
-
-      for (const endpoint of possibleEndpoints) {
-        const response = await fetch(endpoint, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
-        });
-
-        if (response.ok) {
-          const responseData = await response.json();
-
-          const eventList = Array.isArray(responseData)
-            ? responseData
-            : responseData.content ||
-              responseData.events ||
-              responseData.trackingEvents ||
-              responseData.data ||
-              [];
-
-          setTrackingEvents(eventList);
-          return;
-        }
-      }
-
-      setTrackingEvents([]);
-    } catch (error) {
-      console.warn("Tracking history could not be loaded:", error);
-      setTrackingEvents([]);
+    if (shipmentResponse.status === 404) {
+      throw new Error("The requested shipment could not be found.");
     }
-  };
+
+    if (!shipmentResponse.ok) {
+      throw new Error("Unable to load shipment details.");
+    }
+
+    const shipmentData = await shipmentResponse.json();
+
+    const loadedShipment =
+      shipmentData.shipment ||
+      shipmentData.data ||
+      shipmentData;
+
+    setShipment(loadedShipment);
+
+    await fetchTrackingHistory(
+      token,
+      loadedShipment.trackingNumber
+    );
+  } catch (error) {
+    console.error("Failed to fetch shipment details:", error);
+
+    setErrorMessage(
+      error.message ||
+        "Something went wrong while loading shipment details."
+    );
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+  const fetchTrackingHistory = async (
+  token,
+  trackingNumberValue
+) => {
+  try {
+    if (!trackingNumberValue) {
+      setTrackingEvents([]);
+      return;
+    }
+
+    const response = await fetch(
+      `${API_BASE_URL}/api/shipments/${trackingNumberValue}/history`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      }
+    );
+
+    if (!response.ok) {
+      setTrackingEvents([]);
+      return;
+    }
+
+    const responseData = await response.json();
+
+    const eventList = Array.isArray(responseData)
+      ? responseData
+      : responseData.content ||
+        responseData.events ||
+        responseData.trackingEvents ||
+        responseData.data ||
+        [];
+
+    setTrackingEvents(eventList);
+  } catch (error) {
+    console.warn(
+      "Tracking history could not be loaded:",
+      error
+    );
+
+    setTrackingEvents([]);
+  }
+};
+
+     
 
   const getValue = (...values) => {
     return (
@@ -165,18 +178,7 @@ function ShipmentDetailsPage() {
     shipment?.sender?.fullName
   );
 
-  const senderEmail = getValue(
-    shipment?.senderEmail,
-    shipment?.sender_email,
-    shipment?.sender?.email
-  );
 
-  const senderPhone = getValue(
-    shipment?.senderPhone,
-    shipment?.sender_phone,
-    shipment?.sender?.phone,
-    shipment?.sender?.phoneNumber
-  );
 
   const receiverName = getValue(
     shipment?.receiverName,
@@ -185,20 +187,10 @@ function ShipmentDetailsPage() {
     shipment?.receiver?.fullName
   );
 
-  const receiverEmail = getValue(
-    shipment?.receiverEmail,
-    shipment?.receiver_email,
-    shipment?.receiver?.email
-  );
 
-  const receiverPhone = getValue(
-    shipment?.receiverPhone,
-    shipment?.receiver_phone,
-    shipment?.receiver?.phone,
-    shipment?.receiver?.phoneNumber
-  );
 
   const pickupAddress = getValue(
+    shipment?.source,
     shipment?.pickupAddress,
     shipment?.senderAddress,
     shipment?.originAddress,
@@ -206,19 +198,13 @@ function ShipmentDetailsPage() {
   );
 
   const deliveryAddress = getValue(
+    shipment?.destination,
     shipment?.deliveryAddress,
     shipment?.delivery_address,
     shipment?.destinationAddress,
     shipment?.receiverAddress
   );
 
-  const currentLocation = getValue(
-    shipment?.currentLocation,
-    shipment?.lastLocation,
-    shipment?.locationName,
-    shipment?.currentAddress,
-    shipment?.latestTrackingEvent?.location
-  );
 
   const estimatedArrival = getValue(
     shipment?.estimatedArrival,
@@ -234,25 +220,23 @@ function ShipmentDetailsPage() {
     shipment?.creationDate
   );
 
-  const updatedAt = getValue(
-    shipment?.updatedAt,
-    shipment?.updated_at,
-    shipment?.lastUpdatedAt,
-    shipment?.modifiedAt
+  const predictedDelayMinutes = getValue(
+    shipment?.predictedDelayMinutes,
+    shipment?.delayMinutes
   );
 
-  const packageDescription = getValue(
-    shipment?.packageDescription,
-    shipment?.description,
-    shipment?.shipmentDescription,
-    shipment?.contents
+  const delayReason = getValue(
+    shipment?.delayReason,
+    shipment?.delayDescription
   );
 
-  const packageWeight = getValue(
-    shipment?.weight,
-    shipment?.packageWeight,
-    shipment?.weightKg
+  const lastLocationUpdate = getValue(
+    shipment?.lastLocationUpdate,
+    shipment?.locationUpdatedAt
   );
+
+
+
 
   const latitude = getValue(
     shipment?.currentLatitude,
@@ -469,8 +453,7 @@ function ShipmentDetailsPage() {
             </div>
 
             <p>
-              Review shipment information, delivery progress, customer details,
-              current location and tracking history.
+              Review the shipment data currently stored in the backend, including its route, coordinates, delivery status and tracking history.
             </p>
           </div>
 
@@ -509,14 +492,18 @@ function ShipmentDetailsPage() {
           </article>
 
           <article className="shipment-details-summary-card">
-            <div className="shipment-summary-icon summary-purple">📍</div>
+            <div className="shipment-summary-icon summary-purple">⏳</div>
 
             <div>
-              <span>Current Location</span>
+              <span>Predicted Delay</span>
 
-              <strong>{currentLocation || "Not updated"}</strong>
+              <strong>
+                {predictedDelayMinutes !== null
+                  ? `${predictedDelayMinutes} minutes`
+                  : "No delay recorded"}
+              </strong>
 
-              <small>Most recent known position</small>
+              <small>Latest delay prediction</small>
             </div>
           </article>
 
@@ -601,28 +588,16 @@ function ShipmentDetailsPage() {
                 </div>
               </div>
 
-              <div className="shipment-details-map-placeholder">
-                <div className="shipment-map-grid"></div>
-
-                <div className="shipment-map-route"></div>
-
-                <div className="shipment-map-origin-point"></div>
-
-                <div className="shipment-map-truck">🚚</div>
-
-                <div className="shipment-map-destination-point"></div>
-
-                <div className="shipment-map-message">
-                  <span>OPERATOR MAP</span>
-
-                  <strong>Live route map will appear here</strong>
-
-                  <p>
-                    Current and destination coordinates are ready for
-                    OperatorMap integration.
-                  </p>
-                </div>
-              </div>
+              <RouteMap
+                trackingNumber={trackingNumber}
+                currentLatitude={latitude}
+                currentLongitude={longitude}
+                destinationLatitude={destinationLatitude}
+                destinationLongitude={destinationLongitude}
+                currentStatus={shipmentStatus}
+                estimatedDeliveryTime={estimatedArrival}
+                lastLocationUpdate={lastLocationUpdate}
+              />
 
               <div className="shipment-coordinate-grid">
                 <div>
@@ -764,9 +739,8 @@ function ShipmentDetailsPage() {
             <article className="shipment-details-panel">
               <div className="shipment-details-panel-header">
                 <div>
-                  <span>CONTACT INFORMATION</span>
-
-                  <h2>Sender details</h2>
+                  <span>SHIPMENT PARTY</span>
+                  <h2>Sender information</h2>
                 </div>
 
                 <div className="shipment-details-panel-icon">S</div>
@@ -779,27 +753,13 @@ function ShipmentDetailsPage() {
 
                 <div>
                   <span>Sender</span>
-
                   <h3>{senderName || "Not available"}</h3>
                 </div>
               </div>
 
               <div className="shipment-details-list">
                 <div>
-                  <span>Email address</span>
-
-                  <strong>{senderEmail || "Not available"}</strong>
-                </div>
-
-                <div>
-                  <span>Phone number</span>
-
-                  <strong>{senderPhone || "Not available"}</strong>
-                </div>
-
-                <div>
-                  <span>Pickup address</span>
-
+                  <span>Source address</span>
                   <strong>{pickupAddress || "Not available"}</strong>
                 </div>
               </div>
@@ -808,9 +768,8 @@ function ShipmentDetailsPage() {
             <article className="shipment-details-panel">
               <div className="shipment-details-panel-header">
                 <div>
-                  <span>CONTACT INFORMATION</span>
-
-                  <h2>Receiver details</h2>
+                  <span>SHIPMENT PARTY</span>
+                  <h2>Receiver information</h2>
                 </div>
 
                 <div className="shipment-details-panel-icon receiver-panel-icon">
@@ -825,27 +784,13 @@ function ShipmentDetailsPage() {
 
                 <div>
                   <span>Receiver</span>
-
                   <h3>{receiverName || "Not available"}</h3>
                 </div>
               </div>
 
               <div className="shipment-details-list">
                 <div>
-                  <span>Email address</span>
-
-                  <strong>{receiverEmail || "Not available"}</strong>
-                </div>
-
-                <div>
-                  <span>Phone number</span>
-
-                  <strong>{receiverPhone || "Not available"}</strong>
-                </div>
-
-                <div>
-                  <span>Delivery address</span>
-
+                  <span>Destination address</span>
                   <strong>{deliveryAddress || "Not available"}</strong>
                 </div>
               </div>
@@ -854,9 +799,8 @@ function ShipmentDetailsPage() {
             <article className="shipment-details-panel">
               <div className="shipment-details-panel-header">
                 <div>
-                  <span>PACKAGE RECORD</span>
-
-                  <h2>Shipment information</h2>
+                  <span>SHIPMENT RECORD</span>
+                  <h2>Available shipment information</h2>
                 </div>
 
                 <div className="shipment-details-panel-icon package-panel-icon">
@@ -867,51 +811,50 @@ function ShipmentDetailsPage() {
               <div className="shipment-details-list">
                 <div>
                   <span>Shipment ID</span>
-
                   <strong>
-                    {getValue(shipment.id, shipment.shipmentId) ||
-                      "Not available"}
+                    {getValue(shipment.id, shipment.shipmentId) || "Not available"}
                   </strong>
                 </div>
 
                 <div>
                   <span>Tracking number</span>
-
                   <strong>{trackingNumber}</strong>
                 </div>
 
                 <div>
-                  <span>Package weight</span>
-
-                  <strong>
-                    {packageWeight
-                      ? `${packageWeight}${
-                          String(packageWeight)
-                            .toLowerCase()
-                            .includes("kg")
-                            ? ""
-                            : " kg"
-                        }`
-                      : "Not available"}
-                  </strong>
-                </div>
-
-                <div>
-                  <span>Description</span>
-
-                  <strong>{packageDescription || "Not available"}</strong>
+                  <span>Status</span>
+                  <strong>{formatStatus(shipmentStatus)}</strong>
                 </div>
 
                 <div>
                   <span>Created at</span>
-
                   <strong>{formatDateTime(createdAt)}</strong>
                 </div>
 
                 <div>
-                  <span>Last updated</span>
+                  <span>Estimated delivery</span>
+                  <strong>{formatDateTime(estimatedArrival)}</strong>
+                </div>
 
-                  <strong>{formatDateTime(updatedAt)}</strong>
+                <div>
+                  <span>Predicted delay</span>
+                  <strong>
+                    {predictedDelayMinutes !== null
+                      ? `${predictedDelayMinutes} minutes`
+                      : "No delay recorded"}
+                  </strong>
+                </div>
+
+                {delayReason && (
+                  <div>
+                    <span>Delay reason</span>
+                    <strong>{delayReason}</strong>
+                  </div>
+                )}
+
+                <div>
+                  <span>Last location update</span>
+                  <strong>{formatDateTime(lastLocationUpdate)}</strong>
                 </div>
               </div>
             </article>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   MapContainer,
   Marker,
@@ -38,6 +38,17 @@ const destinationIcon = L.divIcon({
 });
 
 function isValidCoordinate(latitude, longitude) {
+  if (
+    latitude === null ||
+    latitude === undefined ||
+    latitude === "" ||
+    longitude === null ||
+    longitude === undefined ||
+    longitude === ""
+  ) {
+    return false;
+  }
+
   const lat = Number(latitude);
   const lng = Number(longitude);
 
@@ -53,7 +64,10 @@ function isValidCoordinate(latitude, longitude) {
 
 function formatCoordinate(value) {
   const number = Number(value);
-  return Number.isFinite(number) ? number.toFixed(6) : "Not available";
+
+  return Number.isFinite(number)
+    ? number.toFixed(6)
+    : "Not available";
 }
 
 function formatStatus(status) {
@@ -64,7 +78,10 @@ function formatStatus(status) {
   return status
     .toLowerCase()
     .split("_")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .map(
+      (word) =>
+        word.charAt(0).toUpperCase() + word.slice(1)
+    )
     .join(" ");
 }
 
@@ -92,16 +109,20 @@ function MapViewportController({ positions }) {
   const map = useMap();
 
   useEffect(() => {
-    if (positions.length === 0) {
+    if (!positions || positions.length === 0) {
       return;
     }
 
     if (positions.length === 1) {
-      map.setView(positions[0], 13, { animate: true });
+      map.setView(positions[0], 13, {
+        animate: true,
+      });
+
       return;
     }
 
     const bounds = L.latLngBounds(positions);
+
     map.fitBounds(bounds, {
       padding: [45, 45],
       maxZoom: 14,
@@ -110,6 +131,40 @@ function MapViewportController({ positions }) {
   }, [map, positions]);
 
   return null;
+}
+
+function convertRouteCoordinates(geometry) {
+  if (!geometry || !geometry.coordinates) {
+    return [];
+  }
+
+  /*
+   * Geoapify returns GeoJSON coordinates in this format:
+   * [longitude, latitude]
+   *
+   * React Leaflet requires:
+   * [latitude, longitude]
+   */
+
+  if (geometry.type === "LineString") {
+    return geometry.coordinates.map(
+      ([longitude, latitude]) => [
+        latitude,
+        longitude,
+      ]
+    );
+  }
+
+  if (geometry.type === "MultiLineString") {
+    return geometry.coordinates.flatMap((line) =>
+      line.map(([longitude, latitude]) => [
+        latitude,
+        longitude,
+      ])
+    );
+  }
+
+  return [];
 }
 
 function ShipmentMap({
@@ -122,6 +177,10 @@ function ShipmentMap({
   estimatedDeliveryTime,
   lastLocationUpdate,
 }) {
+  const [routePositions, setRoutePositions] = useState([]);
+  const [routeLoading, setRouteLoading] = useState(false);
+  const [routeError, setRouteError] = useState("");
+
   const hasCurrentLocation = isValidCoordinate(
     currentLatitude,
     currentLongitude
@@ -132,40 +191,178 @@ function ShipmentMap({
     destinationLongitude
   );
 
-  const currentPosition = hasCurrentLocation
-    ? [Number(currentLatitude), Number(currentLongitude)]
-    : null;
+  const currentPosition = useMemo(() => {
+    if (!hasCurrentLocation) {
+      return null;
+    }
 
-  const destinationPosition = hasDestinationLocation
-    ? [Number(destinationLatitude), Number(destinationLongitude)]
-    : null;
+    return [
+      Number(currentLatitude),
+      Number(currentLongitude),
+    ];
+  }, [
+    hasCurrentLocation,
+    currentLatitude,
+    currentLongitude,
+  ]);
 
-  const positions = useMemo(() => {
-    return [currentPosition, destinationPosition].filter(Boolean);
+  const destinationPosition = useMemo(() => {
+    if (!hasDestinationLocation) {
+      return null;
+    }
+
+    return [
+      Number(destinationLatitude),
+      Number(destinationLongitude),
+    ];
+  }, [
+    hasDestinationLocation,
+    destinationLatitude,
+    destinationLongitude,
+  ]);
+
+  const markerPositions = useMemo(() => {
+    return [
+      currentPosition,
+      destinationPosition,
+    ].filter(Boolean);
   }, [currentPosition, destinationPosition]);
 
-  const defaultCenter = positions[0] || [22.7196, 75.8577];
+  const viewportPositions = useMemo(() => {
+    if (routePositions.length > 0) {
+      return routePositions;
+    }
+
+    return markerPositions;
+  }, [routePositions, markerPositions]);
+
+  const defaultCenter =
+    markerPositions[0] || [22.7196, 75.8577];
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function fetchRoadRoute() {
+      if (!currentPosition || !destinationPosition) {
+        setRoutePositions([]);
+        setRouteError("");
+        return;
+      }
+
+      const apiKey =
+        import.meta.env.VITE_GEOAPIFY_API_KEY;
+
+      if (!apiKey) {
+        console.error(
+          "VITE_GEOAPIFY_API_KEY is missing from the .env file."
+        );
+
+        setRoutePositions([]);
+        setRouteError("Routing API key is missing.");
+        return;
+      }
+
+      try {
+        setRouteLoading(true);
+        setRouteError("");
+
+        const waypoints =
+          `${currentPosition[0]},${currentPosition[1]}|` +
+          `${destinationPosition[0]},${destinationPosition[1]}`;
+
+        const routeUrl =
+          "https://api.geoapify.com/v1/routing" +
+          `?waypoints=${encodeURIComponent(waypoints)}` +
+          "&mode=drive" +
+          `&apiKey=${encodeURIComponent(apiKey)}`;
+
+        const response = await fetch(routeUrl, {
+          method: "GET",
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            `Geoapify routing request failed with status ${response.status}.`
+          );
+        }
+
+        const data = await response.json();
+
+        const routeGeometry =
+          data.features?.[0]?.geometry;
+
+        const convertedRoute =
+          convertRouteCoordinates(routeGeometry);
+
+        if (convertedRoute.length === 0) {
+          throw new Error(
+            "No road route was returned for these locations."
+          );
+        }
+
+        setRoutePositions(convertedRoute);
+      } catch (error) {
+        if (error.name === "AbortError") {
+          return;
+        }
+
+        console.error(
+          "Unable to load the shipment road route:",
+          error
+        );
+
+        setRoutePositions([]);
+        setRouteError(
+          "The road route could not be loaded."
+        );
+      } finally {
+        if (!controller.signal.aborted) {
+          setRouteLoading(false);
+        }
+      }
+    }
+
+    fetchRoadRoute();
+
+    return () => {
+      controller.abort();
+    };
+  }, [
+    currentLatitude,
+    currentLongitude,
+    destinationLatitude,
+    destinationLongitude,
+  ]);
 
   if (!hasCurrentLocation && !hasDestinationLocation) {
     return (
       <div className="shipment-map-wrapper">
         <div className="shipment-map-header">
           <div>
-            <span className="shipment-map-label">Live Tracking Map</span>
+            <span className="shipment-map-label">
+              Live Tracking Map
+            </span>
+
             <h2>Shipment Route</h2>
+
             <p>
-              The map will appear after current or destination coordinates are
-              added to this shipment.
+              The map will appear after current or destination
+              coordinates are added to this shipment.
             </p>
           </div>
         </div>
 
         <div className="shipment-map-empty-state">
-          <div className="shipment-map-empty-icon">🗺️</div>
+          <div className="shipment-map-empty-icon">
+            🗺️
+          </div>
+
           <h3>Location coordinates are not available</h3>
+
           <p>
-            Ask the logistics operator to update the shipment latitude and
-            longitude.
+            Ask the logistics operator to update the shipment
+            latitude and longitude.
           </p>
         </div>
       </div>
@@ -176,23 +373,41 @@ function ShipmentMap({
     <div className="shipment-map-wrapper">
       <div className="shipment-map-header">
         <div>
-          <span className="shipment-map-label">Live Tracking Map</span>
+          <span className="shipment-map-label">
+            Live Tracking Map
+          </span>
+
           <h2>Shipment Route</h2>
+
           <p>
-            Track the current shipment position and its delivery destination on
-            OpenStreetMap.
+            Track the current shipment position and its delivery
+            destination on OpenStreetMap.
           </p>
+
+          {routeLoading && (
+            <small>Loading road route...</small>
+          )}
+
+          {routeError && (
+            <small>{routeError}</small>
+          )}
         </div>
 
         <div className="shipment-map-summary">
           <div>
             <span>Status</span>
-            <strong>{formatStatus(currentStatus)}</strong>
+
+            <strong>
+              {formatStatus(currentStatus)}
+            </strong>
           </div>
 
           <div>
             <span>Estimated Delivery</span>
-            <strong>{formatDate(estimatedDeliveryTime)}</strong>
+
+            <strong>
+              {formatDate(estimatedDeliveryTime)}
+            </strong>
           </div>
         </div>
       </div>
@@ -208,45 +423,99 @@ function ShipmentMap({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        <MapViewportController positions={positions} />
+        <MapViewportController
+          positions={viewportPositions}
+        />
 
         {currentPosition && (
-          <Marker position={currentPosition} icon={currentLocationIcon}>
+          <Marker
+            position={currentPosition}
+            icon={currentLocationIcon}
+          >
             <Popup>
               <div className="shipment-map-popup">
-                <strong>Current Shipment Location</strong>
-                <span>Tracking: {trackingNumber || "Not available"}</span>
-                <span>Status: {formatStatus(currentStatus)}</span>
-                <span>Latitude: {formatCoordinate(currentLatitude)}</span>
-                <span>Longitude: {formatCoordinate(currentLongitude)}</span>
-                <span>Updated: {formatDate(lastLocationUpdate)}</span>
+                <strong>
+                  Current Shipment Location
+                </strong>
+
+                <span>
+                  Tracking:{" "}
+                  {trackingNumber || "Not available"}
+                </span>
+
+                <span>
+                  Status: {formatStatus(currentStatus)}
+                </span>
+
+                <span>
+                  Latitude:{" "}
+                  {formatCoordinate(currentLatitude)}
+                </span>
+
+                <span>
+                  Longitude:{" "}
+                  {formatCoordinate(currentLongitude)}
+                </span>
+
+                <span>
+                  Updated:{" "}
+                  {formatDate(lastLocationUpdate)}
+                </span>
               </div>
             </Popup>
           </Marker>
         )}
 
         {destinationPosition && (
-          <Marker position={destinationPosition} icon={destinationIcon}>
+          <Marker
+            position={destinationPosition}
+            icon={destinationIcon}
+          >
             <Popup>
               <div className="shipment-map-popup">
-                <strong>Delivery Destination</strong>
-                <span>Tracking: {trackingNumber || "Not available"}</span>
+                <strong>
+                  Delivery Destination
+                </strong>
+
                 <span>
-                  Latitude: {formatCoordinate(destinationLatitude)}
+                  Tracking:{" "}
+                  {trackingNumber || "Not available"}
                 </span>
+
                 <span>
-                  Longitude: {formatCoordinate(destinationLongitude)}
+                  Latitude:{" "}
+                  {formatCoordinate(
+                    destinationLatitude
+                  )}
                 </span>
-                <span>ETA: {formatDate(estimatedDeliveryTime)}</span>
+
+                <span>
+                  Longitude:{" "}
+                  {formatCoordinate(
+                    destinationLongitude
+                  )}
+                </span>
+
+                <span>
+                  ETA:{" "}
+                  {formatDate(
+                    estimatedDeliveryTime
+                  )}
+                </span>
               </div>
             </Popup>
           </Marker>
         )}
 
-        {currentPosition && destinationPosition && (
+        {routePositions.length > 0 && (
           <Polyline
-            positions={[currentPosition, destinationPosition]}
-            pathOptions={{ weight: 4, opacity: 0.8, dashArray: "10 10" }}
+            positions={routePositions}
+            pathOptions={{
+              weight: 5,
+              opacity: 0.9,
+              lineCap: "round",
+              lineJoin: "round",
+            }}
           />
         )}
       </MapContainer>
@@ -254,11 +523,16 @@ function ShipmentMap({
       <div className="shipment-map-legend">
         {currentPosition && (
           <div>
-            <span className="shipment-map-legend-icon">🚚</span>
+            <span className="shipment-map-legend-icon">
+              🚚
+            </span>
+
             <div>
               <strong>Current Location</strong>
+
               <small>
-                {formatCoordinate(currentLatitude)}, {formatCoordinate(currentLongitude)}
+                {formatCoordinate(currentLatitude)},{" "}
+                {formatCoordinate(currentLongitude)}
               </small>
             </div>
           </div>
@@ -266,11 +540,16 @@ function ShipmentMap({
 
         {destinationPosition && (
           <div>
-            <span className="shipment-map-legend-icon">📦</span>
+            <span className="shipment-map-legend-icon">
+              📦
+            </span>
+
             <div>
               <strong>Destination</strong>
+
               <small>
-                {formatCoordinate(destinationLatitude)}, {formatCoordinate(destinationLongitude)}
+                {formatCoordinate(destinationLatitude)},{" "}
+                {formatCoordinate(destinationLongitude)}
               </small>
             </div>
           </div>

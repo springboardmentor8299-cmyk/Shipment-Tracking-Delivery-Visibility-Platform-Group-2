@@ -1,6 +1,7 @@
 package com.shiptrack.shipment.dto;
 
 import com.shiptrack.shipment.ShipmentStatus;
+
 import java.time.LocalDateTime;
 
 public class ShipmentResponse {
@@ -14,6 +15,8 @@ public class ShipmentResponse {
     private ShipmentStatus status;
     private LocalDateTime createdAt;
 
+    private Double sourceLatitude;
+    private Double sourceLongitude;
     private Double currentLatitude;
     private Double currentLongitude;
     private Double destinationLatitude;
@@ -89,6 +92,22 @@ public class ShipmentResponse {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Double getSourceLatitude() {
+        return sourceLatitude;
+    }
+
+    public void setSourceLatitude(Double sourceLatitude) {
+        this.sourceLatitude = sourceLatitude;
+    }
+
+    public Double getSourceLongitude() {
+        return sourceLongitude;
+    }
+
+    public void setSourceLongitude(Double sourceLongitude) {
+        this.sourceLongitude = sourceLongitude;
     }
 
     public Double getCurrentLatitude() {

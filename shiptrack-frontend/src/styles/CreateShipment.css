@@ -132,7 +132,7 @@ a {
 
 .create-shipment-brand small {
   color: #64748b;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
@@ -149,7 +149,7 @@ a {
   border-radius: 11px;
   color: #cbd5e1;
   background: rgba(255, 255, 255, 0.05);
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 700;
   text-decoration: none;
   transition:
@@ -200,7 +200,7 @@ a {
   border-radius: 999px;
   color: #93c5fd;
   background: rgba(37, 99, 235, 0.11);
-  font-size: 9.5px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.25px;
 }
@@ -261,13 +261,13 @@ a {
 
 .create-shipment-secure strong {
   color: #bbf7d0;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .create-shipment-secure small {
   margin-top: 4px;
   color: #6b9a79;
-  font-size: 8px;
+  font-size: 12px;
 }
 
 .create-shipment-layout {
@@ -306,7 +306,7 @@ a {
 
 .create-shipment-section-label {
   color: #60a5fa;
-  font-size: 8.5px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.25px;
 }
@@ -321,7 +321,7 @@ a {
 .create-shipment-card-header p {
   margin: 8px 0 0;
   color: #64748b;
-  font-size: 9.5px;
+  font-size: 12px;
   line-height: 1.55;
 }
 
@@ -379,13 +379,13 @@ a {
 
 .create-shipment-message strong {
   color: #f8fafc;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .create-shipment-message p {
   margin: 5px 0 0;
   color: #cbd5e1;
-  font-size: 9.5px;
+  font-size: 12px;
   line-height: 1.55;
 }
 
@@ -405,7 +405,7 @@ a {
 
 .create-shipment-tracking-result span {
   color: #64748b;
-  font-size: 7.5px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.7px;
@@ -414,7 +414,7 @@ a {
 .create-shipment-tracking-result strong {
   margin-top: 4px;
   color: #93c5fd;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.3px;
 }
 
@@ -439,7 +439,7 @@ a {
   border-radius: 12px;
   color: #93c5fd;
   background: rgba(59, 130, 246, 0.1);
-  font-size: 9.5px;
+  font-size: 12px;
   font-weight: 800;
 }
 
@@ -452,7 +452,7 @@ a {
 .create-shipment-form-section-heading p {
   margin: 5px 0 0;
   color: #64748b;
-  font-size: 8.5px;
+  font-size: 12px;
 }
 
 .create-shipment-form-grid {
@@ -465,7 +465,7 @@ a {
   display: block;
   margin-bottom: 9px;
   color: #cbd5e1;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -505,7 +505,7 @@ a {
   border-radius: 12px;
   color: #f8fafc;
   background: #111827;
-  font-size: 10.5px;
+  font-size: 12px;
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
@@ -526,7 +526,7 @@ a {
   display: block;
   margin-top: 7px;
   color: #475569;
-  font-size: 8px;
+  font-size: 12px;
 }
 
 .create-shipment-divider {
@@ -547,7 +547,7 @@ a {
 
 .create-shipment-required-note {
   color: #64748b;
-  font-size: 8.5px;
+  font-size: 12px;
 }
 
 .create-shipment-submit-button {
@@ -563,7 +563,7 @@ a {
   color: #ffffff;
   background: linear-gradient(135deg, #2563eb, #4f46e5);
   box-shadow: 0 14px 30px rgba(37, 99, 235, 0.28);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   cursor: pointer;
   transition:
@@ -624,7 +624,7 @@ a {
 
 .create-shipment-route-header span {
   color: #60a5fa;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.1px;
 }
@@ -715,7 +715,7 @@ a {
 
 .create-shipment-route-location small {
   color: #64748b;
-  font-size: 7.5px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.7px;
@@ -726,7 +726,7 @@ a {
   margin-top: 5px;
   overflow: hidden;
   color: #e2e8f0;
-  font-size: 10px;
+  font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -781,20 +781,20 @@ a {
   border-radius: 9px;
   color: #93c5fd;
   background: rgba(59, 130, 246, 0.1);
-  font-size: 8.5px;
+  font-size: 12px;
   font-weight: 800;
 }
 
 .create-shipment-process-item strong {
   display: block;
   color: #cbd5e1;
-  font-size: 9.5px;
+  font-size: 12px;
 }
 
 .create-shipment-process-item p {
   margin: 5px 0 0;
   color: #64748b;
-  font-size: 8px;
+  font-size: 12px;
   line-height: 1.55;
 }
 
@@ -821,14 +821,14 @@ a {
 
 .create-shipment-support-card span {
   color: #e2e8f0;
-  font-size: 9.5px;
+  font-size: 12px;
   font-weight: 700;
 }
 
 .create-shipment-support-card p {
   margin: 6px 0 0;
   color: #64748b;
-  font-size: 8px;
+  font-size: 12px;
   line-height: 1.55;
 }
 

@@ -557,6 +557,19 @@ function OperatorShipmentsPage() {
                           Update Shipment
                           <span>→</span>
                         </button>
+
+                        {String(shipmentStatus).toUpperCase() ===
+                          "OUT_FOR_DELIVERY" && (
+                          <Link
+                            to={`/operator/shipments/${getTrackingNumber(
+                              shipment
+                            )}/proof-of-delivery`}
+                            className="operator-pod-button"
+                          >
+                            <span>✍</span>
+                            Proof of Delivery
+                          </Link>
+                        )}
                       </div>
                     </article>
                   );

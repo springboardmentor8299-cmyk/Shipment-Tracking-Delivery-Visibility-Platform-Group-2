@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./UpdateShipmentPage.css";
+import OperatorMap from "../../components/maps/OperatorMap";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
@@ -66,6 +67,8 @@ function UpdateShipmentPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
+
+  const [isResolvingLocation, setIsResolvingLocation] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -133,7 +136,8 @@ function UpdateShipmentPage() {
 
       const token = getStoredToken();
 
-      const response = await fetch(`${API_BASE_URL}/api/shipments/${id}`, {
+      const response = await fetch(
+  `${API_BASE_URL}/api/shipments/id/${id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -351,7 +355,40 @@ function UpdateShipmentPage() {
     shipment?.receiver?.fullName
   );
 
+  const sourceLatitude = getValue(
+    shipment?.sourceLatitude,
+    shipment?.sourceLat,
+    shipment?.pickupLatitude,
+    shipment?.pickupLat,
+    shipment?.senderLatitude,
+    shipment?.originLatitude,
+    shipment?.originLat
+  );
+
+  const sourceLongitude = getValue(
+    shipment?.sourceLongitude,
+    shipment?.sourceLng,
+    shipment?.pickupLongitude,
+    shipment?.pickupLng,
+    shipment?.senderLongitude,
+    shipment?.originLongitude,
+    shipment?.originLng
+  );
+
+  const destinationLatitude = getValue(
+    shipment?.destinationLatitude,
+    shipment?.deliveryLatitude,
+    shipment?.receiverLatitude
+  );
+
+  const destinationLongitude = getValue(
+    shipment?.destinationLongitude,
+    shipment?.deliveryLongitude,
+    shipment?.receiverLongitude
+  );
+
   const pickupAddress = getValue(
+    shipment?.source,
     shipment?.pickupAddress,
     shipment?.senderAddress,
     shipment?.originAddress,
@@ -359,6 +396,7 @@ function UpdateShipmentPage() {
   );
 
   const deliveryAddress = getValue(
+    shipment?.destination,
     shipment?.deliveryAddress,
     shipment?.delivery_address,
     shipment?.destinationAddress,
@@ -565,99 +603,107 @@ function UpdateShipmentPage() {
   };
 
   const buildUpdatePayload = () => {
-    return {
-      status: formData.status,
-      currentLocation: formData.currentLocation.trim() || null,
-      latitude:
-        formData.latitude !== ""
-          ? Number(formData.latitude)
-          : null,
-      longitude:
-        formData.longitude !== ""
-          ? Number(formData.longitude)
-          : null,
-      estimatedArrival: formData.estimatedArrival
-        ? new Date(formData.estimatedArrival).toISOString()
+  return {
+    status: formData.status,
+
+    location: formData.currentLocation.trim() || null,
+
+    latitude:
+      formData.latitude !== ""
+        ? Number(formData.latitude)
         : null,
-      delayMinutes:
-        formData.delayMinutes !== ""
-          ? Number(formData.delayMinutes)
-          : null,
-      delayReason:
-        formData.status === "DELAYED"
-          ? formData.delayReason.trim() || null
-          : formData.delayReason.trim() || null,
-      failedDeliveryReason:
-        formData.status === "FAILED_DELIVERY"
-          ? formData.failedDeliveryReason.trim()
-          : null,
-      deliveryNotes: formData.deliveryNotes.trim() || null,
-      notifyCustomer: formData.notifyCustomer,
-    };
+
+    longitude:
+      formData.longitude !== ""
+        ? Number(formData.longitude)
+        : null,
+
+    estimatedDeliveryTime: formData.estimatedArrival
+      ? new Date(formData.estimatedArrival).toISOString()
+      : null,
+
+    delayReason:
+      formData.delayReason.trim() || null,
   };
+};
 
-  const submitUpdateRequest = async (payload) => {
-    const token = getStoredToken();
+ const submitUpdateRequest = async (payload) => {
+  const token = getStoredToken();
 
-    const possibleRequests = [
-      {
-        endpoint: `${API_BASE_URL}/api/shipments/${id}/operator-update`,
-        method: "PUT",
+  const response = await fetch(
+    `${API_BASE_URL}/api/shipments/${shipment.trackingNumber}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
-      {
-        endpoint: `${API_BASE_URL}/api/shipments/${id}/status`,
-        method: "PUT",
-      },
-      {
-        endpoint: `${API_BASE_URL}/api/shipments/${id}`,
-        method: "PUT",
-      },
-    ];
-
-    let lastErrorMessage = "Unable to update shipment.";
-
-    for (const request of possibleRequests) {
-      const response = await fetch(request.endpoint, {
-        method: request.method,
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.status === 401 || response.status === 403) {
-        throw new Error(
-          "Your login session has expired or you do not have permission to update this shipment."
-        );
-      }
-
-      if (response.ok) {
-        const contentType = response.headers.get("content-type");
-
-        if (contentType?.includes("application/json")) {
-          return response.json();
-        }
-
-        return null;
-      }
-
-      if (response.status !== 404 && response.status !== 405) {
-        try {
-          const errorData = await response.json();
-
-          lastErrorMessage =
-            errorData.message ||
-            errorData.error ||
-            "Unable to update shipment.";
-        } catch {
-          lastErrorMessage = "Unable to update shipment.";
-        }
-      }
+      body: JSON.stringify(payload),
     }
+  );
 
-    throw new Error(lastErrorMessage);
-  };
+  if (response.status === 401 || response.status === 403) {
+    throw new Error(
+      "Your login session has expired or you do not have permission to update this shipment."
+    );
+  }
+
+  if (!response.ok) {
+    let errorMessage = "Unable to update shipment.";
+
+    try {
+      const errorData = await response.json();
+      errorMessage =
+        errorData.message ||
+        errorData.error ||
+        errorMessage;
+    } catch {}
+
+    throw new Error(errorMessage);
+  }
+
+  return response.json();
+};
+
+const getLocationNameFromCoordinates = async (
+  latitude,
+  longitude
+) => {
+  const apiKey = import.meta.env.VITE_GEOAPIFY_API_KEY;
+
+  if (!apiKey) {
+    throw new Error(
+      "Geoapify API key is missing. Add VITE_GEOAPIFY_API_KEY to the .env file."
+    );
+  }
+
+  const response = await fetch(
+    "https://api.geoapify.com/v1/geocode/reverse" +
+      `?lat=${encodeURIComponent(latitude)}` +
+      `&lon=${encodeURIComponent(longitude)}` +
+      "&format=json" +
+      `&apiKey=${encodeURIComponent(apiKey)}`
+  );
+
+  if (!response.ok) {
+    throw new Error("Unable to identify the selected location.");
+  }
+
+  const data = await response.json();
+  const result = data.results?.[0];
+
+  if (!result) {
+    return `Latitude ${latitude}, Longitude ${longitude}`;
+  }
+
+  return (
+    result.formatted ||
+    result.address_line1 ||
+    result.city ||
+    result.state ||
+    `Latitude ${latitude}, Longitude ${longitude}`
+  );
+};
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -1043,14 +1089,19 @@ function UpdateShipmentPage() {
                   <span>📍</span>
 
                   <input
-                    id="currentLocation"
-                    name="currentLocation"
-                    type="text"
-                    value={formData.currentLocation}
-                    onChange={handleInputChange}
-                    placeholder="Example: Bhopal Distribution Center"
-                    autoComplete="off"
-                  />
+  id="currentLocation"
+  name="currentLocation"
+  type="text"
+  value={formData.currentLocation}
+  onChange={handleInputChange}
+  placeholder={
+    isResolvingLocation
+      ? "Finding selected location..."
+      : "Example: Bhopal Distribution Center"
+  }
+  disabled={isResolvingLocation}
+  autoComplete="off"
+/>
                 </div>
 
                 <small>
@@ -1129,6 +1180,66 @@ function UpdateShipmentPage() {
                   </div>
                 </div>
               </div>
+
+              <OperatorMap
+                sourceLatitude={sourceLatitude}
+                sourceLongitude={sourceLongitude}
+                currentLatitude={formData.latitude}
+                currentLongitude={formData.longitude}
+                destinationLatitude={destinationLatitude}
+                destinationLongitude={destinationLongitude}
+               onLocationSelect={async ({ latitude, longitude }) => {
+  const formattedLatitude = Number(latitude).toFixed(6);
+  const formattedLongitude = Number(longitude).toFixed(6);
+
+  setFormData((previousData) => ({
+    ...previousData,
+    latitude: formattedLatitude,
+    longitude: formattedLongitude,
+    currentLocation: "Finding location...",
+  }));
+
+  setValidationErrors((previousErrors) => ({
+    ...previousErrors,
+    latitude: "",
+    longitude: "",
+    currentLocation: "",
+  }));
+
+  setSuccessMessage("");
+  setErrorMessage("");
+  setIsResolvingLocation(true);
+
+  try {
+    const locationName =
+      await getLocationNameFromCoordinates(
+        formattedLatitude,
+        formattedLongitude
+      );
+
+    setFormData((previousData) => ({
+      ...previousData,
+      currentLocation: locationName,
+    }));
+  } catch (error) {
+    console.error("Reverse geocoding failed:", error);
+
+    setFormData((previousData) => ({
+      ...previousData,
+      currentLocation:
+        `Latitude ${formattedLatitude}, ` +
+        `Longitude ${formattedLongitude}`,
+    }));
+
+    setErrorMessage(
+      error.message ||
+        "Coordinates were selected, but the location name could not be loaded."
+    );
+  } finally {
+    setIsResolvingLocation(false);
+  }
+}}
+              />
             </article>
 
             <article className="update-shipment-panel">
@@ -1346,22 +1457,27 @@ function UpdateShipmentPage() {
               </button>
 
               <button
-                type="submit"
-                className="update-submit-button"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  <>
-                    <span className="update-button-spinner"></span>
-                    Updating Shipment
-                  </>
-                ) : (
-                  <>
-                    Save Shipment Update
-                    <span>→</span>
-                  </>
-                )}
-              </button>
+  type="submit"
+  className="update-submit-button"
+  disabled={isSubmitting || isResolvingLocation}
+>
+  {isResolvingLocation ? (
+    <>
+      <span className="update-button-spinner"></span>
+      Finding Location
+    </>
+  ) : isSubmitting ? (
+    <>
+      <span className="update-button-spinner"></span>
+      Updating Shipment
+    </>
+  ) : (
+    <>
+      Save Shipment Update
+      <span>→</span>
+    </>
+  )}
+</button>
             </div>
           </form>
 

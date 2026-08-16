@@ -1,15 +1,138 @@
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "./OperatorDashboard.css";
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
 function OperatorDashboard() {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
+  const [shipments, setShipments] = useState([]);
+  const [isLoadingStats, setIsLoadingStats] = useState(true);
+  const [statsError, setStatsError] = useState("");
+
+  const getStoredToken = () =>
+    localStorage.getItem("token") ||
+    localStorage.getItem("jwtToken") ||
+    sessionStorage.getItem("token") ||
+    sessionStorage.getItem("jwtToken");
+
+  useEffect(() => {
+    const fetchShipments = async () => {
+      try {
+        setIsLoadingStats(true);
+        setStatsError("");
+
+        const token = getStoredToken();
+
+        const response = await fetch(
+          `${API_BASE_URL}/api/shipments`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              ...(token
+                ? { Authorization: `Bearer ${token}` }
+                : {}),
+            },
+          }
+        );
+
+        if (response.status === 401 || response.status === 403) {
+          throw new Error(
+            "Your session has expired or you do not have permission to view shipment statistics."
+          );
+        }
+
+        if (!response.ok) {
+          throw new Error("Unable to load shipment statistics.");
+        }
+
+        const responseData = await response.json();
+
+        const shipmentList = Array.isArray(responseData)
+          ? responseData
+          : responseData.content ||
+            responseData.shipments ||
+            responseData.data ||
+            [];
+
+        setShipments(shipmentList);
+      } catch (error) {
+        console.error("Unable to load operator dashboard:", error);
+        setStatsError(
+          error.message ||
+            "Something went wrong while loading shipment statistics."
+        );
+        setShipments([]);
+      } finally {
+        setIsLoadingStats(false);
+      }
+    };
+
+    fetchShipments();
+  }, []);
+
+  const statistics = useMemo(() => {
+    const normalizedShipments = shipments.map((shipment) => ({
+      ...shipment,
+      normalizedStatus: String(
+        shipment.status || shipment.shipmentStatus || ""
+      ).toUpperCase(),
+    }));
+
+    const deliveredToday = normalizedShipments.filter((shipment) => {
+      if (shipment.normalizedStatus !== "DELIVERED") {
+        return false;
+      }
+
+      const deliveredValue =
+        shipment.deliveredAt ||
+        shipment.deliveryTime ||
+        shipment.lastLocationUpdate ||
+        shipment.updatedAt ||
+        shipment.createdAt;
+
+      if (!deliveredValue) {
+        return false;
+      }
+
+      const deliveredDate = new Date(deliveredValue);
+      const today = new Date();
+
+      return (
+        deliveredDate.getFullYear() === today.getFullYear() &&
+        deliveredDate.getMonth() === today.getMonth() &&
+        deliveredDate.getDate() === today.getDate()
+      );
+    }).length;
+
+    return {
+      total: normalizedShipments.length,
+      inTransit: normalizedShipments.filter(
+        (shipment) => shipment.normalizedStatus === "IN_TRANSIT"
+      ).length,
+      outForDelivery: normalizedShipments.filter(
+        (shipment) =>
+          shipment.normalizedStatus === "OUT_FOR_DELIVERY"
+      ).length,
+      delivered: normalizedShipments.filter(
+        (shipment) => shipment.normalizedStatus === "DELIVERED"
+      ).length,
+      deliveredToday,
+    };
+  }, [shipments]);
+
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
+
+  const getStatValue = (value) =>
+    isLoadingStats ? "—" : value;
 
   return (
     <div className="operator-dashboard-page">
@@ -49,9 +172,9 @@ function OperatorDashboard() {
             <h1>Operator Dashboard</h1>
 
             <p>
-              Manage assigned shipments, update delivery locations, monitor
-              estimated arrival times and keep customers informed throughout
-              the complete delivery journey.
+              Manage assigned shipments, update delivery locations,
+              monitor estimated arrival times and keep customers
+              informed throughout the complete delivery journey.
             </p>
 
             <div className="operator-hero-actions">
@@ -64,7 +187,7 @@ function OperatorDashboard() {
               </Link>
 
               <Link
-                to="/operator/shipments"
+                to="/operator/shipments?view=progress"
                 className="operator-secondary-button"
               >
                 View Delivery Progress
@@ -88,7 +211,6 @@ function OperatorDashboard() {
 
               <div className="operator-control-body">
                 <div className="operator-map-grid"></div>
-
                 <div className="operator-fleet-route route-one"></div>
                 <div className="operator-fleet-route route-two"></div>
 
@@ -142,62 +264,100 @@ function OperatorDashboard() {
           </div>
         </section>
 
+        {statsError && (
+          <div className="operator-dashboard-error" role="alert">
+            {statsError}
+          </div>
+        )}
+
         <section className="operator-statistics-section">
           <div className="operator-statistics-grid">
-            <article className="operator-stat-card">
+            <Link
+              to="/operator/shipments"
+              className="operator-stat-card"
+            >
               <div className="operator-stat-card-top">
                 <div className="operator-stat-icon stat-blue">📦</div>
-                <span className="operator-stat-trend">Active</span>
+                <span className="operator-stat-trend">All</span>
               </div>
 
-              <span className="operator-stat-label">Assigned Shipments</span>
-              <strong>24</strong>
-              <p>Total shipments currently assigned for processing.</p>
-            </article>
+              <span className="operator-stat-label">
+                Assigned Shipments
+              </span>
+              <strong>{getStatValue(statistics.total)}</strong>
+              <p>Total shipments currently available for processing.</p>
+            </Link>
 
-            <article className="operator-stat-card">
+            <Link
+              to="/operator/shipments?status=IN_TRANSIT"
+              className="operator-stat-card"
+            >
               <div className="operator-stat-card-top">
                 <div className="operator-stat-icon stat-purple">↗</div>
                 <span className="operator-stat-trend">Moving</span>
               </div>
 
               <span className="operator-stat-label">In Transit</span>
-              <strong>15</strong>
-              <p>Shipments currently moving between delivery locations.</p>
-            </article>
+              <strong>{getStatValue(statistics.inTransit)}</strong>
+              <p>
+                Shipments currently moving between delivery locations.
+              </p>
+            </Link>
 
-            <article className="operator-stat-card">
+            <Link
+              to="/operator/shipments?status=OUT_FOR_DELIVERY"
+              className="operator-stat-card"
+            >
               <div className="operator-stat-card-top">
                 <div className="operator-stat-icon stat-orange">⌖</div>
                 <span className="operator-stat-trend">Priority</span>
               </div>
 
-              <span className="operator-stat-label">Out For Delivery</span>
-              <strong>6</strong>
-              <p>Shipments scheduled for final delivery today.</p>
-            </article>
+              <span className="operator-stat-label">
+                Out For Delivery
+              </span>
+              <strong>
+                {getStatValue(statistics.outForDelivery)}
+              </strong>
+              <p>Shipments currently scheduled for final delivery.</p>
+            </Link>
 
-            <article className="operator-stat-card">
+            <Link
+              to="/operator/shipments?status=DELIVERED"
+              className="operator-stat-card"
+            >
               <div className="operator-stat-card-top">
                 <div className="operator-stat-icon stat-green">✓</div>
                 <span className="operator-stat-trend">Completed</span>
               </div>
 
-              <span className="operator-stat-label">Delivered Today</span>
-              <strong>3</strong>
-              <p>Shipments successfully delivered during the current day.</p>
-            </article>
+              <span className="operator-stat-label">
+                Delivered Today
+              </span>
+              <strong>
+                {getStatValue(
+                  statistics.deliveredToday ||
+                    statistics.delivered
+                )}
+              </strong>
+              <p>
+                Shipments successfully delivered during the current
+                day.
+              </p>
+            </Link>
           </div>
         </section>
 
         <section className="operator-dashboard-section">
           <div className="operator-section-header">
             <div>
-              <span className="operator-section-label">QUICK ACTIONS</span>
+              <span className="operator-section-label">
+                QUICK ACTIONS
+              </span>
               <h2>Manage delivery operations</h2>
               <p>
-                Access shipment management, location updates and delivery
-                monitoring tools from one workspace.
+                Access shipment management, location updates and
+                delivery monitoring tools from one workspace.
               </p>
             </div>
 
@@ -221,12 +381,10 @@ function OperatorDashboard() {
                 <span className="operator-card-label">
                   ASSIGNED DELIVERIES
                 </span>
-
                 <h3>Manage Shipments</h3>
-
                 <p>
-                  View assigned shipments, delivery addresses, tracking
-                  numbers and current shipment statuses.
+                  View assigned shipments, delivery addresses,
+                  tracking numbers and current shipment statuses.
                 </p>
               </div>
 
@@ -237,7 +395,7 @@ function OperatorDashboard() {
             </Link>
 
             <Link
-              to="/operator/shipments"
+              to="/operator/shipments?view=update"
               className="operator-dashboard-card operator-location-card"
             >
               <div className="operator-card-top">
@@ -246,24 +404,24 @@ function OperatorDashboard() {
               </div>
 
               <div className="operator-card-content">
-                <span className="operator-card-label">LIVE LOCATION</span>
-
+                <span className="operator-card-label">
+                  LIVE LOCATION
+                </span>
                 <h3>Update Shipment</h3>
-
                 <p>
-                  Update shipment coordinates, delivery status and latest
-                  location information during transit.
+                  Select a shipment and update its coordinates,
+                  delivery status and latest location information.
                 </p>
               </div>
 
               <div className="operator-card-footer">
-                <span>Update location</span>
+                <span>Select shipment to update</span>
                 <strong>→</strong>
               </div>
             </Link>
 
             <Link
-              to="/operator/shipments"
+              to="/operator/shipments?view=eta"
               className="operator-dashboard-card operator-eta-card"
             >
               <div className="operator-card-top">
@@ -275,23 +433,21 @@ function OperatorDashboard() {
                 <span className="operator-card-label">
                   DELIVERY ESTIMATION
                 </span>
-
                 <h3>ETA Monitoring</h3>
-
                 <p>
-                  Monitor estimated arrival times, expected delivery schedules
-                  and predicted shipment delays.
+                  View estimated arrival times, expected delivery
+                  schedules and predicted shipment delays.
                 </p>
               </div>
 
               <div className="operator-card-footer">
-                <span>Monitor ETA</span>
+                <span>Monitor shipment ETA</span>
                 <strong>→</strong>
               </div>
             </Link>
 
             <Link
-              to="/operator/shipments"
+              to="/operator/shipments?view=progress"
               className="operator-dashboard-card operator-progress-card"
             >
               <div className="operator-card-top">
@@ -303,17 +459,15 @@ function OperatorDashboard() {
                 <span className="operator-card-label">
                   DELIVERY WORKFLOW
                 </span>
-
                 <h3>Delivery Progress</h3>
-
                 <p>
-                  Track shipment movement from pickup and transit through final
-                  delivery completion.
+                  Track shipment movement from pickup and transit
+                  through final delivery completion.
                 </p>
               </div>
 
               <div className="operator-card-footer">
-                <span>Track progress</span>
+                <span>Track delivery progress</span>
                 <strong>→</strong>
               </div>
             </Link>
@@ -323,39 +477,36 @@ function OperatorDashboard() {
         <section className="operator-dashboard-info-grid">
           <article className="operator-info-card">
             <div className="operator-info-icon">📍</div>
-
             <div>
               <span>LIVE GPS UPDATES</span>
               <h3>Keep shipment locations current</h3>
               <p>
-                Update shipment coordinates during transit so customers can
-                view accurate delivery progress.
+                Update shipment coordinates during transit so
+                customers can view accurate delivery progress.
               </p>
             </div>
           </article>
 
           <article className="operator-info-card">
             <div className="operator-info-icon">⚡</div>
-
             <div>
               <span>FAST DELIVERY WORKFLOW</span>
               <h3>Complete updates efficiently</h3>
               <p>
-                Quickly manage shipment status, delivery location and ETA
-                information from one place.
+                Quickly manage shipment status, delivery location and
+                ETA information from one place.
               </p>
             </div>
           </article>
 
           <article className="operator-info-card">
             <div className="operator-info-icon">🔒</div>
-
             <div>
               <span>SECURE OPERATIONS</span>
               <h3>Protected operator workspace</h3>
               <p>
-                Role-based authentication ensures that shipment operations
-                remain secure and authorized.
+                Role-based authentication ensures that shipment
+                operations remain secure and authorized.
               </p>
             </div>
           </article>

@@ -16,4 +16,9 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
     List<Shipment> findByCustomerAndStatus(User customer, ShipmentStatus status);
 
     boolean existsByTrackingNumber(String trackingNumber);
+
+    long countByPredictedDelayMinutesGreaterThan(Integer minutes);
+
+
 }
+

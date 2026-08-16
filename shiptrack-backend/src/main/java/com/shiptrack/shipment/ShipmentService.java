@@ -9,6 +9,7 @@ import com.shiptrack.tracking.TrackingService;
 import com.shiptrack.user.User;
 import com.shiptrack.user.UserService;
 import org.springframework.stereotype.Service;
+import com.shiptrack.shipment.dto.ShipmentUpdateRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -47,6 +48,9 @@ public class ShipmentService {
         shipment.setSource(request.getSource());
         shipment.setDestination(request.getDestination());
 
+        shipment.setSourceLatitude(request.getSourceLatitude());
+        shipment.setSourceLongitude(request.getSourceLongitude());
+
         shipment.setCurrentLatitude(request.getSourceLatitude());
         shipment.setCurrentLongitude(request.getSourceLongitude());
 
@@ -80,6 +84,16 @@ public class ShipmentService {
                 .stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
+    }
+
+    public ShipmentResponse getShipmentById(Long id) {
+
+        Shipment shipment = shipmentRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Shipment not found")
+                );
+
+        return mapToResponse(shipment);
     }
 
     public List<ShipmentResponse> getMyShipments() {
@@ -189,6 +203,94 @@ public class ShipmentService {
         return mapToResponse(updatedShipment);
     }
 
+    public ShipmentResponse updateShipment(
+            String trackingNumber,
+            ShipmentUpdateRequest request
+    ) {
+
+        Shipment shipment = shipmentRepository
+                .findByTrackingNumber(trackingNumber)
+                .orElseThrow(() ->
+                        new RuntimeException("Shipment not found")
+                );
+
+        if (request.getStatus() != null) {
+            shipment.setStatus(request.getStatus());
+        }
+
+        if (request.getLatitude() != null) {
+            shipment.setCurrentLatitude(request.getLatitude());
+        }
+
+        if (request.getLongitude() != null) {
+            shipment.setCurrentLongitude(request.getLongitude());
+        }
+
+        if (request.getEstimatedDeliveryTime() != null) {
+            shipment.setEstimatedDeliveryTime(
+                    request.getEstimatedDeliveryTime()
+            );
+        }
+
+        if (request.getDelayReason() != null
+                && !request.getDelayReason().isBlank()) {
+
+            shipment.setDelayReason(
+                    request.getDelayReason().trim()
+            );
+        }
+
+        boolean locationUpdated =
+                request.getLatitude() != null
+                        || request.getLongitude() != null;
+
+        if (locationUpdated) {
+            shipment.setLastLocationUpdate(LocalDateTime.now());
+        }
+
+        /*
+         * Automatically calculate ETA only when the frontend
+         * has not manually supplied an estimated delivery time.
+         */
+        if (locationUpdated
+                && request.getEstimatedDeliveryTime() == null) {
+
+            EtaResponse etaResponse =
+                    etaService.calculateEta(shipment);
+
+            shipment.setEstimatedDeliveryTime(
+                    etaResponse.getEstimatedDeliveryTime()
+            );
+
+            shipment.setPredictedDelayMinutes(
+                    etaResponse.getPredictedDelayMinutes()
+            );
+
+            /*
+             * Use automatically calculated delay reason only when
+             * the operator has not supplied one.
+             */
+            if (request.getDelayReason() == null
+                    || request.getDelayReason().isBlank()) {
+
+                shipment.setDelayReason(
+                        etaResponse.getDelayReason()
+                );
+            }
+        }
+
+        Shipment updatedShipment =
+                shipmentRepository.save(shipment);
+
+        trackingService.addTrackingEvent(
+                updatedShipment,
+                updatedShipment.getStatus(),
+                request.getLocation()
+        );
+
+        return mapToResponse(updatedShipment);
+    }
+
     private String generateTrackingNumber() {
 
         String trackingNumber;
@@ -239,6 +341,13 @@ public class ShipmentService {
                 shipment.getCreatedAt()
         );
 
+        response.setSourceLatitude(
+                shipment.getSourceLatitude()
+        );
+        response.setSourceLongitude(
+                shipment.getSourceLongitude()
+        );
+
         response.setCurrentLatitude(
                 shipment.getCurrentLatitude()
         );
@@ -275,4 +384,5 @@ public class ShipmentService {
                         new RuntimeException("Shipment not found")
                 );
     }
+
 }

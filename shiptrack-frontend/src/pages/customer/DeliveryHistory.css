@@ -128,7 +128,7 @@ a {
 
 .delivery-history-brand small {
   color: #64748b;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
@@ -152,7 +152,7 @@ a {
   border-radius: 11px;
   color: #cbd5e1;
   background: rgba(255, 255, 255, 0.045);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 750;
   text-decoration: none;
   transition: 0.2s ease;
@@ -197,7 +197,7 @@ a {
   border-radius: 999px;
   color: #6ee7b7;
   background: rgba(16, 185, 129, 0.09);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.2px;
 }
@@ -226,7 +226,7 @@ a {
   max-width: 720px;
   margin: 17px 0 0;
   color: #94a3b8;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.75;
 }
 
@@ -241,7 +241,7 @@ a {
   border-radius: 11px;
   color: #a7f3d0;
   background: rgba(16, 185, 129, 0.09);
-  font-size: 9.5px;
+  font-size: 12px;
   font-weight: 750;
   cursor: pointer;
   transition: 0.2s ease;
@@ -331,7 +331,7 @@ a {
 .delivery-stat-icon.success {
   color: #a5f3fc;
   background: rgba(6, 182, 212, 0.13);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .delivery-history-stat-card span,
@@ -342,7 +342,7 @@ a {
 
 .delivery-history-stat-card span {
   color: #94a3b8;
-  font-size: 8.5px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.75px;
   text-transform: uppercase;
@@ -358,7 +358,7 @@ a {
 .delivery-history-stat-card small {
   margin-top: 4px;
   color: #475569;
-  font-size: 8px;
+  font-size: 12px;
 }
 
 .delivery-history-content {
@@ -384,7 +384,7 @@ a {
 
 .delivery-history-section-label {
   color: #60a5fa;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.15px;
 }
@@ -399,7 +399,7 @@ a {
 .delivery-history-content-header p {
   margin: 8px 0 0;
   color: #64748b;
-  font-size: 9.5px;
+  font-size: 12px;
   line-height: 1.6;
 }
 
@@ -425,7 +425,7 @@ a {
 .delivery-history-result-count span {
   margin-top: 3px;
   color: #64748b;
-  font-size: 7.5px;
+  font-size: 12px;
   text-transform: uppercase;
 }
 
@@ -462,7 +462,7 @@ a {
   border-radius: 11px;
   color: #f8fafc;
   background: #111827;
-  font-size: 9.5px;
+  font-size: 12px;
   transition: 0.2s ease;
 }
 
@@ -502,7 +502,7 @@ a {
   border-radius: 999px;
   color: #a7f3d0;
   background: rgba(16, 185, 129, 0.08);
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
   white-space: nowrap;
@@ -532,7 +532,7 @@ a {
   border-bottom: 1px solid rgba(148, 163, 184, 0.12);
   color: #64748b;
   background: rgba(8, 13, 26, 0.44);
-  font-size: 7.8px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.85px;
   text-align: left;
@@ -582,7 +582,7 @@ a {
 }
 
 .delivery-avatar {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
 }
 
@@ -606,7 +606,7 @@ a {
 .delivery-tracking-cell span,
 .delivery-person-cell span {
   color: #475569;
-  font-size: 7px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.6px;
   text-transform: uppercase;
@@ -615,7 +615,7 @@ a {
 .delivery-tracking-cell strong {
   margin-top: 4px;
   color: #93c5fd;
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .delivery-person-cell strong {
@@ -623,7 +623,7 @@ a {
   margin-top: 4px;
   overflow: hidden;
   color: #dbe4f0;
-  font-size: 9px;
+  font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -669,7 +669,7 @@ a {
 
 .delivery-route-point small {
   color: #475569;
-  font-size: 6.7px;
+  font-size: 12px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
@@ -679,7 +679,7 @@ a {
   margin-top: 2px;
   overflow: hidden;
   color: #cbd5e1;
-  font-size: 8px;
+  font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -703,7 +703,7 @@ a {
   border-radius: 999px;
   color: #bbf7d0;
   background: rgba(34, 197, 94, 0.08);
-  font-size: 7.5px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.4px;
   text-transform: uppercase;
@@ -729,7 +729,7 @@ a {
   border-radius: 9px;
   color: #a7f3d0;
   background: rgba(16, 185, 129, 0.08);
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 750;
   cursor: pointer;
   white-space: nowrap;
@@ -779,7 +779,7 @@ a {
   max-width: 450px;
   margin: 9px 0 0;
   color: #64748b;
-  font-size: 9.5px;
+  font-size: 12px;
   line-height: 1.65;
 }
 
@@ -808,7 +808,7 @@ a {
   color: #ffffff;
   background: linear-gradient(135deg, #059669, #2563eb);
   box-shadow: 0 12px 25px rgba(5, 150, 105, 0.2);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
   text-decoration: none;
   cursor: pointer;
@@ -844,13 +844,13 @@ a {
 
 .delivery-history-error strong {
   color: #fecaca;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .delivery-history-error p {
   margin: 4px 0 0;
   color: #fca5a5;
-  font-size: 8.5px;
+  font-size: 12px;
 }
 
 .delivery-history-error button {
@@ -860,7 +860,7 @@ a {
   border-radius: 9px;
   color: #fecaca;
   background: rgba(239, 68, 68, 0.1);
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 750;
   cursor: pointer;
 }
@@ -936,7 +936,7 @@ a {
 
   .delivery-mobile-card-header > div span {
     color: #475569;
-    font-size: 7px;
+    font-size: 12px;
     letter-spacing: 0.6px;
     text-transform: uppercase;
   }
@@ -944,7 +944,7 @@ a {
   .delivery-mobile-card-header > div strong {
     margin-top: 5px;
     color: #93c5fd;
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .delivery-mobile-people {
@@ -967,14 +967,14 @@ a {
 
   .delivery-mobile-people span {
     color: #475569;
-    font-size: 7px;
+    font-size: 12px;
     text-transform: uppercase;
   }
 
   .delivery-mobile-people strong {
     margin-top: 5px;
     color: #dbe4f0;
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .delivery-mobile-route {
@@ -1003,14 +1003,14 @@ a {
 
   .delivery-mobile-route-point small {
     color: #475569;
-    font-size: 7px;
+    font-size: 12px;
     text-transform: uppercase;
   }
 
   .delivery-mobile-route-point strong {
     margin-top: 3px;
     color: #cbd5e1;
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .delivery-mobile-route-line {
@@ -1034,7 +1034,7 @@ a {
     border-radius: 10px;
     color: #a7f3d0;
     background: rgba(16, 185, 129, 0.09);
-    font-size: 8.5px;
+    font-size: 12px;
     font-weight: 750;
     cursor: pointer;
   }

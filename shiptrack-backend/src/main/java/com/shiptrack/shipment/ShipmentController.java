@@ -3,6 +3,7 @@ package com.shiptrack.shipment;
 import com.shiptrack.shipment.dto.ShipmentRequest;
 import com.shiptrack.shipment.dto.ShipmentResponse;
 import com.shiptrack.shipment.dto.UpdateStatusRequest;
+import com.shiptrack.shipment.dto.ShipmentUpdateRequest;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -65,6 +66,15 @@ public class ShipmentController {
                 shipmentService.getDeliveryHistory()
         );
     }
+    @GetMapping("/id/{id}")
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR','LOGISTICS_OPERATOR')")
+    public ResponseEntity<ShipmentResponse> getShipmentById(
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(
+                shipmentService.getShipmentById(id)
+        );
+    }
 
     @GetMapping("/{trackingNumber}")
     @PreAuthorize("isAuthenticated()")
@@ -110,6 +120,20 @@ public class ShipmentController {
 
         return ResponseEntity.ok(
                 shipmentService.updateLocation(
+                        trackingNumber,
+                        request
+                )
+        );
+    }
+
+    @PutMapping("/{trackingNumber}")
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR','LOGISTICS_OPERATOR')")
+    public ResponseEntity<ShipmentResponse> updateShipment(
+            @PathVariable String trackingNumber,
+            @RequestBody ShipmentUpdateRequest request) {
+
+        return ResponseEntity.ok(
+                shipmentService.updateShipment(
                         trackingNumber,
                         request
                 )
