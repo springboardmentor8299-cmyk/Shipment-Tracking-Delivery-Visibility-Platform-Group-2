@@ -1,0 +1,8 @@
+{
+  "name": "ShipTrack Pro",
+  "description": "A full-stack shipment tracking, live route monitoring, proof-of-delivery, and  logistics analytics platform.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE"]
+}
