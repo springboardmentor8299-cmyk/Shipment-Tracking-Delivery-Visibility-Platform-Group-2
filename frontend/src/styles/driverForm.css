@@ -1,0 +1,182 @@
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+}
+
+.form-container{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px;
+    background:#f4f7fb;
+}
+
+.shipment-form{
+
+    width:100%;
+    max-width:650px;
+
+    background:#fff;
+
+    padding:40px;
+
+    border-radius:18px;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+
+    border:1px solid #e2e8f0;
+
+}
+
+.shipment-form h2{
+
+    text-align:center;
+
+    color:#1e293b;
+
+    margin-bottom:30px;
+
+    font-size:32px;
+
+    font-weight:700;
+
+}
+
+.shipment-form input,
+.shipment-form select,
+.shipment-form textarea{
+
+    width:100%;
+
+    padding:14px 18px;
+
+    margin-bottom:18px;
+
+    border:1px solid #d1d5db;
+
+    border-radius:12px;
+
+    font-size:15px;
+
+    transition:.3s;
+
+    resize:none;
+
+}
+
+.shipment-form input:focus,
+.shipment-form select:focus,
+.shipment-form textarea:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 10px rgba(37,99,235,.18);
+
+}
+
+.shipment-form textarea{
+
+    min-height:120px;
+
+}
+
+.form-buttons{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-top:25px;
+
+}
+
+.save-btn{
+
+    flex:1;
+
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+
+    color:#fff;
+
+    border:none;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:all .3s ease;
+
+    box-shadow:0 8px 20px rgba(37,99,235,.25);
+
+}
+
+.save-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 12px 25px rgba(37,99,235,.35);
+
+}
+
+.cancel-btn{
+
+    flex:1;
+
+    background:#64748b;
+
+    color:white;
+
+    border:none;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:all .3s ease;
+
+}
+
+.cancel-btn:hover{
+
+    background:#475569;
+
+    transform:translateY(-2px);
+
+}
+
+@media(max-width:768px){
+
+    .shipment-form{
+
+        padding:25px;
+
+    }
+
+    .form-buttons{
+
+        flex-direction:column;
+
+    }
+
+}

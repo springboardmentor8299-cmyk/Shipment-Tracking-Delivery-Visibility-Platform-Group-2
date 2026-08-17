@@ -1,0 +1,1122 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+}
+
+/* ================= Dashboard ================= */
+
+.dashboard{
+    display:flex;
+    min-height:100vh;
+    background:#f4f7fb;
+}
+
+/* ================= Sidebar ================= */
+
+.sidebar{
+
+    width:260px;
+
+    min-width:260px;
+
+    background:#fff;
+
+    border-right:1px solid #e5e7eb;
+
+    padding:25px;
+
+    position:sticky;
+
+    top:0;
+
+    height:100vh;
+
+}
+
+.sidebar h2{
+
+    color:#2563eb;
+
+    text-align:center;
+
+    font-size:30px;
+
+    font-weight:700;
+
+}
+
+.sidebar p{
+
+    text-align:center;
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    margin-top:8px;
+
+    margin-bottom:30px;
+
+}
+
+.sidebar ul{
+
+    list-style:none;
+
+}
+
+.sidebar li{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:14px 16px;
+
+    margin-bottom:10px;
+
+    border-radius:12px;
+
+    color:#475569;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:all .3s ease;
+
+}
+
+.sidebar li:hover{
+
+    background:#2563eb;
+
+    color:white;
+
+    transform:translateX(6px);
+
+}
+
+.sidebar svg{
+
+    font-size:18px;
+
+}
+
+/* ================= Main ================= */
+
+.main-content{
+
+    flex:1;
+
+    padding:30px;
+
+    overflow-x:auto;
+
+}
+
+/* ================= Topbar ================= */
+
+.topbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:35px;
+
+}
+
+.topbar h1{
+
+    color:#1e293b;
+
+    font-size:34px;
+
+    font-weight:700;
+
+}
+
+.topbar p{
+
+    color:#64748b;
+
+    margin-top:6px;
+
+    font-size:15px;
+
+}
+
+.topbar button{
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:11px 20px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    margin-left:10px;
+
+    font-size:15px;
+
+    transition:all .3s ease;
+
+}
+
+.topbar button:hover{
+
+    background:#1d4ed8;
+
+    transform:translateY(-2px);
+
+}
+/* ================= Cards ================= */
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    gap:20px;
+
+    margin-bottom:30px;
+
+}
+
+.card{
+
+    background:#ffffff;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+    transition:all .3s ease;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 15px 35px rgba(37,99,235,.15);
+
+}
+
+.card h3{
+
+    color:#64748b;
+
+    font-size:16px;
+
+    margin-bottom:12px;
+
+    font-weight:600;
+
+}
+
+.card h1{
+
+    font-size:42px;
+
+    font-weight:700;
+
+}
+
+/* Card Colors */
+
+.card:nth-child(1){
+
+    border-left:6px solid #2563eb;
+
+}
+
+.card:nth-child(1) h1{
+
+    color:#2563eb;
+
+}
+
+.card:nth-child(2){
+
+    border-left:6px solid #22c55e;
+
+}
+
+.card:nth-child(2) h1{
+
+    color:#22c55e;
+
+}
+
+.card:nth-child(3){
+
+    border-left:6px solid #f59e0b;
+
+}
+
+.card:nth-child(3) h1{
+
+    color:#f59e0b;
+
+}
+
+.card:nth-child(4){
+
+    border-left:6px solid #ef4444;
+
+}
+
+.card:nth-child(4) h1{
+
+    color:#ef4444;
+
+}
+
+/* ================= Search ================= */
+
+.search-box{
+
+    width:40%;
+
+    min-width:320px;
+
+    padding:13px 18px;
+
+    margin-bottom:20px;
+
+    border-radius:30px;
+
+    border:1px solid #d1d5db;
+
+    font-size:15px;
+
+    transition:.3s;
+
+}
+
+.search-box:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 10px rgba(37,99,235,.25);
+
+}
+
+/* ================= Table ================= */
+
+.table-section{
+
+    background:#ffffff;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    border:1px solid #e2e8f0;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.05);
+
+    overflow-x:auto;
+
+}
+
+.table-section h2{
+
+    color:#1e293b;
+
+    margin-bottom:20px;
+
+    font-size:24px;
+
+    font-weight:700;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+table thead{
+
+    background:#2563eb;
+
+}
+
+table th{
+
+    color:white;
+
+    padding:15px;
+
+    text-align:center;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    white-space:nowrap;
+
+}
+
+table td{
+
+    padding:15px;
+
+    text-align:center;
+
+    border-bottom:1px solid #e5e7eb;
+
+    color:#334155;
+
+    white-space:nowrap;
+
+}
+
+table tbody tr{
+
+    transition:.3s;
+
+}
+
+table tbody tr:hover{
+
+    background:#eff6ff;
+
+}
+
+td:last-child{
+
+    min-width:180px;
+
+}
+/* ================= Status Badge ================= */
+
+.status{
+
+    display:inline-block;
+
+    padding:7px 14px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    min-width:95px;
+
+}
+
+.delivered{
+
+    background:#dcfce7;
+
+    color:#15803d;
+
+}
+
+.transit{
+
+    background:#dbeafe;
+
+    color:#2563eb;
+
+}
+
+.pending{
+
+    background:#fef3c7;
+
+    color:#b45309;
+
+}
+
+/* ================= Action Buttons ================= */
+
+.actions{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:8px;
+
+}
+
+.view-btn,
+.track-btn,
+.edit-btn,
+.delete-btn{
+
+    width:40px;
+
+    height:40px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:15px;
+
+    transition:.3s;
+
+}
+
+.view-btn{
+
+    background:#10b981;
+
+}
+
+.view-btn:hover{
+
+    background:#059669;
+
+    transform:translateY(-2px);
+
+}
+
+.track-btn{
+
+    background:#3b82f6;
+
+}
+
+.track-btn:hover{
+
+    background:#2563eb;
+
+    transform:translateY(-2px);
+
+}
+
+.edit-btn{
+
+    background:#f59e0b;
+
+}
+
+.edit-btn:hover{
+
+    background:#d97706;
+
+    transform:translateY(-2px);
+
+}
+
+.delete-btn{
+
+    background:#ef4444;
+
+}
+
+.delete-btn:hover{
+
+    background:#dc2626;
+
+    transform:translateY(-2px);
+
+}
+
+/* ================= Scrollbar ================= */
+
+.table-section::-webkit-scrollbar{
+
+    height:8px;
+
+}
+
+.table-section::-webkit-scrollbar-thumb{
+
+    background:#cbd5e1;
+
+    border-radius:20px;
+
+}
+
+/* ================= Responsive ================= */
+.add-driver-btn{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    color:#fff;
+    border:none;
+    padding:12px 22px;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all .3s ease;
+    box-shadow:0 6px 16px rgba(37,99,235,.25);
+}
+
+.add-driver-btn:hover{
+    transform:translateY(-2px);
+    background:linear-gradient(135deg,#1d4ed8,#1e40af);
+    box-shadow:0 10px 22px rgba(37,99,235,.35);
+}
+
+.add-driver-btn svg{
+    font-size:18px;
+}
+/* ================= Add Driver Toolbar ================= */
+
+.driver-toolbar{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.driver-toolbar .search-box{
+    width:360px;
+    min-width:360px;
+    margin-bottom:0;
+}
+
+.add-driver-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    background:#2563eb;
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    padding:12px 22px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+    white-space:nowrap;
+}
+
+.add-driver-btn:hover{
+    background:#1d4ed8;
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(37,99,235,.25);
+}
+
+/* ================= Responsive ================= */
+
+@media(max-width:1024px){
+
+    .cards{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+@media(max-width:900px){
+
+    .dashboard{
+
+        flex-direction:column;
+
+    }
+
+    .sidebar{
+
+        width:100%;
+
+        height:auto;
+
+        position:relative;
+
+        border-right:none;
+
+        border-bottom:1px solid #e5e7eb;
+
+    }
+
+    .main-content{
+
+        padding:20px;
+
+    }
+
+    .topbar{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:20px;
+
+    }
+
+    .cards{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .search-box{
+
+        width:100%;
+
+        min-width:100%;
+
+    }
+
+    table{
+
+        display:block;
+
+        overflow-x:auto;
+
+        white-space:nowrap;
+
+    }
+
+    .actions{
+
+        flex-wrap:wrap;
+
+    }
+    .sidebar li.active{
+    background:#2563eb;
+    color:white;
+    box-shadow:0 8px 18px rgba(37,99,235,.25);
+}
+
+.sidebar li.active svg{
+    color:white;
+}
+.edit-btn,
+.delete-btn{
+
+    width:42px;
+    height:42px;
+
+    border:none;
+
+    border-radius:10px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    cursor:pointer;
+
+    color:white;
+
+    font-size:17px;
+
+    transition:all .3s ease;
+
+}
+
+.edit-btn{
+
+    background:#2563eb;
+
+}
+
+.edit-btn:hover{
+
+    background:#1d4ed8;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 8px 18px rgba(37,99,235,.30);
+
+}
+
+.delete-btn{
+
+    background:#ef4444;
+
+}
+
+.delete-btn:hover{
+
+    background:#dc2626;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 8px 18px rgba(239,68,68,.30);
+
+}
+.report-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:25px;
+
+    margin-bottom:25px;
+
+}
+
+.chart-card{
+
+    background:#fff;
+
+    padding:25px;
+
+    border-radius:18px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+
+    border:1px solid #e5e7eb;
+
+}
+
+.chart-card h3{
+
+    margin-bottom:20px;
+
+    color:#1e293b;
+
+    font-size:20px;
+
+    font-weight:600;
+
+}
+
+.report-actions{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-top:25px;
+
+    flex-wrap:wrap;
+
+}
+
+.report-btn{
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:12px 22px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.report-btn:hover{
+
+    background:#1d4ed8;
+
+    transform:translateY(-2px);
+
+}
+
+
+}
+/* ================= Print Button ================= */
+
+.print-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+
+    color:#fff;
+
+    border:none;
+
+    padding:12px 24px;
+
+    border-radius:12px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:all .3s ease;
+
+    box-shadow:0 6px 18px rgba(37,99,235,.25);
+
+}
+
+.print-btn:hover{
+
+    transform:translateY(-2px);
+
+    background:linear-gradient(135deg,#1d4ed8,#1e40af);
+
+    box-shadow:0 10px 22px rgba(37,99,235,.35);
+
+}
+
+.print-btn:active{
+
+    transform:scale(.98);
+
+}
+/* ================= Settings ================= */
+
+.settings-form{
+
+    max-width:600px;
+
+    margin-top:20px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+.settings-form label{
+
+    font-weight:600;
+
+    color:#334155;
+
+}
+
+.settings-form input[type="text"],
+.settings-form input[type="email"]{
+
+    padding:12px;
+
+    border:1px solid #d1d5db;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+}
+
+.setting-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:12px;
+
+    background:#f8fafc;
+
+    border-radius:10px;
+
+}
+
+.save-settings-btn{
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:14px;
+
+    border-radius:10px;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.save-settings-btn:hover{
+
+    background:#1d4ed8;
+
+}
+/* ================= Update Status Button ================= */
+
+.update-status-btn{
+
+    background:#16a34a;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 20px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    transition:0.3s;
+
+}
+
+.update-status-btn:hover{
+
+    background:#15803d;
+
+    transform:translateY(-2px);
+
+}
+
+.update-status-btn:active{
+
+    transform:scale(.98);
+
+}
+/* Driver Action Buttons */
+
+.driver-actions{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.driver-actions button{
+
+    width:45px;
+
+    height:45px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    transition:0.3s;
+
+}
+
+.view-btn{
+
+    background:#10b981;
+
+    color:white;
+
+}
+
+.view-btn:hover{
+
+    background:#059669;
+
+}
+
+.edit-btn{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+.edit-btn:hover{
+
+    background:#1d4ed8;
+
+}
+.driver-actions{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.proof-btn{
+    width:40px;
+    height:40px;
+    border:none;
+    border-radius:8px;
+    background:#16a34a;
+    color:white;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.proof-btn:hover{
+    background:#15803d;
+}

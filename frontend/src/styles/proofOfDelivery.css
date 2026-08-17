@@ -1,0 +1,460 @@
+/* =====================================================
+   GOOGLE FONT
+===================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+/* =====================================================
+   RESET
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Poppins",sans-serif;
+}
+
+body{
+
+    background:#eef3f9;
+
+}
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.proof-container{
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:40px;
+
+    background:#eef3f9;
+
+}
+
+/* =====================================================
+   MAIN CARD
+===================================================== */
+
+.proof-card{
+
+    width:100%;
+
+    max-width:950px;
+
+    background:white;
+
+    border-radius:22px;
+
+    padding:40px;
+
+    box-shadow:
+
+        0 15px 35px rgba(0,0,0,.08);
+
+}
+
+/* =====================================================
+   TITLE
+===================================================== */
+
+.proof-card h2{
+
+    text-align:center;
+
+    font-size:42px;
+
+    color:#1e293b;
+
+    margin-bottom:35px;
+
+}
+
+/* =====================================================
+   FORM ROW
+===================================================== */
+
+.form-row{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:20px;
+
+    margin-bottom:25px;
+
+}
+
+/* =====================================================
+   INPUTS
+===================================================== */
+
+.proof-card input[type="text"],
+
+.proof-card textarea{
+
+    width:100%;
+
+    border:2px solid #e2e8f0;
+
+    border-radius:15px;
+
+    padding:18px;
+
+    font-size:17px;
+
+    outline:none;
+
+    transition:.3s;
+
+    background:white;
+
+}
+
+.proof-card input[type="text"]:focus,
+
+.proof-card textarea:focus{
+
+    border-color:#2563eb;
+
+    box-shadow:
+
+        0 0 8px rgba(37,99,235,.15);
+
+}
+
+.proof-card textarea{
+
+    resize:none;
+
+    min-height:120px;
+
+}
+
+/* =====================================================
+   SECTION TITLE
+===================================================== */
+
+.proof-card h3{
+
+    margin-top:20px;
+
+    margin-bottom:15px;
+
+    font-size:28px;
+
+    color:#1e293b;
+
+}
+/* =====================================================
+   SIGNATURE AREA
+===================================================== */
+
+.signature{
+
+    width:100% !important;
+
+    height:250px !important;
+
+    border:3px dashed #2563eb;
+
+    border-radius:15px;
+
+    background:white;
+
+    cursor:crosshair;
+
+    margin-bottom:20px;
+
+}
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.clear-btn{
+
+    background:#ef4444;
+
+    color:white;
+
+    border:none;
+
+    border-radius:10px;
+
+    padding:14px 28px;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    margin-bottom:30px;
+
+}
+
+.clear-btn:hover{
+
+    background:#dc2626;
+
+}
+
+.submit-btn{
+
+    width:100%;
+
+    height:55px;
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    border-radius:12px;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    margin-top:30px;
+
+    transition:.3s;
+
+}
+
+.submit-btn:hover{
+
+    background:#1d4ed8;
+
+    transform:translateY(-2px);
+
+}
+
+/* =====================================================
+   FILE UPLOAD
+===================================================== */
+
+input[type="file"]{
+
+    width:100%;
+
+    padding:18px;
+
+    border:2px dashed #2563eb;
+
+    border-radius:15px;
+
+    background:#f8fbff;
+
+    cursor:pointer;
+
+    margin-top:10px;
+
+    margin-bottom:20px;
+
+}
+
+input[type="file"]:hover{
+
+    background:#eef6ff;
+
+}
+
+/* =====================================================
+   IMAGE PREVIEW
+===================================================== */
+
+.preview{
+
+    width:100%;
+
+    max-height:350px;
+
+    object-fit:cover;
+
+    border-radius:15px;
+
+    border:2px solid #dbeafe;
+
+    margin-top:15px;
+
+    margin-bottom:25px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+.proof-card{
+
+    animation:fadeIn .5s ease;
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:768px){
+
+    .proof-card{
+
+        padding:25px;
+
+    }
+
+    .proof-card h2{
+
+        font-size:32px;
+
+    }
+
+    .proof-card h3{
+
+        font-size:22px;
+
+    }
+
+    .form-row{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .signature{
+
+        height:200px !important;
+
+    }
+
+    .submit-btn{
+
+        font-size:16px;
+
+    }
+
+}
+/* Signature container */
+
+.signature-box{
+
+    width:100%;
+
+    height:240px;
+
+    border:3px dashed #2563eb;
+
+    border-radius:15px;
+
+    background:white;
+
+    overflow:hidden;
+
+    margin-bottom:20px;
+
+}
+
+.signature{
+
+    width:100% !important;
+
+    height:100% !important;
+
+}
+
+/* Upload */
+
+.upload-box{
+
+    width:100%;
+
+    height:140px;
+
+    border:3px dashed #2563eb;
+
+    border-radius:15px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    background:#f8fbff;
+
+    transition:.3s;
+
+}
+
+.upload-box:hover{
+
+    background:#eef6ff;
+
+}
+
+/* Preview */
+
+.preview-container{
+
+    margin-top:20px;
+
+}
+
+.preview{
+
+    width:100%;
+
+    max-height:350px;
+
+    object-fit:cover;
+
+    border-radius:15px;
+
+    border:2px solid #2563eb;
+
+}
