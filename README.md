@@ -1,173 +1,51 @@
-# Shipment Tracking & Delivery Visibility Platform
+# ShipTrack Pro - Enterprise Shipment & Logistics Management Platform
 
-A full-stack shipment tracking platform that provides real-time delivery visibility for customers, drivers, operators, and support teams. The system manages shipments end-to-end — from order creation and route tracking to proof of delivery — with role-based dashboards and secure authentication.
+ShipTrack Pro is an enterprise-grade shipment tracking, live fleet monitoring, proof-of-delivery (POD), and logistics management system.
 
-## Features
+## 🛠️ Technology Stack & Architecture Specification
 
-- **Role-based access** — dedicated dashboards for Admin, Customer, Driver, Operator, and Support roles.
-- **Secure authentication** — JWT-based login with email/password and Google OAuth 2.0 sign-in.
-- **Live shipment tracking** — real-time location updates and route history on an interactive map (Leaflet / OpenStreetMap).
-- **Shipment lifecycle management** — create, assign, and update shipments across statuses.
-- **Proof of delivery (POD)** — capture delivery confirmation with signatures and upload POD documents (PDF).
-- **Notifications** — in-app notifications for shipment and support events.
-- **Driver management** — admin tools to onboard, assign, and monitor drivers and their performance.
-- **Support & escalation** — ticket-based support system with priority, categorization, and escalation workflows.
-- **Reporting & analytics** — dashboards with shipment trends, key metrics, and exportable reports (PDF/CSV).
-- **Live delivery monitoring** — monitor active deliveries and driver locations in near real time.
+### 1. Programming Languages
+- **Backend Core**: Java 17+
+- **Frontend Core**: JavaScript (ES6+) / TypeScript
 
-## Tech Stack
+### 2. Backend Architecture & Frameworks
+- **Framework**: Spring Boot 3.x
+- **Security & Access Control**: Spring Security
+- **Data Access & Persistence**: Spring Data JPA with Hibernate ORM
+- **Build System**: Apache Maven
+- **Real-Time Streaming**: Spring WebSocket (STOMP protocol)
 
-### Backend
-| Layer | Technology |
-| --- | --- |
-| Language | Java 17 |
-| Framework | Spring Boot 3.5 |
-| Security | Spring Security, OAuth2 Resource Server, JJWT |
-| Persistence | Spring Data JPA (Hibernate) |
-| Database | PostgreSQL |
-| Reporting | OpenPDF |
-| Build | Maven |
+### 3. Frontend Architecture & Libraries
+- **Framework**: React.js 18+
+- **Routing**: React Router
+- **HTTP Client**: Axios
+- **Styling & UI Engine**: Tailwind CSS
+- **Data Visualization**: Chart.js & Recharts
+- **State Management**: React Context API
 
-### Frontend
-| Layer | Technology |
-| --- | --- |
-| Framework | React 19 + Vite |
-| Routing | React Router |
-| HTTP Client | Axios |
-| UI | Bootstrap 5, Bootstrap Icons, React-Toastify, AOS |
-| Charts | Chart.js, Recharts, React-ChartJS-2 |
-| Maps | Leaflet (OpenStreetMap / Nominatim) |
-| Reports | jsPDF, jsPDF-AutoTable |
+### 4. Database & Caching Layer
+- **Primary Database**: PostgreSQL (Relational ACID database)
+- **In-Memory Caching**: Redis (High-speed session & location telemetry cache)
 
-## Architecture
+### 5. Authentication & Identity
+- **Security**: Spring Security
+- **Token Mechanism**: Stateless JWT Authentication
+- **Federation**: OAuth2 Login (Google Identity)
 
-```
-shipment-tracking-platform/
-├── SHIPTRACK_JAVA/
-│   ├── shiptrack-backend/          # Spring Boot REST API (port 8081)
-│   │   └── shiptrack-backend/
-│   │       ├── src/main/java/com/shiptrack/
-│   │       │   ├── config/         # Security & data initializers
-│   │       │   ├── controller/     # REST controllers
-│   │       │   ├── service/        # Business logic
-│   │       │   ├── repository/     # JPA repositories
-│   │       │   ├── entity/         # JPA entities
-│   │       │   ├── dto/            # Request/response objects
-│   │       │   ├── security/       # JWT filter
-│   │       │   └── util/           # Helpers (e.g., map utilities)
-│   │       └── src/main/resources/
-│   │           └── application.properties
-│   └── shiptrack-frontend/         # React SPA (Vite dev server, port 5173)
-│       └── src/
-│           ├── api/                # Axios API clients
-│           ├── auth/               # OAuth helpers
-│           ├── components/         # Reusable UI components
-│           ├── pages/              # Route/page components
-│           └── styles/             # CSS modules
-└── README.md
-```
+### 6. Maps & Location Services
+- **Primary Mapping SDK**: Official Google Maps API (JavaScript SDK)
+- **Secondary Geocoding**: OpenStreetMap API (Fallback reverse geocoding)
 
-The frontend communicates with the backend through a REST API at `http://localhost:8081/api`.
+### 7. Push Notifications
+- **Messaging Service**: Firebase Cloud Messaging (FCM) for real-time driver & delay alerts
 
-## Prerequisites
+---
 
-- **Java 17+**
-- **Maven 3.8+**
-- **Node.js 18+** and **npm**
-- **PostgreSQL** (running locally)
-- A **Google OAuth 2.0 Client ID** (optional, for Google sign-in)
+## 🚀 Key Features
 
-## Getting Started
-
-### 1. Database
-
-Create a PostgreSQL database:
-
-```sql
-CREATE DATABASE shiptrack;
-```
-
-### 2. Backend Setup
-
-```bash
-cd SHIPTRACK_JAVA/shiptrack-backend/shiptrack-backend
-```
-
-The backend defaults to the `local` profile (see [Environment Variables](#environment-variables)). Run:
-
-```bash
-mvn spring-boot:run
-```
-
-The API server starts at `http://localhost:8081`.
-
-### 3. Frontend Setup
-
-```bash
-cd SHIPTRACK_JAVA/shiptrack-frontend
-npm install
-```
-
-Create a `.env` file in the frontend directory with your Google Client ID (see below), then start the dev server:
-
-```bash
-npm run dev
-```
-
-Open `http://localhost:5173` in your browser.
-
-## Environment Variables
-
-Credentials are never committed to the repository. Configure them via environment variables / local config files.
-
-### Backend — `application.properties`
-
-| Variable | Description |
-| --- | --- |
-| `DB_PASSWORD` | PostgreSQL password for the `shiptrack` database |
-| `JWT_SECRET` | Secret key used to sign JWT tokens (use a long, random string) |
-| `GOOGLE_CLIENT_ID` | Google OAuth 2.0 client ID (for Google sign-in) |
-
-For local development the backend defaults to the `local` profile, which loads
-values from `src/main/resources/application-local.properties`. Create this file
-(the repo's `.gitignore` keeps it out of version control) and add your real values:
-
-```properties
-spring.datasource.password=your-db-password
-jwt.secret=your-long-random-jwt-secret
-google.client-id=your-client-id.apps.googleusercontent.com
-```
-
-Alternatively, set the variables above as environment variables and leave the
-`${...}` placeholders to resolve them.
-
-### Frontend — `.env`
-
-| Variable | Description |
-| --- | --- |
-| `VITE_GOOGLE_CLIENT_ID` | Google OAuth 2.0 client ID (used by the Google sign-in flow) |
-
-Example frontend `.env`:
-
-```
-VITE_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
-```
-
-## Available Scripts
-
-### Backend
-
-```bash
-mvn spring-boot:run      # Start the API server
-mvn test                 # Run backend tests
-mvn package              # Build the application JAR
-```
-
-### Frontend
-
-```bash
-npm run dev              # Start the Vite dev server
-npm run build            # Build for production
-npm run preview          # Preview the production build
-npm run lint             # Run ESLint
-```
+1. **Live Shipment Tracking**: Track packages with real-time GPS coordinates, route polylines, and status step progressions.
+2. **Global Fleet GPS Map**: Admin Control Tower displaying active fleet locations on Google Maps with interactive info windows and filterable markers.
+3. **Driver Dispatch & Mobile Telemetry**: Dedicated Logistics Operator view with route stops, pickup/drop-off execution, and issue reporting.
+4. **Digital Proof of Delivery (POD)**: Signature capture, doorstep photo uploads, and multi-format PDF generation.
+5. **Executive Audit Center & Multi-Format Reports**: Export official operational logs to PDF, formatted Excel (`.xlsx`), and raw CSV logs.
+6. **Support Console**: Direct agent ticket management, customer inquiry escalations, and automated AI assistance.

@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL Relational Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: shiptrack_postgres
+    environment:
+      POSTGRES_DB: shiptrack_db
+      POSTGRES_USER: shiptrack_user
+      POSTGRES_PASSWORD: shiptrack_secure_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shiptrack_user -d shiptrack_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. Redis High-Performance Cache & Live Location Broker
+  redis:
+    image: redis:7-alpine
+    container_name: shiptrack_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 3. Java Spring Boot Enterprise Backend
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: shiptrack_backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/shiptrack_db
+      SPRING_DATASOURCE_USERNAME: shiptrack_user
+      SPRING_DATASOURCE_PASSWORD: shiptrack_secure_password
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      JWT_SECRET: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # 4. React Frontend Application
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: shiptrack_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  redis_data:
