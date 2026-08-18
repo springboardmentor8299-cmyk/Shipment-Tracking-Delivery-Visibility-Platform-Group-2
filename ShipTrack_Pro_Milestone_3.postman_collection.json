@@ -1,0 +1,207 @@
+{
+  "info": {
+    "name": "ShipTrack Pro - Milestone 3 API Collection",
+    "description": "Postman API Collection for Milestone 3: Proof of Delivery (POD), Role-Scoped Analytics, Reports Export (PDF/Excel), and Route History Tracking.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login - Administrator",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@shiptrack.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/api/auth/login", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Login - Customer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"theerthana@gmail.com\",\n  \"password\": \"customer123\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/api/auth/login", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Login - Business Client",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"biz@shiptrack.com\",\n  \"password\": \"biz123\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/api/auth/login", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Login - Logistics Operator",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"sam@shiptrack.com\",\n  \"password\": \"driver123\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/api/auth/login", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Login - Support Agent",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"amy@shiptrack.com\",\n  \"password\": \"support123\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/api/auth/login", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "auth", "login"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Proof of Delivery (POD)",
+      "item": [
+        {
+          "name": "Get POD Record",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/api/pod/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "pod", "1"] }
+          }
+        },
+        {
+          "name": "Capture Digital Signature",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"signatureData\": \"data:image/svg+xml;utf8,<svg width='200' height='80'><path d='M10 40 Q 50 10 90 40' stroke='blue'/></svg>\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/api/pod/1/signature", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "pod", "1", "signature"] }
+          }
+        },
+        {
+          "name": "Upload Delivery Photo",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"photoUrl\": \"https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/api/pod/1/photo", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "pod", "1", "photo"] }
+          }
+        },
+        {
+          "name": "Confirm Delivery (Operator POD)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"signatureData\": \"data:image/png;base64,demo\",\n  \"photoUrls\": \"https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d\",\n  \"recipientName\": \"Theerthana V\",\n  \"deliveryAgentId\": 501,\n  \"geoLat\": 12.9352,\n  \"geoLng\": 77.6245,\n  \"notes\": \"Handed directly to recipient\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/api/pod/1/confirm", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "pod", "1", "confirm"] }
+          }
+        },
+        {
+          "name": "Verify / Dispute POD (Support / Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"VERIFIED\",\n  \"verifiedBy\": \"support_amy\",\n  \"notes\": \"Signature matches customer ID record\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/api/pod/1/verify", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "pod", "1", "verify"] }
+          }
+        },
+        {
+          "name": "Get Disputed POD Queue",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/api/pod/disputed", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "pod", "disputed"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analytics & Reports",
+      "item": [
+        {
+          "name": "Customer Analytics",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/api/analytics/customer/2", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "analytics", "customer", "2"] }
+          }
+        },
+        {
+          "name": "Business Client Analytics",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/api/analytics/business/101", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "analytics", "business", "101"] }
+          }
+        },
+        {
+          "name": "Logistics Operator Analytics",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/api/analytics/operator/501", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "analytics", "operator", "501"] }
+          }
+        },
+        {
+          "name": "Support Agent Analytics",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/api/analytics/support", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "analytics", "support"] }
+          }
+        },
+        {
+          "name": "Admin Platform KPIs",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/api/analytics/admin", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "analytics", "admin"] }
+          }
+        },
+        {
+          "name": "Export PDF Report",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/api/reports/shipment/export?format=pdf", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "reports", "shipment", "export"], "query": [{ "key": "format", "value": "pdf" }] }
+          }
+        },
+        {
+          "name": "Export Excel Report",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/api/reports/logistics/export?format=excel", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "reports", "logistics", "export"], "query": [{ "key": "format", "value": "excel" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Route History",
+      "item": [
+        {
+          "name": "Get Route Polyline & History",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/api/routes/1/history", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "routes", "1", "history"] }
+          }
+        }
+      ]
+    }
+  ]
+}

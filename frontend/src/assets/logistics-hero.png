@@ -1,0 +1,70 @@
+<section className="hero-section">
+    <div className="hero-overlay">
+
+        {/* Navbar */}
+
+        <nav className="hero-navbar">
+
+            <h2>CargoFlow</h2>
+
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#tracking">Tracking</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+
+            <div className="auth-buttons">
+                <Link to="/login" className="btn btn-light">
+                    Login
+                </Link>
+
+                <Link to="/register" className="btn btn-primary">
+                    Register
+                </Link>
+            </div>
+
+        </nav>
+
+        {/* Hero */}
+
+        <div className="hero-content">
+
+            <div className="hero-left">
+
+                <h1>
+                    Smart Shipment
+                    <br />
+                    Tracking Platform
+                </h1>
+
+                <p>
+                    Track every shipment in real time, manage logistics,
+                    and monitor deliveries from a modern dashboard.
+                </p>
+
+                <div className="hero-buttons">
+                    <button className="btn btn-primary">
+                        Get Started
+                    </button>
+
+                    <button className="btn btn-outline-light">
+                        Track Shipment
+                    </button>
+                </div>
+
+            </div>
+
+            <div className="hero-right">
+
+                <img
+                    src={heroImage}
+                    alt="Shipment Tracking"
+                />
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
