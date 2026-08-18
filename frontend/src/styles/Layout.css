@@ -1,0 +1,65 @@
+/* ===== Admin Layout ===== */
+.admin-layout {
+    display: flex;
+    height: 100vh;
+    background: #f8f9fa;
+}
+
+.admin-layout .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.admin-layout .main-content > div:last-child {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* ===== Customer Layout ===== */
+.customer-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #f8f9fa;
+}
+
+.customer-layout > div:first-child {
+    flex-shrink: 0;
+}
+
+.customer-layout > div:last-child {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* ===== Scrollbar Styling ===== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* ===== Global Responsive ===== */
+@media (max-width: 768px) {
+    .admin-layout {
+        flex-direction: column;
+    }
+
+    .admin-layout .main-content {
+        margin-top: 0;
+    }
+}

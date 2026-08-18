@@ -1,0 +1,31 @@
+{
+  "name": "pod-app",
+  "version": "1.0.0",
+  "description": "Proof of Delivery application",
+  "main": "src/main.tsx",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.3.0",
+    "axios": "^0.21.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.4.3",
+    "vite": "^2.5.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-react": "^7.27.1"
+  },
+  "keywords": [
+    "proof",
+    "delivery",
+    "pod",
+    "application"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

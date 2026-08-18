@@ -1,0 +1,16 @@
+### Get all shipments
+GET http://localhost:8080/api/shipments
+
+###
+
+### Create a shipment
+POST http://localhost:8080/api/shipments
+Content-Type: application/json
+
+{
+  "trackingNumber": "TRK1001",
+  "senderName": "Ravi",
+  "receiverName": "Priya",
+  "deliveryAddress": "Chennai",
+  "status": "IN_TRANSIT"
+}

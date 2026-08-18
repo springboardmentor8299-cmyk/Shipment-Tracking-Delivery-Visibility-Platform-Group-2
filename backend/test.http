@@ -1,0 +1,82 @@
+### ==========================
+### Register User
+### ==========================
+
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "newadmin4",
+  "email": "newadmin4@gmail.com",
+  "password": "newadmin123",
+  "role": "ADMIN"
+}
+
+
+### ==========================
+### Login User
+### ==========================
+
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "newadmin3@gmail.com",
+  "password": "newadmin123"
+}
+
+
+### ==========================
+### Get All Shipments
+### ==========================
+
+GET http://localhost:8080/api/shipments
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuZXdhZG1pbjNAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwidXNlcm5hbWUiOiJuZXdhZG1pbjMiLCJpYXQiOjE3ODQzODE4OTksImV4cCI6MTc4NDQ2ODI5OX0.gQWZrvxsQ59F_u1jZluDo4uNCTc3QM8_skjNxKr89ts
+
+### ==========================
+### Create Shipment
+### ==========================
+
+POST http://localhost:8080/api/shipments
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuZXdhZG1pbjNAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwidXNlcm5hbWUiOiJuZXdhZG1pbjMiLCJpYXQiOjE3ODQzODE4OTksImV4cCI6MTc4NDQ2ODI5OX0.gQWZrvxsQ59F_u1jZluDo4uNCTc3QM8_skjNxKr89ts
+Content-Type: application/json
+
+{
+  "trackingNumber": "WE1002",
+  "senderName": "Ravi",
+  "receiverName": "Priya",
+  "deliveryAddress": "Chennai",
+  "status": "IN_TRANSIT"
+}
+
+
+### ==========================
+### Get Shipment By ID
+### ==========================
+
+GET http://localhost:8080/api/shipments/4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuZXdhZG1pbjNAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwidXNlcm5hbWUiOiJuZXdhZG1pbjMiLCJpYXQiOjE3ODQzODE4OTksImV4cCI6MTc4NDQ2ODI5OX0.gQWZrvxsQ59F_u1jZluDo4uNCTc3QM8_skjNxKr89ts
+
+### ==========================
+### Update Shipment
+### ==========================
+
+PUT http://localhost:8080/api/shipments/4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuZXdhZG1pbjNAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwidXNlcm5hbWUiOiJuZXdhZG1pbjMiLCJpYXQiOjE3ODQzODE4OTksImV4cCI6MTc4NDQ2ODI5OX0.gQWZrvxsQ59F_u1jZluDo4uNCTc3QM8_skjNxKr89ts
+Content-Type: application/json
+
+{
+  "trackingNumber": "TRK1002",
+  "senderName": "Raviii",
+  "receiverName": "Priya",
+  "deliveryAddress": "Salem",
+  "status": "IN_TRANSIT"
+}
+
+
+### ==========================
+### Delete Shipment
+### ==========================
+
+DELETE http://localhost:8080/api/shipments/4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuZXdhZG1pbjNAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwidXNlcm5hbWUiOiJuZXdhZG1pbjMiLCJpYXQiOjE3ODQzODE4OTksImV4cCI6MTc4NDQ2ODI5OX0.gQWZrvxsQ59F_u1jZluDo4uNCTc3QM8_skjNxKr89ts
